@@ -6,8 +6,8 @@
 # Đorđe Cvijanović <cdorde@gmail.com>, 2023
 # Uros Kalajdzic <ukalajdzic@gmail.com>, 2023
 # Martin Trigaux, 2023
-# Dragan Vukosavljevic <dragan.vukosavljevic@gmail.com>, 2023
 # Milan Bojovic <mbojovic@outlook.com>, 2023
+# Dragan Vukosavljevic <dragan.vukosavljevic@gmail.com>, 2024
 # コフスタジオ, 2024
 # 
 msgid ""
@@ -1400,7 +1400,7 @@ msgstr "Drop files here to upload"
 #: model:ir.model.fields,field_description:documents.field_documents_share__activity_date_deadline_range
 #: model:ir.model.fields,field_description:documents.field_documents_workflow_rule__activity_date_deadline_range
 msgid "Due Date In"
-msgstr "Due Date In"
+msgstr "Datum dospeća za"
 
 #. module: documents
 #: model:ir.model.fields,field_description:documents.field_documents_request_wizard__activity_date_deadline_range_type
@@ -3275,7 +3275,7 @@ msgstr "Video"
 #, python-format
 msgid ""
 "Want to become a <b>paperless company</b>? Let's discover Odoo Documents."
-msgstr ""
+msgstr "Želite postati <b>bezpapirno preduzeće</b>? Otkrijte Odoo Documents."
 
 #. module: documents
 #: model:ir.model.fields,field_description:documents.field_documents_document__website_message_ids

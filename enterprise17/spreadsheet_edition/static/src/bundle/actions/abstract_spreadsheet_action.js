@@ -14,6 +14,7 @@ import { initCallbackRegistry } from "@spreadsheet/o_spreadsheet/init_callbacks"
 import { RecordFileStore } from "../image/record_file_store";
 import { useSpreadsheetCurrencies, useSpreadsheetLocales, useSpreadsheetThumbnail } from "../hooks";
 import { useSpreadsheetPrint } from "@spreadsheet/hooks";
+import { waitForDataLoaded } from "@spreadsheet/helpers/model";
 
 const uuidGenerator = new spreadsheet.helpers.UuidGenerator();
 
@@ -233,8 +234,10 @@ export class AbstractSpreadsheetAction extends Component {
 
     async _onSpreadSheetNameChanged(detail) {
         const { name } = detail;
-        this.state.spreadsheetName = name;
-        this.env.config.setDisplayName(this.state.spreadsheetName);
+        if (name && name !== this.state.spreadsheetName) {
+            this.state.spreadsheetName = name;
+            this.env.config.setDisplayName(this.state.spreadsheetName);
+        }
     }
 
     async createNewSpreadsheet() {
@@ -320,6 +323,7 @@ export class AbstractSpreadsheetAction extends Component {
     async download() {
         this.ui.block();
         try {
+            await waitForDataLoaded(this.model);
             await this.actionService.doAction({
                 type: "ir.actions.client",
                 tag: "action_download_spreadsheet",

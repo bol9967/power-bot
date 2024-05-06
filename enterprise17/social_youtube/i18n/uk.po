@@ -5,6 +5,7 @@
 # Translators:
 # Martin Trigaux, 2023
 # Wil Odoo, 2023
+# Alina Lisnenko <alina.lisnenko@erp.co.ua>, 2024
 # 
 msgid ""
 msgstr ""
@@ -12,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-05 13:47+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Wil Odoo, 2023\n"
+"Last-Translator: Alina Lisnenko <alina.lisnenko@erp.co.ua>, 2024\n"
 "Language-Team: Ukrainian (https://app.transifex.com/odoo/teams/41243/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -37,7 +38,7 @@ msgstr "123 Перегляди •"
 #. module: social_youtube
 #: model_terms:ir.ui.view,arch_db:social_youtube.social_stream_post_view_kanban
 msgid "<i class=\"fa fa-thumbs-o-up me-1\" title=\"Likes\"/>"
-msgstr ""
+msgstr "<i class=\"fa fa-thumbs-o-up me-1\" title=\"Likes\"/>"
 
 #. module: social_youtube
 #: model_terms:ir.ui.view,arch_db:social_youtube.youtube_preview
@@ -177,6 +178,20 @@ msgid "Created on"
 msgstr "Створено"
 
 #. module: social_youtube
+#. odoo-python
+#: code:addons/social_youtube/models/social_post.py:0
+#, python-format
+msgid "Description cannot exceed 5000 characters."
+msgstr "Опис не може перевищувати 5000 символів."
+
+#. module: social_youtube
+#. odoo-python
+#: code:addons/social_youtube/models/social_post.py:0
+#, python-format
+msgid "Description should not contain > or < symbol."
+msgstr "Опис не повинен містити > або < символів."
+
+#. module: social_youtube
 #: model:ir.model.fields,field_description:social_youtube.field_social_account_revoke_youtube__display_name
 msgid "Display Name"
 msgstr "Назва для відображення"
@@ -283,6 +298,8 @@ msgid ""
 "Our YouTube Social application uses YouTube API Services.\n"
 "                        By using it, you implicitly agree to the:"
 msgstr ""
+"Наш модуль Соцмереж YouTube використовує сервіси YouTube API.\n"
+"                        Використовуючи його, ви прямо погоджуєтеся з:"
 
 #. module: social_youtube
 #. odoo-python
@@ -314,7 +331,7 @@ msgstr "Публічний"
 #: code:addons/social_youtube/controllers/main.py:0
 #, python-format
 msgid "Read More about YouTube Channel"
-msgstr ""
+msgstr "Читати більше про YouTube канал"
 
 #. module: social_youtube
 #. odoo-python
@@ -464,6 +481,20 @@ msgid "There is no channel linked with this YouTube account."
 msgstr "Немає каналів, пов’язаних із цим обліковим записом YouTube."
 
 #. module: social_youtube
+#. odoo-python
+#: code:addons/social_youtube/models/social_post.py:0
+#, python-format
+msgid "Title cannot exceed 100 characters."
+msgstr "Заголовок не може перевищувати 100 символів."
+
+#. module: social_youtube
+#. odoo-python
+#: code:addons/social_youtube/models/social_post.py:0
+#, python-format
+msgid "Title should not contain > or < symbol."
+msgstr "Заголовок не повинен містити > або < символів."
+
+#. module: social_youtube
 #: model_terms:ir.ui.view,arch_db:social_youtube.social_account_view_form
 msgid ""
 "To provide our application services, note that we store the following data "
@@ -515,7 +546,7 @@ msgstr "Завантаження не вдалося. Спробуйте ще р
 #: code:addons/social_youtube/static/src/js/social_youtube_upload_field.js:0
 #, python-format
 msgid "Uploading... %s%"
-msgstr ""
+msgstr "Завантаження... %s%"
 
 #. module: social_youtube
 #. odoo-javascript
@@ -590,6 +621,13 @@ msgid "Yes, delete it"
 msgstr "Так, видалити його"
 
 #. module: social_youtube
+#. odoo-javascript
+#: code:addons/social_youtube/static/src/js/social_youtube_upload_field.js:0
+#, python-format
+msgid "You cannot use '>' or '<' in both title and description."
+msgstr "Ви не можете використовувати '>' або '<' і в заголовку і в описі."
+
+#. module: social_youtube
 #. odoo-python
 #: code:addons/social_youtube/models/social_media.py:0
 #, python-format
@@ -602,6 +640,20 @@ msgstr "У вас немає активної підписки. Купіть ї�
 #, python-format
 msgid "You have to upload a video when posting on YouTube."
 msgstr "Ви повинні завантажити відео під час публікації на YouTube."
+
+#. module: social_youtube
+#. odoo-javascript
+#: code:addons/social_youtube/static/src/js/social_youtube_upload_field.js:0
+#, python-format
+msgid "You need to give your video a description."
+msgstr "Ви повинні додати опис до вашого відео."
+
+#. module: social_youtube
+#. odoo-javascript
+#: code:addons/social_youtube/static/src/js/social_youtube_upload_field.js:0
+#, python-format
+msgid "You need to give your video a title."
+msgstr "Вам необхідно додати назву вашому відео."
 
 #. module: social_youtube
 #: model:ir.model.fields.selection,name:social_youtube.selection__social_media__media_type__youtube
@@ -682,7 +734,7 @@ msgstr "Опції YouTube"
 #. module: social_youtube
 #: model_terms:ir.ui.view,arch_db:social_youtube.youtube_preview
 msgid "YouTube Placeholder"
-msgstr ""
+msgstr "Заповнювач YouTube"
 
 #. module: social_youtube
 #: model:ir.model.fields,field_description:social_youtube.field_social_post__youtube_preview
@@ -766,6 +818,20 @@ msgstr "YouTube не надав дійсний код авторизації."
 #: model_terms:ir.ui.view,arch_db:social_youtube.social_account_view_form
 msgid "Your channel name and picture"
 msgstr "Назва вашого каналу і зображення"
+
+#. module: social_youtube
+#. odoo-javascript
+#: code:addons/social_youtube/static/src/js/social_youtube_upload_field.js:0
+#, python-format
+msgid "Your description cannot exceed 5000 characters."
+msgstr "Ваш опис не може перевищувати 5000 знаків."
+
+#. module: social_youtube
+#. odoo-javascript
+#: code:addons/social_youtube/static/src/js/social_youtube_upload_field.js:0
+#, python-format
+msgid "Your title cannot exceed 100 characters."
+msgstr "Ваш заголовок не може перевищувати 100 знаків."
 
 #. module: social_youtube
 #. odoo-python

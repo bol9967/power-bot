@@ -284,10 +284,6 @@ class SignRequest(models.Model):
         if not self:
             raise UserError(_('You should select at least one document to download.'))
 
-        for request in self:
-            if not request.completed_document_attachment_ids:
-                request._generate_completed_document()
-
         if len(self) < 2:
             return {
                 'name': 'Signed Document',
@@ -300,7 +296,6 @@ class SignRequest(models.Model):
                 'type': 'ir.actions.act_url',
                 'url': f'/sign/download/zip/{",".join(map(str, self.ids))}',
             }
-
 
     def open_logs(self):
         self.ensure_one()
@@ -387,10 +382,12 @@ class SignRequest(models.Model):
         today = fields.Date.today()
         # find all expired sign requests and those that need a reminder
         # in one query, the code will handle them differently
+        # note: archived requests are not fetched.
         self.env.cr.execute(f'''
         SELECT id 
         FROM sign_request sr
         WHERE sr.state = 'sent'
+        AND active = TRUE
         AND (
             sr.validity < '{today}' 
             OR (sr.reminder > 0 AND sr.last_reminder + sr.reminder * ('1 day'::interval) <= '{today}')
@@ -652,13 +649,20 @@ class SignRequest(models.Model):
                         p.drawOn(can, posX, posY)
 
                     elif item.type_id.item_type == "textarea":
-                        can.setFont(font, height*normalFontSize*0.8)
+                        font_size = height * normalFontSize * 0.8
+                        can.setFont(font, font_size)
                         lines = value.split('\n')
                         y = (1-item.posY)
                         for line in lines:
-                            y -= normalFontSize*0.9
-                            can.drawString(width*item.posX, height*y, line)
-                            y -= normalFontSize*0.1
+                            empty_space = width * item.width - can.stringWidth(line, font, font_size)
+                            x_shift = 0
+                            if item.alignment == 'center':
+                                x_shift = empty_space / 2
+                            elif item.alignment == 'right':
+                                x_shift = empty_space
+                            y -= normalFontSize * 0.9
+                            can.drawString(width * item.posX + x_shift, height * y, line)
+                            y -= normalFontSize * 0.1
 
                     elif item.type_id.item_type == "checkbox":
                         can.setFont(font, height*item.height*0.8)

@@ -8,14 +8,15 @@
 # Anita Kosobucka, 2023
 # Tadeusz Karpiński <tadeuszkarpinski@gmail.com>, 2023
 # Wil Odoo, 2024
+# Damian Ratus, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-24 20:55+0000\n"
+"POT-Creation-Date: 2024-02-22 15:46+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Wil Odoo, 2024\n"
+"Last-Translator: Damian Ratus, 2024\n"
 "Language-Team: Polish (https://app.transifex.com/odoo/teams/41243/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -715,7 +716,7 @@ msgstr "Czynność"
 #. module: sale_subscription
 #: model:ir.ui.menu,name:sale_subscription.mail_activity_plan_menu_config_subscription
 msgid "Activity Plans"
-msgstr ""
+msgstr "Plany działania"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__activity_type_id
@@ -745,10 +746,26 @@ msgid "Add a new plan"
 msgstr "Dodaj nowy plan"
 
 #. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid "Add a new rule"
+msgstr ""
+
+#. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.product_pricelist_view
 #: model_terms:ir.ui.view,arch_db:sale_subscription.product_template_view_form_recurring
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_plan_view_form
 msgid "Add a price rule"
+msgstr ""
+
+#. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid ""
+"Add a recurring plan for this product, or create a new one with the desired "
+"recurrence (e.g., Monthly)"
 msgstr ""
 
 #. module: sale_subscription
@@ -841,13 +858,6 @@ msgstr "Przypisz do"
 #: model:ir.model.fields.selection,name:sale_subscription.selection__payment_transaction__subscription_action__assign_token
 msgid "Assign Token"
 msgstr ""
-
-#. module: sale_subscription
-#. odoo-javascript
-#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
-#, python-format
-msgid "Assign a new partner to the contract"
-msgstr "Przypisanie nowego partnera do umowy"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__message_attachment_count
@@ -1100,6 +1110,13 @@ msgid "Choose a product name.<br/><i>(e.g. eLearning Access)</i>"
 msgstr "Wybierz nazwę produktu.<br/><i>(np. dostęp do eNauki)</i>"
 
 #. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid "Choose the invoice duration for your subscription"
+msgstr ""
+
+#. module: sale_subscription
 #: model:ir.model.fields.selection,name:sale_subscription.selection__sale_order_log__event_type__2_churn
 #: model:ir.model.fields.selection,name:sale_subscription.selection__sale_order_log_report__event_type__2_churn
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_order_log_report_search
@@ -1122,9 +1139,8 @@ msgstr "Spalony"
 #. odoo-javascript
 #: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
 #, python-format
-msgid "Click here to add some products or services to your quotation."
+msgid "Click here to add some products or services"
 msgstr ""
-"Kliknij tutaj, aby dodać niektóre produkty lub usługi do swojej oferty."
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__user_closable
@@ -1419,7 +1435,7 @@ msgstr "Odnośnik klienta"
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_subscription_report__state_id
 msgid "Customer State"
-msgstr ""
+msgstr "Status klienta"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_subscription_report__partner_zip
@@ -1654,7 +1670,7 @@ msgstr "Rozszerzenie"
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.subscription_portal_content
 msgid "Expiration Date:"
-msgstr ""
+msgstr "Termin ważności:"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_view_search
@@ -2098,8 +2114,15 @@ msgstr "Dodajmy wycenę z rekurencją"
 #. odoo-javascript
 #: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
 #, python-format
-msgid "Let's configure the product price"
-msgstr "Skonfigurujmy cenę produktu"
+msgid "Let's add price for selected recurrence"
+msgstr ""
+
+#. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid "Let's choose the customer for your subscription"
+msgstr ""
 
 #. module: sale_subscription
 #. odoo-javascript
@@ -3009,6 +3032,8 @@ msgstr "Przychody cykliczne"
 #. module: sale_subscription
 #. odoo-python
 #: code:addons/sale_subscription/models/sale_order.py:0
+#: code:addons/sale_subscription/models/sale_subscription_plan.py:0
+#: model:ir.model.constraint,message:sale_subscription.constraint_sale_subscription_plan_check_for_valid_billing_period_value
 #, python-format
 msgid ""
 "Recurring period must be a positive number. Please ensure the input is a "
@@ -3048,7 +3073,7 @@ msgstr "Odmówiono"
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_subscription_report__order_reference
 msgid "Related Order"
-msgstr ""
+msgstr "Powiązane zamówienie"
 
 #. module: sale_subscription
 #. odoo-python
@@ -4331,11 +4356,9 @@ msgstr "Objętość"
 #: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
 #, python-format
 msgid ""
-"Want recurring billing via subscription management? Get started by clicking "
-"here"
+"Want a recurring billing through subscription management? Get started by "
+"clicking here"
 msgstr ""
-"Chcesz rozliczać się cyklicznie poprzez zarządzanie subskrypcjami? "
-"Rozpocznij, klikając tutaj"
 
 #. module: sale_subscription
 #. odoo-python
@@ -4638,13 +4661,6 @@ msgid ""
 msgstr ""
 "Znajdziesz tutaj subskrypcje, które należy odnowić (data zakończenia jest "
 "bliska lub minęła)"
-
-#. module: sale_subscription
-#. odoo-javascript
-#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
-#, python-format
-msgid "Your contract is recurrent"
-msgstr "Twoja umowa jest powtarzalna"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.payment_method_form

@@ -3,8 +3,8 @@
 # 	* appointment
 # 
 # Translators:
-# Wil Odoo, 2024
 # Jolien De Paepe, 2024
+# Wil Odoo, 2024
 # Erwin van der Ploeg <erwin@odooexperts.nl>, 2024
 # 
 msgid ""
@@ -759,8 +759,8 @@ msgstr ""
 "<i class=\"fa fa-warning me-2\"/><span invisible=\"schedule_based_on != "
 "'users'\">Je moet deel uitmaken van een afspraaktype om een persoonlijke "
 "link te kunnen delen.</span> <span invisible=\"schedule_based_on != "
-"'resources'\">U kunt geen persoonlijke koppeling maken voor een afspraaktype"
-" op basis van bronnen.</span></i>"
+"'resources'\">Je kunt geen persoonlijke koppeling maken voor een "
+"afspraaktype op basis van bronnen.</span>"
 
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_meeting_date
@@ -1892,6 +1892,7 @@ msgstr ""
 #: code:addons/appointment/static/src/views/appointment_calendar/appointment_calendar_controller.xml:0
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_invite_view_form_insert_link
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_validated
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
 #, python-format
 msgid "Discard"
 msgstr "Negeren"
@@ -2511,6 +2512,11 @@ msgid "Monday"
 msgstr "Maandag"
 
 #. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "More Options"
+msgstr "Meer opties"
+
+#. module: appointment
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_question__question_type__text
 msgid "Multi-line text"
 msgstr "Tekst met meerdere regels"
@@ -2872,6 +2878,11 @@ msgid "Reminders"
 msgstr "Herinneringen"
 
 #. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "Remove"
+msgstr "Verwijderen"
+
+#. module: appointment
 #: model:ir.ui.menu,name:appointment.menu_schedule_report
 #: model:ir.ui.menu,name:appointment.reporting_menu_calendar
 msgid "Reporting"
@@ -2907,12 +2918,14 @@ msgstr "Resource verloven"
 #. module: appointment
 #: model:ir.actions.act_window,name:appointment.appointment_resource_action
 #: model:ir.model.fields,field_description:appointment.field_appointment_invite__resource_ids
+#: model:ir.model.fields,field_description:appointment.field_calendar_event__resource_ids
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_type__schedule_based_on__resources
 #: model:ir.ui.menu,name:appointment.menu_appointment_resource
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_form
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree_invitation
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_validated
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
 #: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_gantt_booking_resource
 msgid "Resources"
 msgstr "Resources"
@@ -2973,6 +2986,11 @@ msgstr "SMS fout bij versturen"
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_slot__weekday__6
 msgid "Saturday"
 msgstr "Zaterdag"
+
+#. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "Save"
+msgstr "Opslaan"
 
 #. module: appointment
 #: model:ir.ui.menu,name:appointment.menu_appointment_schedule_resources
@@ -3120,6 +3138,13 @@ msgstr "Stel je beschikbaarheid in"
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree
 msgid "Share"
 msgstr "Delen"
+
+#. module: appointment
+#. odoo-javascript
+#: code:addons/appointment/static/src/views/appointment_calendar/appointment_calendar_controller.xml:0
+#, python-format
+msgid "Share Appointment Link"
+msgstr "Afspraaklink delen"
 
 #. module: appointment
 #. odoo-javascript
@@ -3368,6 +3393,13 @@ msgstr ""
 #: model:ir.model.constraint,message:appointment.constraint_appointment_slot_check_start_and_end_hour
 msgid "The end time must be later than the start time."
 msgstr "De eindtijd moet later zijn dan de starttijd."
+
+#. module: appointment
+#. odoo-python
+#: code:addons/appointment/models/calendar_event.py:0
+#, python-format
+msgid "The event %s cannot book resources without an appointment type."
+msgstr "Deze afspraak %s kan geen bronnen boeken zonder een afspraaktype."
 
 #. module: appointment
 #. odoo-python
@@ -3689,6 +3721,8 @@ msgid ""
 "If kept empty, the working schedule of the company set on the resource will "
 "be used"
 msgstr ""
+"Indien leeg gehouden, wordt het werkschema van het bedrijf dat voor de "
+"resource is ingesteld, gebruikt"
 
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.staff_user_select

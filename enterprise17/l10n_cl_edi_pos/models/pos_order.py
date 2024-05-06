@@ -12,6 +12,10 @@ class PosOrder(models.Model):
         fields = super()._export_for_ui(order)
         if self.env.company.country_code == 'CL':
             fields['voucher_number'] = order.voucher_number
+            fields['l10n_latam_document_type'] = order.account_move.l10n_latam_document_type_id.name if order.account_move else False
+            fields['l10n_latam_document_number'] = order.account_move.l10n_latam_document_number if order.account_move else False
+            fields['l10n_cl_sii_regional_office'] = dict(self.env.company._fields['l10n_cl_sii_regional_office'].selection).get(self.env.company.l10n_cl_sii_regional_office)
+            fields['l10n_cl_sii_barcode'] = order.account_move._pdf417_barcode(order.account_move.l10n_cl_sii_barcode) if order.account_move.l10n_cl_sii_barcode else False
         return fields
 
     def _order_fields(self, ui_order):
@@ -70,10 +74,21 @@ class PosOrder(models.Model):
 
                 self.env['l10n_cl.account.invoice.reference'].create({
                     'move_id': move.id,
-                    'origin_doc_number': reversed_move_id.name,
+                    'origin_doc_number': reversed_move_id.l10n_latam_document_number,
                     'l10n_cl_reference_doc_type_id': reversed_move_id.l10n_latam_document_type_id.id,
                     'reference_doc_code': reference_doc_code,
-                    'reason': 'Anulación NC por aceptación con reparo (' + reversed_move_id.name + ')',
+                    'reason': 'Anulación NC por aceptación con reparo (' + reversed_move_id.l10n_latam_document_number + ')',
                     'date': move.date,
                 })
         return move
+
+    def get_cl_pos_info(self):
+        result = []
+        for order in self:
+            result.append({
+                'l10n_latam_document_type': order.account_move.l10n_latam_document_type_id.name,
+                'l10n_latam_document_number': order.account_move.l10n_latam_document_number,
+                'l10n_cl_sii_regional_office': dict(self.env.company._fields['l10n_cl_sii_regional_office'].selection).get(self.env.company.l10n_cl_sii_regional_office),
+                'l10n_cl_sii_barcode': order.account_move._pdf417_barcode(order.account_move.l10n_cl_sii_barcode) if order.account_move.l10n_cl_sii_barcode else False,
+            })
+        return result

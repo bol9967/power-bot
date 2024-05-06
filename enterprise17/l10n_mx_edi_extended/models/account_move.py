@@ -122,14 +122,16 @@ class AccountMove(models.Model):
             shipping = self.partner_shipping_id
             if shipping != customer:
 
+                shipping_cfdi_values = dict(cfdi_values)
                 # In case of COMEX we need to fill "NumRegIdTrib" with the real tax id of the customer
                 # but let the generic RFC.
-                shipping_values = self.env['l10n_mx_edi.document']._get_customer_cfdi_values(
-                    shipping,
-                    cfdi_values['receptor']['issued_address'],
+                self.env['l10n_mx_edi.document']._add_customer_cfdi_values(
+                    shipping_cfdi_values,
+                    customer=shipping,
                     usage=cfdi_values['receptor']['uso_cfdi'],
                     to_public=self.l10n_mx_edi_cfdi_to_public,
-                )['receptor']
+                )
+                shipping_values = shipping_cfdi_values['receptor']
                 if (
                     shipping.country_id == shipping.commercial_partner_id.country_id
                     and shipping_values['rfc'] == 'XEXX010101000'
@@ -140,7 +142,7 @@ class AccountMove(models.Model):
 
                 if shipping.country_id.l10n_mx_edi_code == 'MEX':
                     colony = shipping.l10n_mx_edi_colony_code
-                    locality = shipping.l10n_mx_edi_locality_id
+                    locality = shipping.l10n_mx_edi_locality_id.code
                     city = shipping.city_id.l10n_mx_edi_code
                 else:
                     colony = shipping.l10n_mx_edi_colony
@@ -155,15 +157,15 @@ class AccountMove(models.Model):
                 ext_trade_values['destinario'] = {
                     'num_reg_id_trib': shipping_vat,
                     'nombre': shipping.name,
-                    'calle': supplier.street_name,
-                    'numero_exterior': supplier.street_number,
-                    'numero_interior': supplier.street_number2,
+                    'calle': shipping.street_name,
+                    'numero_exterior': shipping.street_number,
+                    'numero_interior': shipping.street_number2,
                     'colonia': colony,
                     'localidad': locality,
                     'municipio': city,
                     'estado': state,
-                    'pais': supplier.country_id.l10n_mx_edi_code,
-                    'codigo_postal': supplier.zip,
+                    'pais': shipping.country_id.l10n_mx_edi_code,
+                    'codigo_postal': shipping.zip,
                 }
 
             # Certificate.

@@ -336,15 +336,15 @@ class AccountReport(models.Model):
     def _get_options_journals(self, options):
         selected_journals = [
             journal for journal in options.get('journals', [])
-            if not journal['id'] in ('divider', 'group') and journal['selected']
+            if journal['model'] == 'account.journal' and journal['selected']
         ]
         if not selected_journals:
             # If no journal is specifically selected, we actually want to select them all.
             # This is needed, because some reports will not use ALL available journals and filter by type.
             # Without getting them from the options, we will use them all, which is wrong.
             selected_journals = [
-                journal for journal in options.get('journals', []) if
-                not journal['id'] in ('divider', 'group')
+                journal for journal in options.get('journals', [])
+                if journal['model'] == 'account.journal'
             ]
         return selected_journals
 
@@ -1135,19 +1135,14 @@ class AccountReport(models.Model):
 
     def _init_options_companies(self, options, previous_options=None):
         if self.filter_multi_company == 'selector':
-            self._multi_company_selector_init_options(options, previous_options=previous_options)
+            companies = self.env.companies
         elif self.filter_multi_company == 'tax_units':
-            self._multi_company_tax_units_init_options(options, previous_options=previous_options)
+            companies = self._multi_company_tax_units_init_options(options, previous_options=previous_options)
         else:
             # Multi-company is disabled for this report ; only accept the sub-branches of the current company from the selector
-            options['companies'] = [{'name': company.name, 'id': company.id} for company in self.env.company._accessible_branches()]
+            companies = self.env.company._accessible_branches()
 
-    def _multi_company_selector_init_options(self, options, previous_options=None):
-        """ Initializes the companies option for reports configured to compute it from the company selector.
-        """
-        options['companies'] = [
-            {'id': c.id, 'name': c.name, 'currency_id': c.currency_id.id} for c in self.env.companies
-        ]
+        options['companies'] = [{'name': c.name, 'id': c.id, 'currency_id': c.currency_id.id} for c in companies]
 
     def _multi_company_tax_units_init_options(self, options, previous_options=None):
         """ Initializes the companies option for reports configured to compute it from tax units.
@@ -1201,7 +1196,7 @@ class AccountReport(models.Model):
             tax_unit = available_tax_units.filtered(lambda x: x.id == options['tax_unit'])
             companies = tax_unit.company_ids
 
-        options['companies'] = [{'name': company.name, 'id': company.id} for company in companies]
+        return companies
 
     ####################################################
     # OPTIONS: MULTI CURRENCY
@@ -2190,6 +2185,9 @@ class AccountReport(models.Model):
     def _format_column_values(self, options, line_dict_list, force_format=False):
         for line_dict in line_dict_list:
             for column_dict in line_dict['columns']:
+                if not column_dict:
+                    continue
+
                 if 'name' in column_dict and not force_format:
                     # Columns which have already received a name are assumed to be already formatted; nothing needs to be done for them.
                     # This gives additional flexibility to custom reports, if needed.
@@ -2197,11 +2195,11 @@ class AccountReport(models.Model):
 
                 column_dict['name'] = self.format_value(
                     options,
-                    column_dict['no_format'],
-                    currency=column_dict['currency'],
-                    blank_if_zero=column_dict['blank_if_zero'],
-                    figure_type=column_dict['figure_type'],
-                    digits=column_dict['digits']
+                    column_dict.get('no_format'),
+                    currency=column_dict.get('currency'),
+                    blank_if_zero=column_dict.get('blank_if_zero'),
+                    figure_type=column_dict.get('figure_type'),
+                    digits=column_dict.get('digits')
                 )
 
     def _generate_common_warnings(self, options, warnings):
@@ -2426,7 +2424,7 @@ class AccountReport(models.Model):
             'auditable': col_value is not None and column_expression.auditable,
             'blank_if_zero': blank_if_zero,
             'column_group_key': col_data.get('column_group_key'),
-            'currency': currency,
+            'currency': currency.id if currency else None,
             'currency_symbol': self.env.company.currency_id.symbol if options.get('multi_currency') else None,
             'digits': digits,
             'expression_label': col_data.get('expression_label'),
@@ -2760,21 +2758,52 @@ class AccountReport(models.Model):
             except ValueError:
                 return False
 
+        def add_expression_to_map(expression, expression_res, figure_types_cache, current_report_eval_dict, current_report_codes_map, other_reports_eval_dict, other_reports_codes_map, cross_report=False):
+            """
+                Process an expression and its result, updating various dictionaries with relevant information.
+                Parameters:
+                - expression (object): The expression object to process.
+                - expression_res (dict): The result of the expression.
+                - figure_types_cache (dict): {report : {label: figure_type}}.
+                - current_report_eval_dict (dict): {expression_id: value}.
+                - current_report_codes_map (dict): {line_code: {expression_label: expression_id}}.
+                - other_reports_eval_dict (dict): {forced_date_scope: {expression_id: value}}.
+                - other_reports_codes_map (dict): {forced_date_scope: {line_code: {expression_label: expression_id}}}.
+                - cross_report: A boolean to know if we are processsing cross_report expression.
+            """
+
+            expr_report = expression.report_line_id.report_id
+            report_default_figure_types = figure_types_cache.setdefault(expr_report, {})
+            expression_label = report_default_figure_types.get(expression.label, '_not_in_cache')
+            if expression_label == '_not_in_cache':
+                report_default_figure_types[expression.label] = expr_report.column_ids.filtered(
+                    lambda x: x.expression_label == expression.label).figure_type
+
+            default_figure_type = figure_types_cache[expr_report][expression.label]
+            figure_type = expression.figure_type or default_figure_type
+            value = expression_res['value']
+            if figure_type == 'monetary' and value:
+                value = self.env.company.currency_id.round(value)
+
+            if cross_report:
+                other_reports_eval_dict.setdefault(forced_date_scope, {})[expression.id] = value
+            else:
+                current_report_eval_dict[expression.id] = value
+
         current_report_eval_dict = {} # {expression_id: value}
         other_reports_eval_dict = {} # {forced_date_scope: {expression_id: value}}
         current_report_codes_map = {} # {line_code: {expression_label: expression_id}}
         other_reports_codes_map = {} # {forced_date_scope: {line_code: {expression_label: expression_id}}}
 
+        figure_types_cache = {}  # {report : {label: figure_type}}
         for expression, expression_res in other_current_report_expr_totals.items():
-            if expression.figure_type != 'string':
-                current_report_eval_dict[expression.id] = self.env.company.currency_id.round(expression_res['value'])
+            add_expression_to_map(expression, expression_res, figure_types_cache, current_report_eval_dict, current_report_codes_map, other_reports_eval_dict, other_reports_codes_map)
             if expression.report_line_id.code:
                 current_report_codes_map.setdefault(expression.report_line_id.code, {})[expression.label] = expression.id
 
         for forced_date_scope, scope_expr_totals in other_cross_report_expr_totals_by_scope.items():
             for expression, expression_res in scope_expr_totals.items():
-                if expression.figure_type != 'string':
-                    other_reports_eval_dict.setdefault(forced_date_scope, {})[expression.id] = self.env.company.currency_id.round(expression_res['value'])
+                add_expression_to_map(expression, expression_res, figure_types_cache, current_report_eval_dict, current_report_codes_map, other_reports_eval_dict, other_reports_codes_map, True)
                 if expression.report_line_id.code:
                     other_reports_codes_map.setdefault(forced_date_scope, {}).setdefault(expression.report_line_id.code, {})[expression.label] = expression.id
 
@@ -2808,6 +2837,10 @@ class AccountReport(models.Model):
         term_replacement_regex = r"(^|(?<=[ ()+/*-]))%s((?=[ ()+/*-])|$)"
         while to_treat:
             formula, unexpanded_formula, forced_date_scope = to_treat.pop(0)
+
+            full_eval_dict = {**current_report_eval_dict, **other_reports_eval_dict.get(forced_date_scope, {})}
+            full_codes_map = {**current_report_codes_map, **other_reports_codes_map.get(forced_date_scope, {})}
+
             # Evaluate the formula
             terms_to_eval = [term for term in re.split(term_separator_regex, formula) if term and not _check_is_float(term)]
             if terms_to_eval:
@@ -2816,8 +2849,8 @@ class AccountReport(models.Model):
                 for term in terms_to_eval:
                     try:
                         expanded_term = _resolve_subformula_on_dict(
-                            {**current_report_eval_dict, **other_reports_eval_dict.get(forced_date_scope, {})},
-                            {**current_report_codes_map, **other_reports_codes_map.get(forced_date_scope, {})},
+                            full_eval_dict,
+                            full_codes_map,
                             term,
                         )
                     except KeyError:
@@ -2853,9 +2886,13 @@ class AccountReport(models.Model):
 
                         criterium_code = other_expr_criterium_match['line_code']
                         criterium_label = other_expr_criterium_match['expr_label']
-                        criterium_expression_id = current_report_codes_map.get(criterium_code, {}).get(criterium_label)
-                        criterium_val = current_report_eval_dict.get(criterium_expression_id)
-                        if not isinstance(criterium_val, float):
+                        criterium_expression_id = full_codes_map.get(criterium_code, {}).get(criterium_label)
+                        criterium_val = full_eval_dict.get(criterium_expression_id)
+
+                        if not criterium_expression_id:
+                            raise UserError(_("This subformula references an unknown expression: %s", expression.subformula))
+
+                        if not isinstance(criterium_val, (float, int)):
                             # The criterium expression has not be evaluated yet. Postpone the evaluation of this formula, and skip this expression
                             # for now. We still try to evaluate other expressions using this formula if any; this means those expressions will
                             # be processed a second time later, giving the same result. This is a rare corner case, and not so costly anyway.
@@ -3392,6 +3429,7 @@ class AccountReport(models.Model):
         # We have to execute two separate queries, one for text values and one for numeric values
         num_queries, num_query_params = [], []
         string_queries, string_query_params = [], []
+        monetary_queries, monetary_query_params = [], []
         for formula, expressions in formulas_dict.items():
             query_end = ''
             if formula == 'most_recent':
@@ -3405,7 +3443,7 @@ class AccountReport(models.Model):
                     FROM account_report_external_value
                     WHERE {where_clause} AND target_report_expression_id = %s
                 """
-            num_query = f"""
+            monetary_query = f"""
                 SELECT
                     %s,
                     COALESCE(SUM(COALESCE(ROUND(CAST(value AS numeric) * currency_table.rate, currency_table.precision), 0)), 0)
@@ -3413,6 +3451,12 @@ class AccountReport(models.Model):
                     JOIN {currency_table_query} ON currency_table.company_id = account_report_external_value.company_id
                 WHERE {where_clause} AND target_report_expression_id = %s
                 {query_end}
+            """
+            num_query = f"""
+                    SELECT %s, SUM(COALESCE(value, 0))
+                      FROM account_report_external_value
+                     WHERE {where_clause} AND target_report_expression_id = %s
+               {query_end}
             """
 
             for expression in expressions:
@@ -3424,13 +3468,16 @@ class AccountReport(models.Model):
                 if expression.figure_type == "string":
                     string_queries.append(string_query)
                     string_query_params += params
+                elif expression.figure_type == "monetary":
+                    monetary_queries.append(monetary_query)
+                    monetary_query_params += params
                 else:
                     num_queries.append(num_query)
                     num_query_params += params
 
         # Convert to dict to have expression ids as keys
         query_results_dict = {}
-        for query_list, query_params in ((num_queries, num_query_params), (string_queries, string_query_params)):
+        for query_list, query_params in ((num_queries, num_query_params), (string_queries, string_query_params), (monetary_queries, monetary_query_params)):
             if query_list:
                 query = '(' + ') UNION ALL ('.join(query_list) + ')'
                 self._cr.execute(query, query_params)
@@ -3455,7 +3502,7 @@ class AccountReport(models.Model):
         for formula, expressions in formulas_dict.items():
             custom_engine_function = self._get_custom_report_function(formula, 'custom_engine')
             rslt[(formula, expressions)] = custom_engine_function(
-                expressions, options, date_scope, current_groupby, next_groupby, offset=offset, limit=limit, warnings=None)
+                expressions, options, date_scope, current_groupby, next_groupby, offset=offset, limit=limit, warnings=warnings)
         return rslt
 
     def _get_engine_query_tail(self, offset, limit):
@@ -3795,6 +3842,13 @@ class AccountReport(models.Model):
             domain = osv.expression.AND([
                 self._get_options_domain(column_group_options, 'strict_range'),
                 groupby_domain,
+            ])
+
+        # Analytic Filter
+        if column_group_options.get("analytic_accounts"):
+            domain = osv.expression.AND([
+                domain,
+                [("analytic_distribution", "in", column_group_options["analytic_accounts"])],
             ])
 
         return domain
@@ -4274,7 +4328,7 @@ class AccountReport(models.Model):
         self.ensure_one()
 
         warnings = {}
-        all_column_groups_expression_totals = self._compute_expression_totals_for_each_column_group(self.line_ids.expression_ids, options)
+        all_column_groups_expression_totals = self._compute_expression_totals_for_each_column_group(self.line_ids.expression_ids, options, warnings=warnings)
 
         # Convert all_column_groups_expression_totals to a json-friendly form (its keys are records)
         json_friendly_column_group_totals = self._get_json_friendly_column_group_totals(all_column_groups_expression_totals)
@@ -4510,7 +4564,7 @@ class AccountReport(models.Model):
 
         line = self.env['account.report.line'].browse(report_line_id)
 
-        if ',' not in groupby and options['export_mode'] != 'print':
+        if ',' not in groupby and options['export_mode'] is None:
             # if ',' not in groupby, then its a terminal groupby (like 'id' in 'partner_id, id'), so we can use the 'load more' feature if necessary
             # When printing, we want to ignore the limit.
             limit_to_load = self.load_more_limit or None
@@ -4522,7 +4576,7 @@ class AccountReport(models.Model):
         rslt_lines = line._expand_groupby(line_dict_id, groupby, options, offset=offset, limit=limit_to_load, load_one_more=bool(limit_to_load), unfold_all_batch_data=unfold_all_batch_data)
         lines_to_load = rslt_lines[:self.load_more_limit] if limit_to_load else rslt_lines
 
-        if not limit_to_load and options['export_mode'] != 'print':
+        if not limit_to_load and options['export_mode'] is None:
             lines_to_load = self._regroup_lines_by_name_prefix(options, rslt_lines, '_report_expand_unfoldable_line_groupby_prefix_group', line.hierarchy_level,
                                                                groupby=groupby, parent_line_dict_id=line_dict_id)
 
@@ -4673,7 +4727,7 @@ class AccountReport(models.Model):
 
     @api.model
     def format_value(self, options, value, currency=None, blank_if_zero=False, figure_type=None, digits=1):
-        currency_id = currency.id if currency else None
+        currency_id = int(currency or 0)
         currency = self.env['res.currency'].browse(currency_id)
 
         return self._format_value(options=options, value=value, currency=currency, blank_if_zero=blank_if_zero, figure_type=figure_type, digits=digits)
@@ -4795,7 +4849,7 @@ class AccountReport(models.Model):
                 io.BytesIO(action_report._run_wkhtmltopdf(
                     bodies,
                     footer=footer.decode(),
-                    landscape=is_landscape,
+                    landscape=is_landscape or self._context.get('force_landscape_printing'),
                     specific_paperformat_args={
                         'data-report-margin-top': 10,
                         'data-report-header-spacing': 10,
@@ -5279,11 +5333,13 @@ class AccountReport(models.Model):
                and len(options['columns']) == 2
 
     @api.model
-    def _check_groupby_fields(self, groupby_fields_name):
+    def _check_groupby_fields(self, groupby_fields_name: list[str] | str):
         """ Checks that each string in the groupby_fields_name list is a valid groupby value for an accounting report (so: it must be a field from
         account.move.line).
         """
-        for field_name in groupby_fields_name:
+        if isinstance(groupby_fields_name, str | bool):
+            groupby_fields_name = groupby_fields_name.split(',') if groupby_fields_name else []
+        for field_name in (fname.strip() for fname in groupby_fields_name):
             groupby_field = self.env['account.move.line']._fields.get(field_name)
             if not groupby_field:
                 raise UserError(_("Field %s does not exist on account.move.line.", field_name))
@@ -5669,6 +5725,13 @@ class AccountReportLine(models.Model):
     def _compute_display_custom_groupby_warning(self):
         for line in self:
             line.display_custom_groupby_warning = line.get_external_id() and line.user_groupby != line.groupby
+
+    @api.constrains('groupby', 'user_groupby')
+    def _validate_groupby(self):
+        super()._validate_groupby()
+        for report_line in self:
+            self.env['account.report']._check_groupby_fields(report_line.user_groupby)
+            self.env['account.report']._check_groupby_fields(report_line.groupby)
 
     def _expand_groupby(self, line_dict_id, groupby, options, offset=0, limit=None, load_one_more=False, unfold_all_batch_data=None):
         """ Expand function used to get the sublines of a groupby.

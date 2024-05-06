@@ -3,7 +3,7 @@
 # 	* room
 # 
 # Translators:
-# Wil Odoo, 2023
+# Wil Odoo, 2024
 # Abe Manyo, 2024
 # 
 msgid ""
@@ -87,6 +87,20 @@ msgid "Action Needed"
 msgstr "Action Dibutuhkan"
 
 #. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_form/room_booking_form.xml:0
+#, python-format
+msgid "Add"
+msgstr "Tambah"
+
+#. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.xml:0
+#, python-format
+msgid "Add a Booking"
+msgstr "Tambahkan Booking"
+
+#. module: room
 #: model:ir.model.fields,field_description:room.field_room_room__description
 msgid "Amenities"
 msgstr "Fasilitas"
@@ -97,6 +111,13 @@ msgstr "Fasilitas"
 #, python-format
 msgid "Are you sure you want to delete this booking?"
 msgstr "Apakah Anda yakin ingin menghapus booking ini?"
+
+#. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.js:0
+#, python-format
+msgid "Are you sure you want to end the current booking ?"
+msgstr "Apakah Anda yakin ingin mengakhiri booking saat ini ?"
 
 #. module: room
 #: model:ir.model.fields,field_description:room.field_room_booking__message_attachment_count
@@ -234,7 +255,14 @@ msgstr "Tanggal"
 #: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.js:0
 #, python-format
 msgid "Delete"
-msgstr "Hapu"
+msgstr "Hapus"
+
+#. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.xml:0
+#, python-format
+msgid "Discard"
+msgstr "Buang"
 
 #. module: room
 #: model:ir.model.fields,field_description:room.field_room_booking__display_name
@@ -258,6 +286,14 @@ msgstr "Contoh proyektor, kapasitas 6 orang"
 msgid "Enable the user to manage meeting rooms available for booking"
 msgstr ""
 "Aktifkan user untuk mengelola ruangan meeting yang tersedia untuk booking"
+
+#. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.js:0
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.xml:0
+#, python-format
+msgid "End Booking"
+msgstr "Akhiri Booking"
 
 #. module: room
 #: model:ir.model.fields,field_description:room.field_room_booking__stop_datetime
@@ -441,6 +477,16 @@ msgid "Office Name"
 msgstr "Nama Kantor"
 
 #. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.xml:0
+#, python-format
+msgid ""
+"Oops! Looks like you have multiple tabs opened. Make sure to use only one."
+msgstr ""
+"Oops! Sepertinya Anda memiliki lebih dari satu tab yang terbuka. Pastikan "
+"Anda hanya menggunakan satu. "
+
+#. module: room
 #: model_terms:ir.ui.view,arch_db:room.room_room_view_form
 msgid "Open"
 msgstr "Terbuka"
@@ -480,12 +526,6 @@ msgstr "Prokyektor, whiteboard"
 #, python-format
 msgid "Public Booking"
 msgstr "Booking Publik"
-
-#. module: room
-#: model:ir.model.fields,field_description:room.field_room_booking__rating_ids
-#: model:ir.model.fields,field_description:room.field_room_room__rating_ids
-msgid "Ratings"
-msgstr "Rating-Rating"
 
 #. module: room
 #: model:ir.actions.act_window,name:room.room_room_action
@@ -560,6 +600,13 @@ msgstr "Kode Singkat"
 #: model:ir.model.fields,field_description:room.field_room_booking__start_datetime
 msgid "Start Datetime"
 msgstr "Mulai Tanggalwaktu"
+
+#. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.xml:0
+#, python-format
+msgid "Start now"
+msgstr "Mulai Sekarang"
 
 #. module: room
 #: model:ir.model.constraint,message:room.constraint_room_room_uniq_access_token

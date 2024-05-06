@@ -4,6 +4,7 @@
 # 
 # Translators:
 # Wil Odoo, 2023
+# Thi Huong Nguyen, 2024
 # 
 msgid ""
 msgstr ""
@@ -11,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 22:20+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Wil Odoo, 2023\n"
+"Last-Translator: Thi Huong Nguyen, 2024\n"
 "Language-Team: Vietnamese (https://app.transifex.com/odoo/teams/41243/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -78,7 +79,7 @@ msgstr "Cập nhật lần cuối vào"
 #. module: timer
 #: model:ir.model.constraint,message:timer.constraint_timer_timer_unique_timer
 msgid "Only one timer occurrence by model, record and user"
-msgstr ""
+msgstr "Only one timer occurrence by model, record and user"
 
 #. module: timer
 #. odoo-python
@@ -90,7 +91,7 @@ msgstr "Hoạt động không được hỗ trợ"
 #. module: timer
 #: model:ir.model.fields,field_description:timer.field_timer_timer__res_id
 msgid "Res"
-msgstr ""
+msgstr "Res"
 
 #. module: timer
 #: model:ir.model.fields,field_description:timer.field_timer_timer__res_model
@@ -120,12 +121,12 @@ msgstr "Đồng hồ tính giờ Lần tạm ngừng cuối cùng"
 #. module: timer
 #: model:ir.model,name:timer.model_timer_mixin
 msgid "Timer Mixin"
-msgstr ""
+msgstr "Mixin Đồng hồ tính giờ"
 
 #. module: timer
 #: model:ir.model,name:timer.model_timer_timer
 msgid "Timer Module"
-msgstr ""
+msgstr "Phân hệ Đồng hồ tính giờ"
 
 #. module: timer
 #: model:ir.model.fields,field_description:timer.field_timer_mixin__timer_start
@@ -141,4 +142,4 @@ msgstr "Người dùng"
 #. module: timer
 #: model:ir.model.fields,field_description:timer.field_timer_mixin__user_timer_id
 msgid "User Timer"
-msgstr "Người dùng Đồng hồ tính giờ"
+msgstr "Đồng hồ tính giờ của người dùng"

@@ -3,15 +3,15 @@
 # 	* account_reports
 # 
 # Translators:
-# Martin Trigaux, 2023
 # Wil Odoo, 2024
+# Martin Trigaux, 2024
 # Tony Ng, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-26 16:10+0000\n"
+"POT-Creation-Date: 2024-04-04 14:45+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
 "Last-Translator: Tony Ng, 2024\n"
 "Language-Team: Chinese (Taiwan) (https://app.transifex.com/odoo/teams/41243/zh_TW/)\n"
@@ -41,6 +41,13 @@ msgstr "及另一個"
 #, python-format
 msgid " is not supported by the Journal Report"
 msgstr "不受日記賬報告支援"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "\" account balance is affected by"
+msgstr "\" 賬戶結餘受以下影響："
 
 #. module: account_reports
 #. odoo-python
@@ -89,6 +96,16 @@ msgid "(%s lines)"
 msgstr "（%s 行）"
 
 #. module: account_reports
+#: model:account.report.line,name:account_reports.outstanding_receipts
+msgid "(+) Outstanding Receipts"
+msgstr "(+) 未結收款"
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.outstanding_payments
+msgid "(-) Outstanding Payments"
+msgstr "(-) 未結付款"
+
+#. module: account_reports
 #. odoo-python
 #: code:addons/account_reports/models/account_report.py:0
 #, python-format
@@ -115,6 +132,13 @@ msgstr ",包括分析模擬"
 #, python-format
 msgid ", Only Show Unreconciled Entries"
 msgstr ",只顯示未對賬記項"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid ", leading to an unexplained difference of"
+msgstr ""
 
 #. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.view_move_form_vat_return
@@ -156,6 +180,11 @@ msgstr "<u>標記有「<i class=\"fa fa-warning\"/>」的錯誤屬非常嚴重�
 #: model_terms:ir.ui.view,arch_db:account_reports.partner_view_buttons
 msgid "<span class=\"o_stat_text\">Partner Ledger</span>"
 msgstr "<span class=\"o_stat_text\">合作夥伴分類賬</span>"
+
+#. module: account_reports
+#: model_terms:ir.ui.view,arch_db:account_reports.account_reports_journal_dashboard_kanban_view
+msgid "<span role=\"separator\">Reconciliation</span>"
+msgstr "<span role=\"separator\">對賬</span>"
 
 #. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.view_account_report_file_download_error_wizard_form
@@ -453,12 +482,14 @@ msgstr "所有報告款式"
 
 #. module: account_reports
 #: model:account.report.column,name:account_reports.account_financial_report_ec_sales_amount
+#: model:account.report.column,name:account_reports.bank_reconciliation_report_amount
 msgid "Amount"
 msgstr "金額"
 
 #. module: account_reports
 #: model:account.report.column,name:account_reports.aged_payable_report_amount_currency
 #: model:account.report.column,name:account_reports.aged_receivable_report_amount_currency
+#: model:account.report.column,name:account_reports.bank_reconciliation_report_amount_currency
 #: model:account.report.column,name:account_reports.partner_ledger_report_amount_currency
 msgid "Amount Currency"
 msgstr "金額貨幣"
@@ -618,6 +649,18 @@ msgstr "結餘（外幣計算）"
 
 #. module: account_reports
 #. odoo-python
+#: code:addons/account_reports/models/bank_reconciliation_report.py:0
+#, python-format
+msgid "Balance of '%s'"
+msgstr ""
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.balance_bank
+msgid "Balance of Bank"
+msgstr ""
+
+#. module: account_reports
+#. odoo-python
 #: code:addons/account_reports/models/account_generic_tax_report.py:0
 #, python-format
 msgid "Balance tax advance payment account"
@@ -636,6 +679,21 @@ msgstr "稅款往來賬戶結餘（應付）"
 #, python-format
 msgid "Balance tax current account (receivable)"
 msgstr "稅款往來賬戶結餘（應收）"
+
+#. module: account_reports
+#: model:ir.actions.client,name:account_reports.action_account_report_bank_reconciliation
+msgid "Bank Reconciliation"
+msgstr "銀行對帳"
+
+#. module: account_reports
+#: model:account.report,name:account_reports.bank_reconciliation_report
+msgid "Bank Reconciliation Report"
+msgstr "銀行對帳報告"
+
+#. module: account_reports
+#: model:ir.model,name:account_reports.model_account_bank_reconciliation_report_handler
+msgid "Bank Reconciliation Report Custom Handler"
+msgstr "銀行對賬報告自訂處理程式"
 
 #. module: account_reports
 #: model:account.report.line,name:account_reports.account_financial_report_bank_view0
@@ -1030,6 +1088,7 @@ msgstr "貸方"
 #. module: account_reports
 #: model:account.report.column,name:account_reports.aged_payable_report_currency
 #: model:account.report.column,name:account_reports.aged_receivable_report_currency
+#: model:account.report.column,name:account_reports.bank_reconciliation_report_currency
 #: model:account.report.column,name:account_reports.general_ledger_report_amount_currency
 msgid "Currency"
 msgstr "貨幣"
@@ -1095,8 +1154,18 @@ msgid "Custom Handler Model Name"
 msgstr "自訂處理程式模型名稱"
 
 #. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/bank_reconciliation_report.py:0
+#, python-format
+msgid ""
+"Custom engine _report_custom_engine_last_statement_balance_amount does not "
+"support groupby"
+msgstr ""
+
+#. module: account_reports
 #. odoo-javascript
 #: code:addons/account_reports/static/src/components/account_report/filters/filter_comparison.xml:0
+#: model:account.report.column,name:account_reports.bank_reconciliation_report_date
 #: model:ir.model.fields,field_description:account_reports.field_account_multicurrency_revaluation_wizard__date
 #, python-format
 msgid "Date"
@@ -1119,6 +1188,14 @@ msgstr "日期不能為空"
 #, python-format
 msgid "Debit"
 msgstr "借方"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/journal_report/line/line.xml:0
+#: model_terms:ir.ui.view,arch_db:account_reports.journal_report_pdf_export_main_table_body
+#, python-format
+msgid "Deductible"
+msgstr "可扣除"
 
 #. module: account_reports
 #. odoo-javascript
@@ -1189,6 +1266,13 @@ msgid "Depreciation"
 msgstr "折舊"
 
 #. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/account_generic_tax_report.py:0
+#, python-format
+msgid "Difference from rounding taxes"
+msgstr ""
+
+#. module: account_reports
 #: model:ir.model.fields,field_description:account_reports.field_account_report_line__display_custom_groupby_warning
 msgid "Display Custom Groupby Warning"
 msgstr "顯示自訂分組依據警告"
@@ -1231,6 +1315,14 @@ msgstr "繼續下載"
 #: model_terms:ir.ui.view,arch_db:account_reports.res_config_settings_view_form
 msgid "Download the Data Inalterability Check Report"
 msgstr "下載數據不變性檢查報告"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/journal_report/line/line.xml:0
+#: model_terms:ir.ui.view,arch_db:account_reports.journal_report_pdf_export_main_table_body
+#, python-format
+msgid "Due"
+msgstr "到期"
 
 #. module: account_reports
 #: model:account.report.column,name:account_reports.partner_ledger_report_date_maturity
@@ -1604,6 +1696,7 @@ msgstr "要呼叫的函數"
 #. odoo-python
 #: code:addons/account_reports/models/account_report.py:0
 #: code:addons/account_reports/models/account_trial_balance_report.py:0
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
 #: code:addons/account_reports/static/src/components/multicurrency_revaluation_report/line_name.xml:0
 #: model:account.report,name:account_reports.general_ledger_report
 #: model:ir.actions.client,name:account_reports.action_account_report_general_ledger
@@ -1650,6 +1743,13 @@ msgstr "一般稅務報表自訂處理程式（賬戶 → 稅項）"
 #: model:ir.model,name:account_reports.model_account_generic_tax_report_handler_tax_account
 msgid "Generic Tax Report Custom Handler (Tax -> Account)"
 msgstr "一般稅務報表自訂處理程式（稅項 → 賬戶）"
+
+#. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/account_journal_report.py:0
+#, python-format
+msgid "Global Tax Summary"
+msgstr "全球稅務摘要"
 
 #. module: account_reports
 #. odoo-python
@@ -1805,6 +1905,13 @@ msgid "Impacted Tax Grids"
 msgstr "受影響稅務規則"
 
 #. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/account_report/filters/filters.js:0
+#, python-format
+msgid "In %s"
+msgstr "在 %s"
+
+#. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.view_account_report_search
 msgid "Inactive"
 msgstr "未啟用"
@@ -1840,6 +1947,18 @@ msgid "Including Analytic Simulations"
 msgstr "包括模擬分析"
 
 #. module: account_reports
+#: model:account.report.line,name:account_reports.no_statement_unreconciled_payments
+#: model:account.report.line,name:account_reports.unreconciled_last_statement_payments
+msgid "Including Unreconciled Payments"
+msgstr ""
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.no_statement_unreconciled_receipt
+#: model:account.report.line,name:account_reports.unreconciled_last_statement_receipts
+msgid "Including Unreconciled Receipts"
+msgstr ""
+
+#. module: account_reports
 #: model:account.report.line,name:account_reports.account_financial_report_executivesummary_income0
 #: model:account.report.line,name:account_reports.account_financial_report_totalincome0
 msgid "Income"
@@ -1861,6 +1980,13 @@ msgstr "收入準備金賬戶"
 #, python-format
 msgid "Income Provision for %s"
 msgstr "%s 收入準備金"
+
+#. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/bank_reconciliation_report.py:0
+#, python-format
+msgid "Inconsistent Statements"
+msgstr "Inconsistent Statements"
 
 #. module: account_reports
 #. odoo-python
@@ -2009,6 +2135,7 @@ msgstr "日記賬項目"
 #: code:addons/account_reports/models/account_deferred_reports.py:0
 #: code:addons/account_reports/models/account_report.py:0
 #: code:addons/account_reports/models/account_trial_balance_report.py:0
+#: code:addons/account_reports/models/bank_reconciliation_report.py:0
 #: code:addons/account_reports/static/src/components/aged_partner_balance/line_name/line_name.xml:0
 #: code:addons/account_reports/static/src/components/general_ledger/line_name.xml:0
 #: code:addons/account_reports/static/src/components/journal_report/line_name.xml:0
@@ -2074,6 +2201,7 @@ msgstr "負債 + 權益"
 #. odoo-python
 #: code:addons/account_reports/static/src/components/account_report/line/popover/debug_popover.xml:0
 #: code:addons/account_reports/wizard/multicurrency_revaluation.py:0
+#: model:account.report.column,name:account_reports.bank_reconciliation_report_label
 #: model:account.report.column,name:account_reports.journal_report_partner_name
 #, python-format
 msgid "Label"
@@ -2133,6 +2261,11 @@ msgstr "最後更新者"
 #: model:ir.model.fields,field_description:account_reports.field_account_tax_unit__write_date
 msgid "Last Updated on"
 msgstr "最後更新於"
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.last_statement_balance
+msgid "Last statement balance"
+msgstr ""
 
 #. module: account_reports
 #. odoo-python
@@ -2225,6 +2358,11 @@ msgstr "此單位成員"
 #, python-format
 msgid "Method '%s' must start with the '%s' prefix."
 msgstr "方法 %s 必須以「%s」字首開頭。"
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.misc_operations
+msgid "Misc. operations"
+msgstr ""
 
 #. module: account_reports
 #. odoo-python
@@ -2394,6 +2532,14 @@ msgstr "非交易應收款"
 
 #. module: account_reports
 #. odoo-javascript
+#: code:addons/account_reports/static/src/components/journal_report/line/line.xml:0
+#: model_terms:ir.ui.view,arch_db:account_reports.journal_report_pdf_export_main_table_body
+#, python-format
+msgid "Non-Deductible"
+msgstr "不可扣除"
+
+#. module: account_reports
+#. odoo-javascript
 #: code:addons/account_reports/static/src/components/account_report/filters/filter_horizontal_groups.xml:0
 #: code:addons/account_reports/static/src/components/account_report/filters/filters.js:0
 #: code:addons/account_reports/static/src/components/account_report/filters/filters.js:0
@@ -2453,6 +2599,7 @@ msgstr "只限賬單管理員才可更改鎖定日期！"
 #. odoo-python
 #: code:addons/account_reports/models/account_report.py:0
 #: code:addons/account_reports/static/src/components/account_report/filters/filter_extra_options.xml:0
+#: code:addons/account_reports/static/src/components/account_report/filters/filter_extra_options.xml:0
 #, python-format
 msgid "Only Show Unreconciled Entries"
 msgstr "只顯示未核銷的項"
@@ -2497,6 +2644,11 @@ msgstr "選項："
 #: model:account.report.line,name:account_reports.account_financial_report_other_income0
 msgid "Other Income"
 msgstr "其他收入"
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.outstanding
+msgid "Outstanding Receipts/Payments"
+msgstr ""
 
 #. module: account_reports
 #. odoo-python
@@ -2691,18 +2843,18 @@ msgid "Post"
 msgstr "過賬"
 
 #. module: account_reports
-#: model_terms:ir.ui.view,arch_db:account_reports.view_move_form_vat_return
-msgid ""
-"Posting this entry will also update and post the unposted closings of the "
-"depending companies."
-msgstr "發佈此條目還將更新和發佈相關公司未發佈的結算資料。"
-
-#. module: account_reports
 #. odoo-javascript
 #: code:addons/account_reports/static/src/components/account_report/filters/filter_extra_options.xml:0
 #, python-format
 msgid "Posted Entries Only"
 msgstr "只限已過賬記項"
+
+#. module: account_reports
+#: model_terms:ir.ui.view,arch_db:account_reports.view_move_form_vat_return
+msgid ""
+"Posting this entry will also update and post the unposted closings of the "
+"depending companies."
+msgstr "發佈此條目還將更新和發佈相關公司未發佈的結算資料。"
 
 #. module: account_reports
 #: model:account.report.line,name:account_reports.account_financial_report_prepayements0
@@ -2784,6 +2936,11 @@ msgstr "應收稅額"
 #: model:account.report.line,name:account_reports.account_financial_report_receivable0
 msgid "Receivables"
 msgstr "應收賬款"
+
+#. module: account_reports
+#: model_terms:ir.ui.view,arch_db:account_reports.account_reports_journal_dashboard_kanban_view
+msgid "Reconciliation Report"
+msgstr "對賬報表"
 
 #. module: account_reports
 #: model:ir.model.fields,field_description:account_reports.field_account_financial_year_op__account_tax_periodicity_reminder_day
@@ -2930,6 +3087,13 @@ msgstr "短期現金預測"
 #: model:ir.model.fields,field_description:account_reports.field_account_multicurrency_revaluation_wizard__show_warning_move_id
 msgid "Show Warning Move"
 msgstr "顯示警告分錄"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "Some"
+msgstr ""
 
 #. module: account_reports
 #. odoo-javascript
@@ -3194,6 +3358,13 @@ msgstr "使用此稅務單位對你公司的稅務報表申報進行分組的國
 
 #. module: account_reports
 #. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "The current balance in the"
+msgstr ""
+
+#. module: account_reports
+#. odoo-javascript
 #: code:addons/account_reports/static/src/components/deferred_reports/warnings.xml:0
 #, python-format
 msgid "The entry that will be generated will take them into account."
@@ -3359,6 +3530,13 @@ msgstr "此報表只顯示目前生效公司的數據。"
 #. odoo-python
 #: code:addons/account_reports/models/account_report.py:0
 #, python-format
+msgid "This subformula references an unknown expression: %s"
+msgstr ""
+
+#. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/account_report.py:0
+#, python-format
 msgid ""
 "This tag is reported in a line of the report but is not linked to any "
 "account of the Chart of Accounts"
@@ -3406,6 +3584,11 @@ msgstr "%s總額"
 #, python-format
 msgid "Trade Partners"
 msgstr "貿易夥伴"
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.transaction_without_statement
+msgid "Transactions without statement"
+msgstr ""
 
 #. module: account_reports
 #: model:account.report,name:account_reports.trial_balance_report
@@ -3689,6 +3872,15 @@ msgstr "無法為鎖定的期間生成條目。"
 #: code:addons/account_reports/models/account_move.py:0
 #, python-format
 msgid ""
+"You cannot reset this closing entry to draft, as another closing entry has "
+"been posted at a later date."
+msgstr "此結算記項不可重設為草稿，因為有另一個結算記項已在較後日子過賬。"
+
+#. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/account_move.py:0
+#, python-format
+msgid ""
 "You cannot reset this closing entry to draft, as it would delete carryover "
 "values impacting the tax report of a locked period. To do this, you first "
 "need to modify you tax return lock date."
@@ -3735,6 +3927,13 @@ msgid "days after period"
 msgstr "天(期間之後)"
 
 #. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "doesn't match the balance of your"
+msgstr ""
+
+#. module: account_reports
 #: model:ir.model.fields.selection,name:account_reports.selection__res_company__account_tax_periodicity__2_months
 msgid "every 2 months"
 msgstr "每 2 個月"
@@ -3743,6 +3942,13 @@ msgstr "每 2 個月"
 #: model:ir.model.fields.selection,name:account_reports.selection__res_company__account_tax_periodicity__4_months
 msgid "every 4 months"
 msgstr "每 4 個月"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "have a starting balance different from the previous ending balance."
+msgstr ""
 
 #. module: account_reports
 #. odoo-javascript
@@ -3759,6 +3965,20 @@ msgstr "在下一期間。"
 #, python-format
 msgid "invoices"
 msgstr "應收憑單"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "journal items"
+msgstr "journal items"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "last bank statement"
+msgstr ""
 
 #. module: account_reports
 #: model:ir.model.fields.selection,name:account_reports.selection__res_company__account_tax_periodicity__monthly
@@ -3797,6 +4017,13 @@ msgstr "每季"
 #: model:ir.model.fields.selection,name:account_reports.selection__res_company__account_tax_periodicity__semester
 msgid "semi-annually"
 msgstr "每半年"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "statements"
+msgstr "statements"
 
 #. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.view_tax_unit_form
@@ -3838,6 +4065,13 @@ msgstr "未過帳日記帳分錄"
 #, python-format
 msgid "were carried over to this line from previous period."
 msgstr "是從上一期間結轉至此資料行的。"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "which don't originate from a bank statement nor payment."
+msgstr ""
 
 #. module: account_reports
 #. odoo-javascript

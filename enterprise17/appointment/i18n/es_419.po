@@ -4,8 +4,8 @@
 # 
 # Translators:
 # Iran Villalobos López, 2024
-# Wil Odoo, 2024
 # Patricia Gutiérrez Capetillo <pagc@odoo.com>, 2024
+# Wil Odoo, 2024
 # Fernanda Alvarez, 2024
 # 
 msgid ""
@@ -142,7 +142,7 @@ msgid ""
 "                                    <span>(Last 30 Days)</span>"
 msgstr ""
 "<br/>\n"
-"                                    <span>(Últimos 30 Días)</span>"
+"                                    <span>(últimos 30 días)</span>"
 
 #. module: appointment
 #: model:mail.template,body_html:appointment.attendee_invitation_mail_template
@@ -948,7 +948,7 @@ msgstr "Acción"
 #. module: appointment
 #: model:ir.model.fields,field_description:appointment.field_appointment_type__message_needaction
 msgid "Action Needed"
-msgstr "Acción requerida"
+msgstr "Se requiere una acción"
 
 #. module: appointment
 #: model:ir.model.fields,field_description:appointment.field_appointment_booking_line__active
@@ -1895,6 +1895,7 @@ msgstr ""
 #: code:addons/appointment/static/src/views/appointment_calendar/appointment_calendar_controller.xml:0
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_invite_view_form_insert_link
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_validated
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
 #, python-format
 msgid "Discard"
 msgstr "Descartar"
@@ -2030,7 +2031,7 @@ msgstr "Para"
 #. module: appointment
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_slot__weekday__5
 msgid "Friday"
-msgstr "viernes"
+msgstr "Viernes"
 
 #. module: appointment
 #: model:ir.model.fields,field_description:appointment.field_appointment_slot__start_datetime
@@ -2516,7 +2517,12 @@ msgstr "Mínimo"
 #. module: appointment
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_slot__weekday__1
 msgid "Monday"
-msgstr "lunes"
+msgstr "Lunes"
+
+#. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "More Options"
+msgstr "Más opciones"
 
 #. module: appointment
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_question__question_type__text
@@ -2556,7 +2562,7 @@ msgstr "Nueva configuración automática para citas "
 #. module: appointment
 #: model_terms:ir.actions.act_window,help:appointment.appointment_answer_input_action_from_question
 msgid "No Answers yet!"
-msgstr "¡Todavía no hay respuestas!"
+msgstr "Todavía no hay respuestas"
 
 #. module: appointment
 #: model_terms:ir.actions.act_window,help:appointment.appointment_type_action
@@ -2593,7 +2599,7 @@ msgstr "Mensaje de no hay usuario asignado"
 #: model_terms:ir.actions.act_window,help:appointment.calendar_event_action_appointment_reporting
 #: model_terms:ir.actions.act_window,help:appointment.calendar_event_action_report_all
 msgid "No data yet!"
-msgstr "¡Todavía no hay datos!"
+msgstr "Todavía no hay información"
 
 #. module: appointment
 #. odoo-python
@@ -2879,6 +2885,11 @@ msgid "Reminders"
 msgstr "Recordatorios"
 
 #. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "Remove"
+msgstr "Eliminar"
+
+#. module: appointment
 #: model:ir.ui.menu,name:appointment.menu_schedule_report
 #: model:ir.ui.menu,name:appointment.reporting_menu_calendar
 msgid "Reporting"
@@ -2914,12 +2925,14 @@ msgstr "Recursos en pausa"
 #. module: appointment
 #: model:ir.actions.act_window,name:appointment.appointment_resource_action
 #: model:ir.model.fields,field_description:appointment.field_appointment_invite__resource_ids
+#: model:ir.model.fields,field_description:appointment.field_calendar_event__resource_ids
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_type__schedule_based_on__resources
 #: model:ir.ui.menu,name:appointment.menu_appointment_resource
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_form
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree_invitation
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_validated
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
 #: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_gantt_booking_resource
 msgid "Resources"
 msgstr "Recursos"
@@ -2974,12 +2987,17 @@ msgstr "AGENDADO"
 #. module: appointment
 #: model:ir.model.fields,field_description:appointment.field_appointment_type__message_has_sms_error
 msgid "SMS Delivery error"
-msgstr "Error al enviar SMS"
+msgstr "Error en el envío del SMS"
 
 #. module: appointment
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_slot__weekday__6
 msgid "Saturday"
-msgstr "sábado"
+msgstr "Sábado"
+
+#. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "Save"
+msgstr "Guardar"
 
 #. module: appointment
 #: model:ir.ui.menu,name:appointment.menu_appointment_schedule_resources
@@ -3126,6 +3144,13 @@ msgstr "Configure su disponibilidad"
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree
 msgid "Share"
 msgstr "Compartir"
+
+#. module: appointment
+#. odoo-javascript
+#: code:addons/appointment/static/src/views/appointment_calendar/appointment_calendar_controller.xml:0
+#, python-format
+msgid "Share Appointment Link"
+msgstr "Compartir el enlace de la cita"
 
 #. module: appointment
 #. odoo-javascript
@@ -3376,6 +3401,13 @@ msgstr "El tiempo de finalización debe ser después del tiempo de inicio."
 
 #. module: appointment
 #. odoo-python
+#: code:addons/appointment/models/calendar_event.py:0
+#, python-format
+msgid "The event %s cannot book resources without an appointment type."
+msgstr "El evento %s no puede reservar recursos sin un tipo de cita."
+
+#. module: appointment
+#. odoo-python
 #: code:addons/appointment/controllers/portal.py:0
 #, python-format
 msgid "The field '%s' does not exist in the targeted model"
@@ -3515,7 +3547,7 @@ msgstr "Esta es una vista previa del formulario para la cita del cliente."
 #. module: appointment
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_slot__weekday__4
 msgid "Thursday"
-msgstr "jueves"
+msgstr "Jueves"
 
 #. module: appointment
 #: model:ir.model.fields,field_description:appointment.field_appointment_resource__tz
@@ -3584,7 +3616,7 @@ msgstr "Total:"
 #. module: appointment
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_slot__weekday__2
 msgid "Tuesday"
-msgstr "martes"
+msgstr "Martes"
 
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_search
@@ -3682,7 +3714,7 @@ msgstr "Historial de comunicación del sitio web"
 #. module: appointment
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_slot__weekday__3
 msgid "Wednesday"
-msgstr "miércoles"
+msgstr "Miércoles"
 
 #. module: appointment
 #: model:ir.model.fields,field_description:appointment.field_appointment_slot__weekday
@@ -3695,6 +3727,8 @@ msgid ""
 "If kept empty, the working schedule of the company set on the resource will "
 "be used"
 msgstr ""
+"Si deja el campo vacío, el horario de trabajo de la empresa se configurará "
+"en el recurso que se use."
 
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.staff_user_select
@@ -3709,7 +3743,7 @@ msgstr "Con Outlook o Google"
 #. module: appointment
 #: model:ir.model.fields,field_description:appointment.field_appointment_resource__resource_calendar_id
 msgid "Working Hours"
-msgstr "Horas laborales"
+msgstr "Horas laborables"
 
 #. module: appointment
 #. odoo-javascript

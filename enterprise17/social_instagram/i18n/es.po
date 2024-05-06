@@ -121,7 +121,7 @@ msgid ""
 "Facebook Account ID provided by the Facebook API, this should never be set manually.\n"
 "        The Instagram (\"Professional\") account is always linked to a Facebook account."
 msgstr ""
-"D de la cuenta de Facebook proporcionada por el API de Facebook, esto jamás se deberá configurar manualmente.\n"
+"ID de la cuenta de Facebook proporcionada por la API de Facebook, esto jamás se deberá configurar manualmente.\n"
 "        La cuenta (\"profesional\") de instagram siempre está vinculada a una cuenta de Facebook."
 
 #. module: social_instagram
@@ -236,7 +236,7 @@ msgstr "Instagram no proporcionó un token de acceso válido."
 #: code:addons/social_instagram/static/src/xml/social_instagram_templates.xml:0
 #, python-format
 msgid "Likes"
-msgstr "Gustos"
+msgstr "Me gusta"
 
 #. module: social_instagram
 #: model:ir.model.fields,field_description:social_instagram.field_social_media__media_type
@@ -271,22 +271,22 @@ msgstr "Más sobre las cuentas de Instagram"
 #. module: social_instagram
 #: model:ir.model,name:social_instagram.model_social_account
 msgid "Social Account"
-msgstr "Cuenta social"
+msgstr "Cuenta de red social"
 
 #. module: social_instagram
 #: model:ir.model,name:social_instagram.model_social_live_post
 msgid "Social Live Post"
-msgstr "Publicación de redes sociales en vivo"
+msgstr "Publicación en redes sociales en vivo"
 
 #. module: social_instagram
 #: model:ir.model,name:social_instagram.model_social_media
 msgid "Social Media"
-msgstr "Medios de comunicación social"
+msgstr "Redes sociales"
 
 #. module: social_instagram
 #: model:ir.model,name:social_instagram.model_social_post
 msgid "Social Post"
-msgstr "Publicar en redes sociales"
+msgstr "Publicación en redes sociales"
 
 #. module: social_instagram
 #: model:ir.model,name:social_instagram.model_social_post_template
@@ -301,7 +301,7 @@ msgstr "Flujo social"
 #. module: social_instagram
 #: model:ir.model,name:social_instagram.model_social_stream_post
 msgid "Social Stream Post"
-msgstr "Publicación en el flujo social"
+msgstr "Publicación en un flujo social"
 
 #. module: social_instagram
 #: model:ir.model.fields,help:social_instagram.field_social_stream_post__instagram_facebook_author_id
@@ -310,7 +310,7 @@ msgid ""
 "picture."
 msgstr ""
 "El ID de Facebook del autor de esta publicación de Instagram que se usa para"
-" obtener la imagen de peril."
+" obtener la imagen de perfil."
 
 #. module: social_instagram
 #. odoo-python
@@ -372,7 +372,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:social_instagram.instagram_preview
 #, python-format
 msgid "Your image appears to be corrupted, please try loading it again."
-msgstr "Parece que su imagen está dañada, intente cargarla de nuevo."
+msgstr "Su imagen parece estar corrupta, intente cargarla de nuevo."
 
 #. module: social_instagram
 #. odoo-python

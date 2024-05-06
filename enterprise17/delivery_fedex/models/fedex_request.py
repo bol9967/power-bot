@@ -6,9 +6,9 @@ import re
 
 from datetime import datetime, date
 from os.path import join as opj
-from zeep import Client, Plugin, Settings
-from zeep.exceptions import Fault
-from zeep.wsdl.utils import etree_to_string
+from odoo.tools.zeep import Client, Plugin, Settings
+from odoo.tools.zeep.exceptions import Fault
+from odoo.tools.zeep.wsdl.utils import etree_to_string
 
 from odoo.tools import remove_accents, float_repr
 from odoo.tools.misc import file_path
@@ -102,6 +102,7 @@ class FedexRequest():
         Contact.PersonName = remove_accents(company_partner.name) if not company_partner.is_company else ''
         Contact.CompanyName = remove_accents(company_partner.commercial_company_name) or ''
         Contact.PhoneNumber = warehouse_partner.phone or ''
+        Contact.EMailAddress = warehouse_partner.email or ''
         # TODO fedex documentation asks for TIN number, but it seems to work without
 
         Address = self.factory.Address()
@@ -127,6 +128,7 @@ class FedexRequest():
             Contact.PersonName = remove_accents(recipient_partner.name)
             Contact.CompanyName = remove_accents(recipient_partner.commercial_company_name) or ''
         Contact.PhoneNumber = recipient_partner.phone or ''
+        Contact.EMailAddress = recipient_partner.email or ''
 
         Address = self.factory.Address()
         Address.StreetLines = [remove_accents(recipient_partner.street) or '', remove_accents(recipient_partner.street2) or '']
@@ -371,7 +373,7 @@ class FedexRequest():
         commodity.QuantityUnits = 'EA'
         customs_value = self.factory.Money()
         customs_value.Currency = commodity_currency
-        customs_value.Amount = delivery_commodity.monetary_value
+        customs_value.Amount = delivery_commodity.monetary_value * delivery_commodity.qty
         commodity.CustomsValue = customs_value
 
         commodity.HarmonizedCode = delivery_commodity.product_id.hs_code.replace(".", "") if delivery_commodity.product_id.hs_code else ''

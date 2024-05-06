@@ -139,8 +139,8 @@ export default class BarcodeQuantModel extends BarcodeModel {
     }
 
     getDisplayIncrementBtn(line) {
-        return line.product_id.tracking !== 'serial' && this.selectedLine &&
-            line.virtual_id === this.selectedLine.virtual_id;
+        return line.product_id.tracking !== 'serial' && this.selectedLineVirtualId &&
+            line.virtual_id === this.selectedLineVirtualId;
     }
 
     getDisplayDecrementBtn(line) {
@@ -166,10 +166,6 @@ export default class BarcodeQuantModel extends BarcodeModel {
 
     get highlightValidateButton() {
         return this.applyOn > 0 && this.applyOn === this.pageLines.length;
-    }
-
-    get incrementButtonsDisplayStyle() {
-        return "d-block my-3";
     }
 
     IsNotSet(line) {

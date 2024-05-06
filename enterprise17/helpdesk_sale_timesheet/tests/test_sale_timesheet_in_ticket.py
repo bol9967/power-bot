@@ -199,3 +199,40 @@ class TestSaleTimesheetInTicket(TestCommonSaleTimesheet):
                 line.name = "/",
                 line.unit_amount = 3
             self.assertEqual(f.remaining_hours_so, 47)
+
+    def test_sale_order_helpdesk_team_in_context(self):
+        """
+            Check that we have the helpdesk team id in the context
+            when we want to see the tickets linked to a sale order.
+        """
+        sale_order = self.env["sale.order"].create({
+            "partner_id": self.partner_a.id,
+            'partner_invoice_id': self.partner_a.id,
+            'partner_shipping_id': self.partner_a.id,
+        })
+        ticket = self.env["helpdesk.ticket"].create({
+            "name": "test_ticket",
+            "sale_order_id": sale_order.id,
+            "partner_id": self.partner_a.id,
+            "team_id": self.helpdesk_team.id,
+        })
+        action = sale_order.action_view_tickets()
+        self.assertEqual(action['context']['default_team_id'], ticket.team_id.id)
+
+    def test_compute_commercial_partner_id(self):
+        """
+            The purpose is to test if the timesheet commecial partner is
+            the commercial partner of the partner linked to the helkpdesk ticket.
+        """
+        ticket = self.env['helpdesk.ticket'].create({
+            'name': 'Test Ticket',
+            'team_id': self.helpdesk_team.id,
+            'partner_id': self.partner_a.id,
+        })
+        timesheet = self.env['account.analytic.line'].create({
+            'name': 'Test Timesheet',
+            'project_id': self.helpdesk_team.project_id.id,
+            'helpdesk_ticket_id': ticket.id,
+            'employee_id': self.employee_user.id,
+        })
+        self.assertEqual(timesheet.commercial_partner_id, ticket.commercial_partner_id)

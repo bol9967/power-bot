@@ -433,7 +433,7 @@ msgstr "主生产计划中显示的生产期间的列数"
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_mrp_product_forecast__procurement_launched
 msgid "Procurement has been run for this forecast"
-msgstr "为该预测运行的采购"
+msgstr "为该预测运行的补货"
 
 #. module: mrp_mps
 #: model:ir.model,name:mrp_mps.model_product_template
@@ -669,7 +669,7 @@ msgid ""
 msgstr ""
 "主计划将销售和需求预测转换为组件生产和采购计划。\n"
 "                    根据安全库存、生产力和提前期等约束条件确保完成计划。\n"
-"                    是支持销售与运营计划（S＆OP）会议的理想工具。"
+"                    是支持销售与运营计划 S＆OP 会议的理想工具."
 
 #. module: mrp_mps
 #: model:ir.model.fields,help:mrp_mps.field_mrp_production_schedule__max_to_replenish_qty

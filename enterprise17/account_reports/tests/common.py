@@ -201,6 +201,7 @@ class TestAccountReportsCommon(AccountTestInvoicingCommon):
                     if j > len(expected_values[i]) - 1:
                         break
                     current_value = line['columns'][index-1].get('name', '')
+                    current_figure_type = line['columns'][index - 1].get('figure_type', '')
 
                 expected_value = expected_values[i][j]
                 currency_data = currency_map.get(index, {})
@@ -216,7 +217,9 @@ class TestAccountReportsCommon(AccountTestInvoicingCommon):
                     used_currency = self.env.company.currency_id
 
                 if type(expected_value) in (int, float) and type(current_value) == str:
-                    if options.get('multi_currency'):
+                    if current_figure_type and current_figure_type != 'monetary':
+                        expected_value = str(expected_value)
+                    elif options.get('multi_currency'):
                         expected_value = formatLang(self.env, expected_value, currency_obj=used_currency)
                     else:
                         expected_value = formatLang(self.env, expected_value, digits=used_currency.decimal_places)
@@ -313,3 +316,13 @@ class TestAccountReportsCommon(AccountTestInvoicingCommon):
         """ Same as _get_basic_line_dict_id_from_report_line, but from the line's xmlid, for convenience in the tests.
         """
         return cls._get_basic_line_dict_id_from_report_line(cls.env.ref(report_line_xmlid))
+
+    @classmethod
+    def _get_audit_params_from_report_line(cls, options, report_line, report_line_dict, **kwargs):
+        return {
+            'report_line_id': report_line.id,
+            'calling_line_dict_id': report_line_dict['id'],
+            'expression_label': 'balance',
+            'column_group_key': next(iter(options['column_groups'])),
+            **kwargs,
+        }

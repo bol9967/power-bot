@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-24 20:55+0000\n"
+"POT-Creation-Date: 2024-02-22 15:46+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
 "Last-Translator: Junko Augias, 2024\n"
 "Language-Team: Japanese (https://app.transifex.com/odoo/teams/41243/ja/)\n"
@@ -1109,11 +1109,27 @@ msgid "Add a new plan"
 msgstr "新しい計画を追加しましょう"
 
 #. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid "Add a new rule"
+msgstr ""
+
+#. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.product_pricelist_view
 #: model_terms:ir.ui.view,arch_db:sale_subscription.product_template_view_form_recurring
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_plan_view_form
 msgid "Add a price rule"
-msgstr "価格規則追加"
+msgstr "価格ルール追加"
+
+#. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid ""
+"Add a recurring plan for this product, or create a new one with the desired "
+"recurrence (e.g., Monthly)"
+msgstr ""
 
 #. module: sale_subscription
 #. odoo-python
@@ -1200,19 +1216,12 @@ msgstr "アーカイブ済プロダクト"
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__activity_user
 msgid "Assign To"
-msgstr "割当先"
+msgstr "担当者"
 
 #. module: sale_subscription
 #: model:ir.model.fields.selection,name:sale_subscription.selection__payment_transaction__subscription_action__assign_token
 msgid "Assign Token"
 msgstr "トークンを割当"
-
-#. module: sale_subscription
-#. odoo-javascript
-#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
-#, python-format
-msgid "Assign a new partner to the contract"
-msgstr "契約書に新しい取引先を割り当てる"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__message_attachment_count
@@ -1448,6 +1457,13 @@ msgid "Choose a product name.<br/><i>(e.g. eLearning Access)</i>"
 msgstr "プロダクト名を選ぶ<br/><i>（例：eLearning Access）</i>"
 
 #. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid "Choose the invoice duration for your subscription"
+msgstr ""
+
+#. module: sale_subscription
 #: model:ir.model.fields.selection,name:sale_subscription.selection__sale_order_log__event_type__2_churn
 #: model:ir.model.fields.selection,name:sale_subscription.selection__sale_order_log_report__event_type__2_churn
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_order_log_report_search
@@ -1470,8 +1486,8 @@ msgstr "解約済"
 #. odoo-javascript
 #: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
 #, python-format
-msgid "Click here to add some products or services to your quotation."
-msgstr "ここをクリックして見積にプロダクトやサービスを追加してください。"
+msgid "Click here to add some products or services"
+msgstr ""
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__user_closable
@@ -1837,7 +1853,8 @@ msgid ""
 "Delay after the trigger date. You can put a negative number if you need a "
 "delay before the trigger date, like sending a reminder 15 minutes before a "
 "meeting."
-msgstr "トリガ日以降の遅延。トリガ日の15分前にリマインダを送信するなど、トリガ日よりも前に遅延が必要な場合は、負の数を入力することができます。"
+msgstr ""
+"トリガー日以降の遅延。トリガ日ーの15分前にリマインダを送信するなど、トリガー日よりも前に遅延が必要な場合は、負の数を入力することができます。"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__trg_date_range
@@ -2433,8 +2450,15 @@ msgstr "定期価格を追加しましょう"
 #. odoo-javascript
 #: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
 #, python-format
-msgid "Let's configure the product price"
-msgstr "プロダクト価格を設定しましょう"
+msgid "Let's add price for selected recurrence"
+msgstr ""
+
+#. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid "Let's choose the customer for your subscription"
+msgstr ""
 
 #. module: sale_subscription
 #. odoo-javascript
@@ -2479,7 +2503,7 @@ msgstr "MRR範囲"
 #: model:ir.actions.act_window,name:sale_subscription.sale_order_log_growth_action
 #: model:ir.ui.menu,name:sale_subscription.menu_sale_order_log_growth_report
 msgid "MRR Breakdown"
-msgstr "MRRブレークダウン"
+msgstr "MRR内訳"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_log_report__amount_signed
@@ -2581,7 +2605,7 @@ msgstr ""
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_subscription_report__margin
 msgid "Margin"
-msgstr "粗利益"
+msgstr "マージン"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_subscription_report__medium_id
@@ -2866,7 +2890,7 @@ msgstr "オフィスクリーニングサービス（サブスク）"
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__on_change_field_ids
 msgid "On Change Fields Trigger"
-msgstr "オンチェンジ項目トリガ"
+msgstr "オンチェンジ項目トリガー"
 
 #. module: sale_subscription
 #. odoo-python
@@ -3309,7 +3333,7 @@ msgstr "定期プラン:"
 #: model:ir.actions.act_window,name:sale_subscription.sale_subscription_plan_action
 #: model:ir.ui.menu,name:sale_subscription.menu_sale_subscription_plans
 msgid "Recurring Plans"
-msgstr "定期的計画"
+msgstr "定期プラン"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_subscription_pricing__price
@@ -3336,6 +3360,8 @@ msgstr "定期収入"
 #. module: sale_subscription
 #. odoo-python
 #: code:addons/sale_subscription/models/sale_order.py:0
+#: code:addons/sale_subscription/models/sale_subscription_plan.py:0
+#: model:ir.model.constraint,message:sale_subscription.constraint_sale_subscription_plan_check_for_valid_billing_period_value
 #, python-format
 msgid ""
 "Recurring period must be a positive number. Please ensure the input is a "
@@ -3735,7 +3761,7 @@ msgstr "状態を表示する"
 msgid ""
 "Some triggers need a reference to a selection field. This field is used to "
 "store it."
-msgstr "いくつかのトリガは選択フィールドへの参照を必要とします。"
+msgstr "いくつかのトリガーは選択フィールドへの参照を必要とします。"
 
 #. module: sale_subscription
 #: model:ir.model.fields,help:sale_subscription.field_sale_order_alert__trg_field_ref
@@ -4145,7 +4171,7 @@ msgstr ""
 msgid ""
 "The automation rule will be triggered if and only if one of these fields is "
 "updated.If empty, all fields are watched."
-msgstr "これらのフィールドの1つが更新された場合にのみ、自動化規則がトリガされます。空の場合、すべてのフィールドが監視されます。"
+msgstr "これらのフィールドの1つが更新された場合にのみ、自動化規則がトリガーされます。空の場合、すべてのフィールドが監視されます。"
 
 #. module: sale_subscription
 #. odoo-python
@@ -4351,7 +4377,7 @@ msgstr "このアップセルオーダはサブスクリプションから作成
 msgid ""
 "This will trigger the action on all linked subsccriptions, regardless of "
 "possible timed conditions. Are you sure you want to proceed?"
-msgstr "これにより、あり得る時間的条件に関係なく、リンクされたすべてのサブスクリプションに対してアクションがトリガーされます。本当に進めますか？"
+msgstr "これにより、あり得る時間的条件に関係なく、リンクされた全てのサブスクリプションに対してアクションがトリガーされます。本当に進めますか？"
 
 #. module: sale_subscription
 #: model:ir.model.fields.selection,name:sale_subscription.selection__sale_order_alert__trigger_condition__on_time
@@ -4428,12 +4454,12 @@ msgstr "トリガー日"
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__trg_selection_field_id
 msgid "Trigger Field"
-msgstr "フィールドをトリガ"
+msgstr "フィールドをトリガー"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__trg_field_ref_model_name
 msgid "Trigger Field Model"
-msgstr "フィールドモデルをトリガ"
+msgstr "フィールドモデルをトリガー"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__trigger_field_ids
@@ -4453,12 +4479,12 @@ msgstr "トリガー条件"
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__trg_field_ref
 msgid "Trigger Reference"
-msgstr "参照をトリガ"
+msgstr "参照をトリガー"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__trg_field_ref_display_name
 msgid "Trigger Reference Display Name"
-msgstr "参照表示名をトリガ"
+msgstr "参照表示名をトリガー"
 
 #. module: sale_subscription
 #: model_terms:ir.actions.act_window,help:sale_subscription.sale_subscription_alert_action
@@ -4618,9 +4644,9 @@ msgstr "容積"
 #: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
 #, python-format
 msgid ""
-"Want recurring billing via subscription management? Get started by clicking "
-"here"
-msgstr "サブスクリプション管理による定期的な課金をご希望ですか？こちらをクリックして下さい。"
+"Want a recurring billing through subscription management? Get started by "
+"clicking here"
+msgstr ""
 
 #. module: sale_subscription
 #. odoo-python
@@ -4906,13 +4932,6 @@ msgid ""
 "You will find here the subscriptions to be renewed (end date is close or "
 "passed)"
 msgstr "更新が必要なサブスクリプション（終了日が近い、または過ぎている）はこちらでご確認下さい。"
-
-#. module: sale_subscription
-#. odoo-javascript
-#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
-#, python-format
-msgid "Your contract is recurrent"
-msgstr "お客様の契約は定期です"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.payment_method_form

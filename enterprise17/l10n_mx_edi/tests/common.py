@@ -29,9 +29,10 @@ class TestMxEdiCommon(AccountTestInvoicingCommon):
 
         # ==== Config ====
 
-        cls.env['res.company']\
-            .search([('name', '=', "ESCUELA KEMPER URGATE")])\
-            .name = "ESCUELA KEMPER URGATE (2)"
+        # do not use demo data and avoid having duplicated companies
+        cls.env['res.company'].search([('vat', '=', "EKU9003173C9")]).write({'vat': False})
+        cls.env['res.company'].search([('name', '=', "ESCUELA KEMPER URGATE")]).name += " (2)"
+
         cls.company_data['company'].write({
             'name': "ESCUELA KEMPER URGATE",
             'vat': 'EKU9003173C9',
@@ -66,6 +67,10 @@ class TestMxEdiCommon(AccountTestInvoicingCommon):
         cls.tax_0_exento.l10n_mx_factor_type = 'Exento'
         cls.tax_8 = cls.env["account.chart.template"].ref('tax17')
         cls.tax_8_ieps = cls.env["account.chart.template"].ref('ieps_8_sale')
+        cls.tax_0_ieps = cls.tax_8_ieps.copy(default={'amount': 0.0})
+        cls.tax_6_ieps = cls.tax_8_ieps.copy(default={'amount': 6.0})
+        cls.tax_7_ieps = cls.tax_8_ieps.copy(default={'amount': 7.0})
+        cls.tax_26_5_ieps = cls.env["account.chart.template"].ref('ieps_26_5_sale')
         cls.tax_53_ieps = cls.env["account.chart.template"].ref('ieps_53_sale')
         cls.tax_10_ret_isr = cls.env["account.chart.template"].ref('tax3')
         cls.tax_10_ret_isr.type_tax_use = 'sale'
@@ -189,6 +194,18 @@ class TestMxEdiCommon(AccountTestInvoicingCommon):
 
         cls.uuid = 0
 
+    def setup_usd_rates(self, *rates):
+        usd = self.fake_usd_data['currency']
+        usd.sudo().rate_ids.unlink()
+        self.env['res.currency.rate'].create([
+            {
+                'name': rate_date,
+                'inverse_company_rate': rate,
+                'currency_id': usd.id,
+            }
+            for rate_date, rate in rates
+        ])
+
     @contextmanager
     def with_mocked_pac_method(self, method_name, method_replacement):
         """ Helper to mock an rpc call to the PAC.
@@ -265,14 +282,31 @@ class TestMxEdiCommon(AccountTestInvoicingCommon):
         def fetch_sat_status(document, *args, **kwargs):
             return {'value': sat_state_method(document)}
 
-        with patch.object(type(self.env['l10n_mx_edi.document']), '_fetch_sat_status', fetch_sat_status):
-            yield
+        def update_sat_state(document, *args, **kwargs):
+            document.sat_state = sat_state_method(document)
+
+        Document = self.env.registry['l10n_mx_edi.document']
+        if self.env.company.l10n_mx_edi_pac_test_env:
+            # In test mode, we only want to check if the SAT button updates the right documents and if the
+            # global sat_state is well computed. We don't want to create on-the-fly a new cancel document.
+            # This can't be tested on the UI and there is no way to force the return of the SAT api.
+            with patch.object(Document, '_update_sat_state', update_sat_state):
+                yield
+        else:
+            with patch.object(Document, '_fetch_sat_status', fetch_sat_status):
+                yield
 
     @contextmanager
     def with_mocked_global_invoice_sequence(self, number):
         sequence = self.env['l10n_mx_edi.document']._get_global_invoice_cfdi_sequence(self.env.company)
         sequence.number_next = number
         yield
+
+    def _test_cfdi_rounding(self, run_function):
+        for tax_calculation_rounding_method in ('round_per_line', 'round_globally'):
+            with self.subTest(tax_calculation_rounding_method=tax_calculation_rounding_method):
+                self.env.company.tax_calculation_rounding_method = tax_calculation_rounding_method
+                run_function(tax_calculation_rounding_method)
 
     @classmethod
     def _create_product(cls, **kwargs):

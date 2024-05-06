@@ -56,9 +56,6 @@ class GeneralLedgerCustomHandler(models.AbstractModel):
         Don't need to unlink as it will be done automatically by garbage collector
         of attachment cron
         """
-        if self.env.company.tax_calculation_rounding_method == 'round_globally':
-            raise UserError(_('The tax calculation method "Round Globally" is not supported with DATEV exports.\n'
-                              'Please change your configuration to "Round per Line".'))
         report = self.env['account.report'].browse(options['report_id'])
         with tempfile.NamedTemporaryFile(mode='w+b', delete=True) as buf:
             with zipfile.ZipFile(buf, mode="w", compression=zipfile.ZIP_DEFLATED, allowZip64=False) as zf:
@@ -88,6 +85,7 @@ class GeneralLedgerCustomHandler(models.AbstractModel):
                 if options.get('add_attachments'):
                     # add all moves attachments in zip file, this is not part of DATEV specs
                     slash_re = re.compile('[\\/]')
+                    documents = []
                     for move in moves:
                         # rename files by move name + sequence number (if more than 1 file)
                         # '\' is not allowed in file name, replace by '-'
@@ -102,6 +100,20 @@ class GeneralLedgerCustomHandler(models.AbstractModel):
                             extension = os.path.splitext(attachment.name)[1]
                             name = name_pattern % {'base': base_name, 'index': i, 'extension': extension}
                             zf.writestr(name, attachment.raw)
+                            documents.append({
+                                'guid': move._l10n_de_datev_get_guid(),
+                                'filename': name,
+                                'type': 2 if move.is_sale_document() else 1 if move.is_purchase_document() else None,
+                            })
+                    if documents:
+                        metadata_document = self.env['ir.qweb']._render(
+                            'l10n_de_reports.datev_export_metadata',
+                            values={
+                                'documents': documents,
+                                'date': fields.Date.today(),
+                            },
+                        )
+                        zf.writestr('document.xml', "<?xml version='1.0' encoding='UTF-8'?>" + str(metadata_document))
             buf.seek(0)
             content = buf.read()
         return {
@@ -131,7 +143,7 @@ class GeneralLedgerCustomHandler(models.AbstractModel):
         writer = pycompat.csv_writer(output, delimiter=';', quotechar='"', quoting=2)
         preheader = ['EXTF', 510, 16, 'Debitoren/Kreditoren', 4, None, None, '', '', '', datev_info[0], datev_info[1], fy, account_length,
             '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
-        header = ['Konto', 'Name (AdressatentypUnternehmen)', 'Name (Adressatentypnatürl. Person)', '', '', '', 'Adressatentyp']
+        header = ['Konto', 'Name (AdressatentypUnternehmen)', 'Name (Adressatentypnatürl. Person)', '', '', '', 'Adressatentyp', '', '', 'EU-UStId']
         lines = [preheader, header]
 
         if len(move_line_ids):
@@ -159,7 +171,8 @@ class GeneralLedgerCustomHandler(models.AbstractModel):
                 'code': code,
                 'company_name': partner.name if partner.is_company else '',
                 'person_name': '' if partner.is_company else partner.name,
-                'natural': partner.is_company and '2' or '1'
+                'natural': partner.is_company and '2' or '1',
+                'vat': partner.vat or '',
             }
             # Idiotic program needs to have a line with 243 elements ordered in a given fashion as it
             # does not take into account the header and non mandatory fields
@@ -168,6 +181,7 @@ class GeneralLedgerCustomHandler(models.AbstractModel):
             array[1] = line_value.get('company_name')
             array[2] = line_value.get('person_name')
             array[6] = line_value.get('natural')
+            array[9] = line_value.get('vat')
             lines.append(array)
         writer.writerows(lines)
         return output.getvalue()
@@ -220,13 +234,21 @@ class GeneralLedgerCustomHandler(models.AbstractModel):
         writer = pycompat.csv_writer(output, delimiter=';', quotechar='"', quoting=2)
         preheader = ['EXTF', 510, 21, 'Buchungsstapel', 7, '', '', '', '', '', datev_info[0], datev_info[1], fy, account_length,
             date_from, date_to, '', '', '', '', 0, 'EUR', '', '', '', '', '', '', '', '', '']
-        header = ['Umsatz (ohne Soll/Haben-Kz)', 'Soll/Haben-Kennzeichen', 'WKZ Umsatz', 'Kurs', 'Basis-Umsatz', 'WKZ Basis-Umsatz', 'Konto', 'Gegenkonto (ohne BU-Schlüssel)', 'BU-Schlüssel', 'Belegdatum', 'Belegfeld 1', 'Belegfeld 2', 'Skonto', 'Buchungstext']
+        header = [
+            'Umsatz (ohne Soll/Haben-Kz)', 'Soll/Haben-Kennzeichen', 'WKZ Umsatz', 'Kurs', 'Basis-Umsatz',
+            'WKZ Basis-Umsatz', 'Konto', 'Gegenkonto (ohne BU-Schlüssel)', 'BU-Schlüssel', 'Belegdatum',
+            'Belegfeld 1', 'Belegfeld 2', 'Skonto', 'Buchungstext', 'Postensperre', 'Diverse Adressnummer',
+            'Geschäftspartnerbank', 'Sachverhalt', 'Zinssperre', 'Beleglink'
+        ]
 
         lines = [preheader, header]
 
         for m in moves:
             payment_account = 0  # Used for non-reconciled payments
 
+            move_balance = 0
+            counterpart_amount = 0
+            last_tax_line_index = 0
             for aml in m.line_ids:
                 if aml.debit == aml.credit:
                     # Ignore debit = credit = 0
@@ -243,6 +265,7 @@ class GeneralLedgerCustomHandler(models.AbstractModel):
                 if aml.payment_id:
                     if payment_account == 0:
                         payment_account = account_code
+                        counterpart_amount = aml.balance
                         continue
                     else:
                         to_account_code = payment_account
@@ -257,9 +280,12 @@ class GeneralLedgerCustomHandler(models.AbstractModel):
 
                 aml_taxes = aml.tax_ids.compute_all(aml.balance, aml.company_id.currency_id, partner=aml.partner_id, handle_price_include=False)
                 line_amount = aml_taxes['total_included']
+                move_balance += line_amount
 
                 code_correction = ''
                 if aml.tax_ids:
+                    last_tax_line_index = len(lines)
+                    last_tax_line_amount = line_amount
                     codes = set(aml.tax_ids.mapped('l10n_de_datev_code'))
                     if len(codes) == 1:
                         # there should only be one max, else skip code
@@ -297,7 +323,18 @@ class GeneralLedgerCustomHandler(models.AbstractModel):
                 array[10] = receipt1[-36:]
                 array[11] = receipt2
                 array[13] = aml.name or ref
+                if options.get('add_attachments') and m.attachment_ids:
+                    array[19] = f'BEDI"{m._l10n_de_datev_get_guid()}"'
                 lines.append(array)
+            # In case of epd we actively fix rounding issues by checking the base line and tax line
+            # amounts against the move amount missing cent and adjust the vals accordingly.
+            # Since here we have to recompute the tax values for each line with tax, we need
+            # to replicate the rounding fix logic adding the difference on the last tax line
+            # to avoid creating a difference with the source payment move
+            if m.payment_id and move_balance and counterpart_amount and last_tax_line_index:
+                delta_balance = move_balance + counterpart_amount
+                if delta_balance:
+                    lines[last_tax_line_index][0] = float_repr(last_tax_line_amount - delta_balance, aml.company_id.currency_id.decimal_places).replace('.', ',')
 
         writer.writerows(lines)
         return output.getvalue()

@@ -5,6 +5,8 @@
 # Translators:
 # Manuela Silva <mmsrs@sky.com>, 2023
 # Wil Odoo, 2023
+# Peter Lawrence Romão <peterromao@yahoo.co.uk>, 2024
+# Samuel Afonso, 2024
 # Rita Bastos, 2024
 # 
 msgid ""
@@ -39,7 +41,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/frontdesk/models/frontdesk_visitor.py:0
 #, python-format
-msgid "%(name)s just checked-in. He requested %(drink)s."
+msgid "%(name)s just checked-in. Requested Drink: %(drink)s."
 msgstr ""
 
 #. module: frontdesk
@@ -184,7 +186,7 @@ msgstr ""
 #. module: frontdesk
 #: model_terms:ir.ui.view,arch_db:frontdesk.frontdesk_visitor_view_tree
 msgid "Checkout"
-msgstr ""
+msgstr "Checkout"
 
 #. module: frontdesk
 #. odoo-javascript
@@ -588,7 +590,7 @@ msgstr ""
 #: model:ir.model.fields.selection,name:frontdesk.selection__frontdesk_frontdesk__ask_email__optional
 #: model:ir.model.fields.selection,name:frontdesk.selection__frontdesk_frontdesk__ask_phone__optional
 msgid "Optional"
-msgstr ""
+msgstr "Opcional"
 
 #. module: frontdesk
 #: model_terms:ir.ui.view,arch_db:frontdesk.frontdesk_frontdesk_view_form
@@ -648,7 +650,7 @@ msgstr "Propriedades"
 #: code:addons/frontdesk/static/src/welcome_page/welcome_page.xml:0
 #, python-format
 msgid "QR Code"
-msgstr ""
+msgstr "Código QR"
 
 #. module: frontdesk
 #: model_terms:ir.ui.view,arch_db:frontdesk.frontdesk_qr_expired

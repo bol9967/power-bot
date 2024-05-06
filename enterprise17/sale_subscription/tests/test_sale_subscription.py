@@ -2785,6 +2785,46 @@ class TestSubscription(TestSubscriptionCommon):
         with self.assertRaises(AccessError):
             close_reason.unlink()
 
+    def test_amount_to_invoice(self):
+        sub = self.env['sale.order'].create({
+            'partner_id': self.partner.id,
+            'plan_id': self.plan_month.id,
+            'order_line': [
+                (0, 0, {
+                    'name': self.product.name,
+                    'product_id': self.product.id,
+                    'product_uom_qty': 10.0,
+                    'product_uom': self.product.uom_id.id,
+                })],
+        })
+        sub.order_line.tax_id = [Command.clear()]
+
+        nr_product = self.env['product.template'].create({
+            'name': 'Non recurring product',
+            'type': 'service',
+            'uom_id': self.product.uom_id.id,
+            'list_price': 25,
+            'invoice_policy': 'order',
+        })
+
+        sub.action_confirm()
+        self.assertEqual(sub.amount_to_invoice, 10)
+        sub._create_recurring_invoice()
+
+        sub.order_line = [Command.link(self.env['sale.order.line'].create({
+            'name': nr_product.name,
+            'order_id': sub.id,
+            'product_id': nr_product.product_variant_id.id,
+            'product_uom_qty': 1,
+        }).id)]
+        sub.order_line.tax_id = [Command.clear()]
+
+        self.assertEqual(sub.amount_to_invoice, (10 + 25))
+        sub._create_recurring_invoice()
+
+        self.assertEqual(sub.amount_to_invoice, 10)
+
+
     def test_close_reason_end_of_contract(self):
         sub = self.subscription
         end_date = datetime.date(2022, 6, 20)
@@ -2868,6 +2908,11 @@ class TestSubscription(TestSubscriptionCommon):
         context_no_mail = {'no_reset_password': True, 'mail_create_nosubscribe': True, 'mail_create_nolog': True, }
         pricelist = self.company_data['default_pricelist']
         pricelist.discount_policy = 'without_discount'
+        pricelist.item_ids.create({
+            'pricelist_id': pricelist.id,
+            'compute_price': 'percentage',
+            'percent_price': 50,
+        })
         sub = self.env["sale.order"].with_context(**context_no_mail).create({
             'name': 'TestSubscription',
             'is_subscription': True,
@@ -2878,11 +2923,40 @@ class TestSubscription(TestSubscriptionCommon):
             'sale_order_template_id': self.subscription_tmpl.id,
         })
         sub._onchange_sale_order_template_id()
-        self.assertEqual(sub.order_line.mapped('discount'), [0, 0])
+        sub.order_line.create({
+            'order_id': sub.id,
+            'product_id': self.product_a.id, # non-subscription product
+        })
+        self.assertEqual(sub.order_line.mapped('discount'), [0, 0, 50],
+            "Regular pricelist discounts should't affect temporal items.")
         sub.order_line.discount = 20
-        self.assertEqual(sub.order_line.mapped('discount'), [20, 20])
+        self.assertEqual(sub.order_line.mapped('discount'), [20, 20, 20])
         sub.action_confirm()
-        self.assertEqual(sub.order_line.mapped('discount'), [20, 20], "The discount should not be reset on confirmation")
+        self.assertEqual(sub.order_line.mapped('discount'), [20, 20, 20],
+             "Discounts should not be reset on confirmation.")
+
+    def test_non_subscription_pricelist_discount(self):
+        context_no_mail = {'no_reset_password': True, 'mail_create_nosubscribe': True, 'mail_create_nolog': True, }
+        pricelist = self.company_data['default_pricelist']
+        pricelist.discount_policy = 'without_discount'
+        pricelist.item_ids.create({
+            'pricelist_id': pricelist.id,
+            'compute_price': 'percentage',
+            'percent_price': 50,
+        })
+        so = self.env["sale.order"].with_context(**context_no_mail).create({
+            'name': 'TestNonSubscription',
+            'is_subscription': False,
+            'partner_id': self.user_portal.partner_id.id,
+            'pricelist_id': pricelist.id,
+            'order_line': [(0, 0, {'product_id': self.product_a.id})],
+        })
+        self.assertEqual(so.order_line.discount, 50)
+        so.order_line.discount = 20
+        self.assertEqual(so.order_line.discount, 20)
+        so.action_confirm()
+        self.assertEqual(so.order_line.discount, 20,
+             "Discounts should not be reset on confirmation.")
 
     def test_churn_log_renew(self):
         """ Test the behavior of the logs when we confirm a renewal quote after the parent has been closed.
@@ -3530,6 +3604,35 @@ class TestSubscription(TestSubscriptionCommon):
             ('0_creation', datetime.date(2024, 1, 27), '3_progress', 21.0, 21.0),
         ], "The last churn is removed")
 
+    def test_recurring_plan_price_recalc_adding_optional_product(self):
+        """
+        Test that when an optional recurring product is added to a subscription sale order that its price unit is
+        correctly recalculated after subsequent edits to the order's recurring plan
+        """
+        self.sub_product_tmpl.write({'product_subscription_pricing_ids': [Command.set(self.pricing_year.id)]})
+        product_a = self.sub_product_tmpl.product_variant_id
+        product_a.list_price = 1.0
+
+        self.product_tmpl_2.write({'product_subscription_pricing_ids': [Command.set(self.pricing_year_2.id)]})
+        product_b = self.product_tmpl_2.product_variant_id
+        product_b.list_price = 1.0
+
+        sale_order = self.env['sale.order'].create({
+            'plan_id': self.plan_month.id,
+            'partner_id': self.user_portal.partner_id.id,
+            'company_id': self.company_data['company'].id,
+            'order_line': [
+                Command.create({'product_id': product_a.id}),
+                Command.create({'product_id': product_b.id})
+            ],
+            'sale_order_option_ids': [Command.create({'product_id': product_b.id})],
+        })
+
+        sale_order.sale_order_option_ids.line_id = sale_order.order_line[1].id
+        sale_order.write({'plan_id': self.plan_year})
+
+        self.assertEqual(sale_order.order_line[1].price_unit, 200.0)
+
     def test_upsell_total_qty(self):
         self.subscription.action_confirm()
         self.subscription._create_recurring_invoice()
@@ -3539,3 +3642,78 @@ class TestSubscription(TestSubscriptionCommon):
         upsell_so.action_confirm()
         for line in upsell_so.order_line.filtered(lambda l: not l.display_type):
             self.assertEqual(line.upsell_total, 3)
+
+    def test_sale_subscription_upsell_does_not_copy_non_recurring_products(self):
+        nr_product = self.env['product.template'].create({
+            'name': 'Non recurring product',
+            'type': 'service',
+            'uom_id': self.product.uom_id.id,
+            'list_price': 25,
+            'invoice_policy': 'order',
+        })
+        self.subscription.action_confirm()
+        self.subscription._create_recurring_invoice()
+
+        action = self.subscription.prepare_upsell_order()
+        upsell_so = self.env['sale.order'].browse(action['res_id'])
+        upsell_so.order_line = [(6, 0, self.env['sale.order.line'].create({
+            'name': nr_product.name,
+            'order_id': upsell_so.id,
+            'product_id': nr_product.product_variant_id.id,
+            'product_uom_qty': 1,
+        }).ids)]
+
+        upsell_so._confirm_upsell()
+        self.assertEqual(len(upsell_so.order_line), 1)
+        self.assertEqual(len(self.subscription.order_line), 2)
+        self.assertEqual(upsell_so.order_line.name, nr_product.name)
+        self.assertFalse(nr_product in self.subscription.order_line.product_template_id)
+
+    def test_change_recurrence_plan_with_option(self):
+        """
+        A recurring order with a line for a recurring produce and a sale order option for a recurring product yields an
+            exception when changing the recurring plan via Form, preventing the plan from being changed
+        """
+        order_1 = self.env['sale.order'].create({
+            'partner_id': self.partner.id,
+            'order_line': [Command.create({'product_id': self.product.id})],
+        })
+        self.env['sale.order.option'].create({
+            'order_id': order_1.id,
+            'product_id': self.product.id,
+        })
+
+        with Form(order_1) as order_form:
+            order_form.plan_id = self.plan_week
+
+        self.assertEqual(order_1.plan_id, self.plan_week)
+
+    def test_subscription_lock_settings(self):
+        """ The settings to automatically lock SO upon confirmation
+        should never be applied to subscription orders. """
+        self.env.user.groups_id += self.env.ref('sale.group_auto_done_setting')
+        self.subscription.write({'start_date': False, 'next_invoice_date': False})
+        self.subscription.action_confirm()
+        self.assertEqual(self.subscription.state, 'sale')
+
+    def test_upsell_descriptions(self):
+        """ On invoicing upsells, only subscription-based items should display a duration. """
+        with freeze_time("2022-10-31"):
+            self.subscription.action_confirm()
+            self.env['sale.order']._cron_recurring_create_invoice()
+
+            action = self.subscription.prepare_upsell_order()
+            upsell_so = self.env['sale.order'].browse(action['res_id'])
+            upsell_so.order_line = [Command.create({'product_id': self.product_a.id})]
+            upsell_so.order_line.filtered('product_id').product_uom_qty = 1
+            upsell_so.action_confirm()
+            invoice = upsell_so._create_invoices()
+
+            self.assertEqual(len(invoice.invoice_line_ids), 4)
+            for line in invoice.invoice_line_ids:
+                name = line.name
+                sol_name = line.sale_line_ids.name
+                if line.sale_line_ids.recurring_invoice:
+                    self.assertRegex(name, rf"^{sol_name} - 1 Month", "Sub lines require duration")
+                else:
+                    self.assertEqual(name, sol_name, "Non-sub lines shouldn't add duration")

@@ -135,7 +135,7 @@ msgstr "Cierre de cuenta"
 #: code:addons/account_bank_statement_import_camt/lib/camt.py:0
 #, python-format
 msgid "Account Management"
-msgstr "Gestión contable"
+msgstr "Gestión de la cuenta"
 
 #. module: account_bank_statement_import_camt
 #. odoo-python
@@ -267,7 +267,7 @@ msgstr "Retiro en sucursal"
 #: code:addons/account_bank_statement_import_camt/lib/camt.py:0
 #, python-format
 msgid "Brokerage fee"
-msgstr "Comisión de intermediación "
+msgstr "Comisión de corretaje"
 
 #. module: account_bank_statement_import_camt
 #. odoo-python
@@ -348,7 +348,7 @@ msgstr "Centralización de tesorería"
 #: code:addons/account_bank_statement_import_camt/lib/camt.py:0
 #, python-format
 msgid "Cash Withdrawal"
-msgstr "Retiro en sucursal"
+msgstr "Retiro de efectivo"
 
 #. module: account_bank_statement_import_camt
 #. odoo-python
@@ -487,7 +487,7 @@ msgstr "Mercancía "
 #: code:addons/account_bank_statement_import_camt/lib/camt.py:0
 #, python-format
 msgid "Compensation/Claims"
-msgstr "Compensasión/reclamos"
+msgstr "Compensación/reclamaciones"
 
 #. module: account_bank_statement_import_camt
 #. odoo-python
@@ -647,7 +647,7 @@ msgstr "Débito directo transfronterizo"
 #: code:addons/account_bank_statement_import_camt/lib/camt.py:0
 #, python-format
 msgid "Cross-Border Intra Company Transfer"
-msgstr "Transferencia transfronteriza intra-empresa"
+msgstr "Transferencia transfronteriza intraempresa"
 
 #. module: account_bank_statement_import_camt
 #. odoo-python
@@ -790,7 +790,7 @@ msgstr "Borrador con descuento"
 #: code:addons/account_bank_statement_import_camt/lib/camt.py:0
 #, python-format
 msgid "Dishonoured/Unpaid Draft"
-msgstr "Borrador sin pagar"
+msgstr "Borrador cancelado/no pagado"
 
 #. module: account_bank_statement_import_camt
 #. odoo-python
@@ -842,7 +842,7 @@ msgstr "Borrador de cambio en madurez"
 #: code:addons/account_bank_statement_import_camt/lib/camt.py:0
 #, python-format
 msgid "Drafts/BillOfOrders"
-msgstr "Borradores/Facturadeorden"
+msgstr "Borradores/Lista de órdenes"
 
 #. module: account_bank_statement_import_camt
 #. odoo-python
@@ -1064,7 +1064,7 @@ msgstr "Cheque extranjero en reserva"
 #: code:addons/account_bank_statement_import_camt/lib/camt.py:0
 #, python-format
 msgid "Foreign Currency Deposit"
-msgstr "Deposito en moneda extranjera"
+msgstr "Depósito en moneda extranjera"
 
 #. module: account_bank_statement_import_camt
 #. odoo-python
@@ -1330,7 +1330,7 @@ msgstr "Transacciones en caja de seguridad"
 #: code:addons/account_bank_statement_import_camt/lib/camt.py:0
 #, python-format
 msgid "Management Fees"
-msgstr "Tarifa de manejo "
+msgstr "Tarifas de gestión"
 
 #. module: account_bank_statement_import_camt
 #. odoo-python
@@ -1400,21 +1400,21 @@ msgstr "Operaciones varias de seguridad"
 #: code:addons/account_bank_statement_import_camt/lib/camt.py:0
 #, python-format
 msgid "Mixed Deposit"
-msgstr "Deposito mixto"
+msgstr "Depósito mixto"
 
 #. module: account_bank_statement_import_camt
 #. odoo-python
 #: code:addons/account_bank_statement_import_camt/lib/camt.py:0
 #, python-format
 msgid "Mortgage Loans"
-msgstr "Préstamos hipptecarios"
+msgstr "Préstamos hipotecarios"
 
 #. module: account_bank_statement_import_camt
 #. odoo-python
 #: code:addons/account_bank_statement_import_camt/lib/camt.py:0
 #, python-format
 msgid "Netting"
-msgstr "Red"
+msgstr "Compensación"
 
 #. module: account_bank_statement_import_camt
 #. odoo-python
@@ -1610,7 +1610,7 @@ msgstr "Opciones"
 #: code:addons/account_bank_statement_import_camt/lib/camt.py:0
 #, python-format
 msgid "Order Cheque"
-msgstr "Orden de cheque"
+msgstr "Cheque a la orden"
 
 #. module: account_bank_statement_import_camt
 #. odoo-python
@@ -1693,8 +1693,8 @@ msgid ""
 "Please check the currency on your bank journal.\n"
 "No statements in currency %s were found in this CAMT file."
 msgstr ""
-"Revise la divisa de su diario bancario.\n"
-"No se encontraron estados en la divisa %s dentro de este archivo CAMT."
+"Revise la moneda de su diario bancario.\n"
+"No se encontraron extractos en la moneda %s dentro de este archivo CAMT."
 
 #. module: account_bank_statement_import_camt
 #. odoo-python
@@ -1705,7 +1705,7 @@ msgid ""
 "\n"
 "This CAMT file is targeting several IBAN accounts but none match the current journal."
 msgstr ""
-"Por favor establece una cuenta IBAN en tu registro bancario\n"
+"Establezca una cuenta IBAN en su registro bancario\n"
 "\n"
 "Este archivo CAMT está asociado con varias cuentas IBAN pero ninguna coincide con el diario actual."
 
@@ -1721,7 +1721,7 @@ msgstr "Pago en puntos de venta (POS)"
 #: code:addons/account_bank_statement_import_camt/lib/camt.py:0
 #, python-format
 msgid "Point-of-Sale (POS) Payment - Debit Card"
-msgstr "Pago en puntos de venta (POS) - tarjeta de debito"
+msgstr "Pago en puntos de venta (POS) - tarjeta de débito"
 
 #. module: account_bank_statement_import_camt
 #. odoo-python

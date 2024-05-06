@@ -806,8 +806,7 @@ class Planning(models.Model):
                 or ('end_datetime' in values and slot.end_datetime != datetime.strptime(values['end_datetime'], '%Y-%m-%d %H:%M:%S'))
             ):
                 values['request_to_switch'] = False
-        # update other slots in recurrency
-        slots = self
+
         recurrence_update = values.pop('recurrence_update', 'this')
         if recurrence_update != 'this':
             recurrence_domain = []
@@ -816,11 +815,33 @@ class Planning(models.Model):
                     recurrence_domain = expression.OR([recurrence_domain,
                         ['&', ('recurrency_id', '=', slot.recurrency_id.id), ('start_datetime', '>=', slot.start_datetime)]
                     ])
+                    recurrence_slots = self.search(recurrence_domain)
+                    if any(
+                        field_name in values
+                        for field_name in ('start_datetime', 'end_datetime')
+                    ):
+                        recurrence_slots -= slot
+                        values["repeat_type"] = slot.repeat_type
+                        self -= recurrence_slots
+                        recurrence_slots.unlink()
+                    else:
+                        self |= recurrence_slots
             else:
-                recurrence_domain = [('recurrency_id', 'in', self.recurrency_id.ids)]
-            slots |= self.search(recurrence_domain)
+                recurrence_slots = self.search([('recurrency_id', 'in', self.recurrency_id.ids)])
+                if any(
+                    field_name in values
+                    for field_name in ('start_datetime', 'end_datetime')
+                ):
+                    slot = recurrence_slots[-1]
+                    values["repeat_type"] = slot.repeat_type    # this is to ensure that the subsequent slots are recreated
+                    recurrence_slots -= slot
+                    recurrence_slots.unlink()
+                    self -= recurrence_slots
+                    self |= slot
+                else:
+                    self |= recurrence_slots
 
-        result = super(Planning, slots).write(values)
+        result = super().write(values)
         # recurrence
         if any(key in ('repeat', 'repeat_unit', 'repeat_type', 'repeat_until', 'repeat_interval', 'repeat_number') for key in values):
             # User is trying to change this record's recurrence so we delete future slots belonging to recurrence A
@@ -1041,7 +1062,10 @@ class Planning(models.Model):
                     # If the shift is out of resource's schedule, skip it.
                     if not split_shift_intervals:
                         continue
-                    rate = shift.allocated_hours * 3600 / sum(map(lambda x: (x[1] - x[0]).total_seconds(), split_shift_intervals))
+                    rate = round(shift.allocated_hours * 3600 / sum(
+                        (start - end).total_seconds()
+                        for start, end, rec in split_shift_intervals
+                    ))
                     # Try to add the shift to the timeline.
                     timeline = self._get_new_timeline_if_fits_in(
                         split_shift_intervals,
@@ -1449,7 +1473,7 @@ class Planning(models.Model):
             return 0.0
         period = self.end_datetime - self.start_datetime
         slot_duration = period.total_seconds() / 3600
-        max_duration = (period.days + 1) * self.company_id.resource_calendar_id.hours_per_day
+        max_duration = (period.days + (1 if period.seconds else 0)) * self.company_id.resource_calendar_id.hours_per_day
         if not max_duration or max_duration >= slot_duration:
             return slot_duration
         return max_duration

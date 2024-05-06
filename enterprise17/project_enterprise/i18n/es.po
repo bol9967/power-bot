@@ -78,7 +78,7 @@ msgstr "<strong>Cliente — </strong>"
 #. module: project_enterprise
 #: model_terms:ir.ui.view,arch_db:project_enterprise.portal_my_task
 msgid "<strong>Deadline:</strong>"
-msgstr "<strong>Fecha tope:</strong>"
+msgstr "<strong>Fecha límite:</strong>"
 
 #. module: project_enterprise
 #: model_terms:ir.ui.view,arch_db:project_enterprise.project_task_view_gantt
@@ -93,7 +93,7 @@ msgstr "<strong>Fecha planificada:</strong>"
 #. module: project_enterprise
 #: model_terms:ir.ui.view,arch_db:project_enterprise.project_project_view_gantt
 msgid "<strong>Project Manager — </strong>"
-msgstr "<strong>Jefe de proyecto — </strong>"
+msgstr "<strong>Gerente de proyecto — </strong>"
 
 #. module: project_enterprise
 #: model_terms:ir.ui.view,arch_db:project_enterprise.project_task_view_gantt
@@ -169,8 +169,8 @@ msgid ""
 "Operation not supported, you should always compare dependency_warning to "
 "True or False."
 msgstr ""
-"Operación no admitida, siempre debe comparar dependency_warning con True o "
-"False."
+"Operación no admitida, siempre debe comparar dependency_warning con "
+"Verdadero o False."
 
 #. module: project_enterprise
 #. odoo-python
@@ -180,8 +180,8 @@ msgid ""
 "Operation not supported, you should always compare planning_overlap to True "
 "or False."
 msgstr ""
-"Operación no admitida, siempre debe comparar planning_overlap con True o "
-"False."
+"Operación no admitida, siempre debe comparar planning_overlap con Verdadero "
+"o False."
 
 #. module: project_enterprise
 #. odoo-python
@@ -376,7 +376,7 @@ msgstr "C.P."
 #: code:addons/project_enterprise/static/src/task_gantt_model.js:0
 #, python-format
 msgid "👤 Unassigned"
-msgstr "👤 Sin asignar"
+msgstr "👤 No asignado"
 
 #. module: project_enterprise
 #. odoo-javascript

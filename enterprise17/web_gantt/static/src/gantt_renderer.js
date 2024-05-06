@@ -327,10 +327,10 @@ export class GanttRenderer extends Component {
                 addClass(pill, "o_resized");
                 this.interaction.mode = "resize";
             },
-            onDrag: ({ pill, direction, diff }) => {
+            onDrag: ({ pill, grabbedHandle, diff }) => {
                 const rect = pill.getBoundingClientRect();
                 const position = { top: rect.y + rect.height };
-                if (direction === "start") {
+                if (grabbedHandle === "left") {
                     position.left = rect.x;
                 } else {
                     position.right = document.body.offsetWidth - rect.x - rect.width;
@@ -358,14 +358,14 @@ export class GanttRenderer extends Component {
             ref: this.rootRef,
             elements: ".o_connector_creator_bullet",
             parentWrapper: ".o_gantt_cells .o_gantt_pill_wrapper",
-            onDragStart: ({ sourcePill, x, y, addClass }) => {
+            onDragStart: ({ initialPosition, sourcePill, x, y, addClass }) => {
                 this.popover.close();
                 initialPillId = sourcePill.dataset.pillId;
                 addClass(sourcePill, "o_connector_creator_lock");
                 this.setConnector({
                     id: NEW_CONNECTOR_ID,
                     highlighted: true,
-                    sourcePoint: { left: x, top: y },
+                    sourcePoint: { left: initialPosition.x, top: initialPosition.y },
                     targetPoint: { left: x, top: y },
                 });
                 this.interaction.mode = "connect";
@@ -932,6 +932,20 @@ export class GanttRenderer extends Component {
     }
 
     /**
+     * @param {"top"|"bottom"} vertical the vertical alignment of the connector creator
+     * @returns {{ vertical: "top"|"bottom", horizontal: "left"|"right" }}
+     */
+    getConnectorCreatorAlignment(vertical) {
+        const alignment = { vertical };
+        if (localization.direction === "rtl") {
+            alignment.horizontal = vertical === "top" ? "right" : "left";
+        } else {
+            alignment.horizontal = vertical === "top" ? "left" : "right";
+        }
+        return alignment;
+    }
+
+    /**
      * This function will add a 'label' property to each
      * non-consolidated pill included in the pills list.
      * This new property is a string meant to replace
@@ -953,7 +967,10 @@ export class GanttRenderer extends Component {
         const stopDate = record[dateStopField];
         const yearlessDateFormat = omit(DateTime.DATE_SHORT, "year");
 
-        const spanAccrossDays = stopDate.startOf("day") > startDate.startOf("day");
+        const spanAccrossDays =
+            stopDate.startOf("day") > startDate.startOf("day") &&
+            startDate.endOf("day").diff(startDate, "hours").toObject().hours >= 3 &&
+            stopDate.diff(stopDate.startOf("day"), "hours").toObject().hours >= 3;
         const spanAccrossWeeks =
             computeRange("week", stopDate).start > computeRange("week", startDate).start;
         const spanAccrossMonths = stopDate.startOf("month") > startDate.startOf("month");
@@ -1383,7 +1400,7 @@ export class GanttRenderer extends Component {
     }
 
     isPillSmall(pill) {
-        return this.state.pillsWidth * pill.grid.column[1] < (pill.displayName.length * 10);
+        return this.state.pillsWidth * pill.grid.column[1] < pill.displayName.length * 10;
     }
 
     /**

@@ -11,8 +11,7 @@ from datetime import datetime
 from json.decoder import JSONDecodeError
 from lxml import etree
 from psycopg2 import OperationalError
-from zeep import Client
-from zeep.transports import Transport
+from odoo.tools.zeep import Client
 
 from odoo import _, api, models, modules, fields, tools
 from odoo.exceptions import UserError
@@ -119,6 +118,8 @@ class L10nMxEdiDocument(models.Model):
         selection=[
             ('invoice_sent', "Sent"),
             ('invoice_sent_failed', "Send In Error"),
+            ('invoice_cancel_requested', "Cancel Requested"),
+            ('invoice_cancel_requested_failed', "Cancel Requested In Error"),
             ('invoice_cancel', "Cancel"),
             ('invoice_cancel_failed', "Cancel In Error"),
             ('invoice_received', "Received"),
@@ -236,10 +237,14 @@ class L10nMxEdiDocument(models.Model):
         """
         return {
             'invoice_sent_failed': (
-                lambda x: not x.move_id, # Force the user to go back to send & print in order to generate the invoice PDF.
-                lambda x: x._get_source_records()._l10n_mx_edi_cfdi_invoice_try_send(),
+                None,
+                lambda x: x._action_retry_invoice_try_send(),
             ),
             'invoice_cancel_failed': (
+                None,
+                lambda x: x._action_retry_invoice_try_cancel(),
+            ),
+            'invoice_cancel_requested_failed': (
                 None,
                 lambda x: x._action_retry_invoice_try_cancel(),
             ),
@@ -374,6 +379,15 @@ class L10nMxEdiDocument(models.Model):
         """ Cancel the document. """
         self.ensure_one()
         return self._get_cancel_button_map()[self.state][2](self)
+
+    def _action_retry_invoice_try_send(self):
+        """ Retry the sending of an invoice CFDI document that failed to be sent. """
+        self.ensure_one()
+        records = self._get_source_records()
+        if self.move_id:
+            records._l10n_mx_edi_cfdi_invoice_retry_send()
+        else:
+            records._l10n_mx_edi_cfdi_invoice_try_send()
 
     def _action_retry_invoice_try_cancel(self):
         """ Retry the cancellation of a the invoice cfdi document that failed to be cancelled. """
@@ -557,10 +571,20 @@ class L10nMxEdiDocument(models.Model):
             # Avoid things like -0.0, see: https://stackoverflow.com/a/11010869
             return '%.*f' % (precision, amount if not float_is_zero(amount, precision_digits=precision) else 0.0)
 
+        if cfdi_values['company'].tax_calculation_rounding_method == 'round_per_line':
+            line_base_importe_dp = currency_precision
+        else:
+            # In case of round_globally, we need to round the tax amounts for each line with an higher
+            # number of decimals to avoid rounding issues.
+            # Indeed, the total per invoice per tax must be equal to the sum of the reported tax amounts for
+            # each line.
+            line_base_importe_dp = 6
+
         cfdi_values.update({
             'format_float': format_float,
             'currency': currency,
             'currency_precision': currency_precision,
+            'line_base_importe_dp': line_base_importe_dp,
             'moneda': currency.name,
         })
 
@@ -611,9 +635,7 @@ class L10nMxEdiDocument(models.Model):
         """
         customer = customer or self.env['res.partner']
         invoice_customer = customer if customer.type == 'invoice' else customer.commercial_partner_id
-        is_foreign_customer = invoice_customer.country_id.code not in ('MX', False)
         has_missing_vat = not invoice_customer.vat
-        has_missing_country = not invoice_customer.country_id
         issued_address = cfdi_values['issued_address']
 
         # If the CFDI is refunding a global invoice, it should be sent as a refund of a global invoice with
@@ -625,7 +647,7 @@ class L10nMxEdiDocument(models.Model):
             is_refund_gi = bool(self.search([('attachment_uuid', 'in', origin_uuids), ('state', '=', 'ginvoice_sent')], limit=1))
 
         customer_as_publico_en_general = (not customer and to_public) or is_refund_gi
-        customer_as_xexx_xaxx = to_public or is_foreign_customer or has_missing_vat or has_missing_country
+        customer_as_xexx_xaxx = to_public or customer.country_id.code != 'MX' or has_missing_vat
 
         if customer_as_publico_en_general or customer_as_xexx_xaxx:
             customer_values = {
@@ -642,6 +664,13 @@ class L10nMxEdiDocument(models.Model):
                     'uso_cfdi': 'G02' if is_refund_gi else 'S01',
                 })
             else:
+                has_country = bool(customer.country_id)
+                company = cfdi_values['company']
+                export_fiscal_position = company._l10n_mx_edi_get_foreign_customer_fiscal_position()
+                fiscal_position = customer.with_company(company).property_account_position_id
+                has_export_fiscal_position = export_fiscal_position and fiscal_position == export_fiscal_position
+                is_foreign_customer = customer.country_id.code != 'MX' and (has_country or has_export_fiscal_position)
+
                 customer_values.update({
                     'rfc': 'XEXX010101000' if is_foreign_customer else 'XAXX010101000',
                     'nombre': self._cfdi_sanitize_to_legal_name(invoice_customer.name),
@@ -687,12 +716,13 @@ class L10nMxEdiDocument(models.Model):
         cfdi_values['objeto_imp'] = tax_objected
 
     @api.model
-    def _get_taxes_cfdi_values(self, base_lines, filter_tax_values=None):
+    def _get_taxes_cfdi_values(self, base_lines, filter_tax_values=None, cfdi_values=None):
         """ Compute the taxes for the CFDI document based on the lines passed as parameter.
 
         :param base_lines:          A list of dictionaries representing the lines of the document.
                                     (see '_convert_to_tax_base_line_dict' in account.tax).
         :param filter_tax_values:   See '_aggregate_taxes' in account.tax.
+        :param cfdi_values:         The current CFDI values.
         :return                     The results of the '_aggregate_taxes' method in account.tax.
         """
 
@@ -704,6 +734,9 @@ class L10nMxEdiDocument(models.Model):
                 'impuesto': TAX_TYPE_TO_CFDI_CODE.get(tax.l10n_mx_tax_type),
                 'tax_amount_field': tax.amount,
             }
+
+        company = cfdi_values.get('company')
+        distribute_total_on_line = not company or company.tax_calculation_rounding_method != 'round_globally'
 
         taxes_values_to_aggregate = []
         for base_line in base_lines:
@@ -719,6 +752,7 @@ class L10nMxEdiDocument(models.Model):
             taxes_values_to_aggregate,
             filter_tax_values_to_apply=filter_tax_values,
             grouping_key_generator=grouping_key_generator,
+            distribute_total_on_line=distribute_total_on_line,
         )
 
     @api.model
@@ -865,19 +899,22 @@ class L10nMxEdiDocument(models.Model):
         return self._dispatch_cfdi_base_lines(base_lines)['cfdi_lines']
 
     @api.model
-    def _add_base_lines_tax_amounts(self, base_lines):
+    def _add_base_lines_tax_amounts(self, base_lines, cfdi_values=None):
         """ Add the taxes to each base line.
 
-        :param base_lines: A list of dictionaries representing the lines of the document.
-                           (see '_convert_to_tax_base_line_dict' in account.tax).
+        :param base_lines:  A list of dictionaries representing the lines of the document.
+                            (see '_convert_to_tax_base_line_dict' in account.tax).
+        :param cfdi_values: The current CFDI values.
         """
         tax_details_transferred = self._get_taxes_cfdi_values(
             base_lines,
             filter_tax_values=lambda _base_line, tax_values: tax_values['tax_repartition_line'].tax_id.amount >= 0.0,
+            cfdi_values=cfdi_values,
         )
         tax_details_withholding = self._get_taxes_cfdi_values(
             base_lines,
             filter_tax_values=lambda _base_line, tax_values: tax_values['tax_repartition_line'].tax_id.amount < 0.0,
+            cfdi_values=cfdi_values,
         )
         for base_line in base_lines:
             discount = base_line['discount']
@@ -1021,18 +1058,20 @@ class L10nMxEdiDocument(models.Model):
                     })
                     result_dict[tax_key]['base'] += tax_values['base']
                     result_dict[tax_key]['importe'] += tax_values['importe']
-        cfdi_values['retenciones_list'] = [
-            {**k, **v}
-            for k, v in withholding_values_map.items()
-        ]
-        cfdi_values['retenciones_reduced_list'] = [
-            {**k, **v}
-            for k, v in withholding_reduced_values_map.items()
-        ]
-        cfdi_values['traslados_list'] = [
-            {**k, **v}
-            for k, v in transferred_values_map.items()
-        ]
+
+        for target_key, source_dict in (
+            ('retenciones_list', withholding_values_map),
+            ('retenciones_reduced_list', withholding_reduced_values_map),
+            ('traslados_list', transferred_values_map),
+        ):
+            cfdi_values[target_key] = [
+                {
+                    **k,
+                    'base': currency.round(v['base']),
+                    'importe': currency.round(v['importe']),
+                }
+                for k, v in source_dict.items()
+            ]
 
         # Totals.
         transferred_tax_amounts = [x['importe'] for x in cfdi_values['traslados_list'] if x['tipo_factor'] != 'Exento']
@@ -1200,6 +1239,7 @@ class L10nMxEdiDocument(models.Model):
             'sequence': sequence,
             'format_string': cfdi_values_list[0]['format_string'],
             'format_float': cfdi_values_list[0]['format_float'],
+            'line_base_importe_dp': cfdi_values_list[0]['line_base_importe_dp'],
             'currency_precision': cfdi_values_list[0]['currency_precision'],
 
             'no_certificado': cfdi_values_list[0]['no_certificado'],
@@ -1387,8 +1427,7 @@ class L10nMxEdiDocument(models.Model):
         ''' Send the CFDI XML document to Finkok for signature. Does not depend on a recordset
         '''
         try:
-            transport = Transport(timeout=20)
-            client = Client(credentials['sign_url'], transport=transport)
+            client = Client(credentials['sign_url'], timeout=20)
             response = client.service.stamp(cfdi, credentials['username'], credentials['password'])
             # pylint: disable=broad-except
         except Exception as e:
@@ -1427,8 +1466,7 @@ class L10nMxEdiDocument(models.Model):
         cer_pem = certificate._get_pem_cer(certificate.content)
         key_pem = certificate._get_pem_key(certificate.key, certificate.password)
         try:
-            transport = Transport(timeout=20)
-            client = Client(credentials['cancel_url'], transport=transport)
+            client = Client(credentials['cancel_url'], timeout=20)
             factory = client.type_factory('apps.services.soap.core.views')
             uuid_type = factory.UUID()
             uuid_type.UUID = uuid
@@ -1501,8 +1539,7 @@ class L10nMxEdiDocument(models.Model):
         ''' Send the CFDI XML document to Solucion Factible for signature. Does not depend on a recordset
         '''
         try:
-            transport = Transport(timeout=20)
-            client = Client(credentials['url'], transport=transport)
+            client = Client(credentials['url'], timeout=20)
             response = client.service.timbrar(credentials['username'], credentials['password'], cfdi, False)
             # pylint: disable=broad-except
         except Exception as e:
@@ -1547,8 +1584,7 @@ class L10nMxEdiDocument(models.Model):
         key_password = certificate.password
 
         try:
-            transport = Transport(timeout=20)
-            client = Client(credentials['url'], transport=transport)
+            client = Client(credentials['url'], timeout=20)
             response = client.service.cancelar(
                 credentials['username'], credentials['password'],
                 uuid_param, cer_pem, key_pem, key_password
@@ -1844,7 +1880,7 @@ Content-Disposition: form-data; name="xml"; filename="xml"
         :param invoice:         An invoice.
         :param document_values: The values to create the document.
         """
-        if document_values['state'] in ('invoice_sent', 'invoice_cancel'):
+        if document_values['state'] in ('invoice_sent', 'invoice_cancel', 'invoice_cancel_requested'):
             accept_method_state = f"{document_values['state']}_failed"
         else:
             accept_method_state = document_values['state']
@@ -1855,16 +1891,24 @@ Content-Disposition: form-data; name="xml"; filename="xml"
             lambda x: x.state == accept_method_state,
         )
 
+        document_states_to_remove = {
+            'invoice_sent_failed',
+            'invoice_cancel_requested_failed',
+            'invoice_cancel_failed',
+            'ginvoice_sent_failed',
+            'ginvoice_cancel_failed',
+        }
+
+        # In case we successfully cancel the invoice, we no longer need the previous cancellation requests.
+        # So, let's remove them.
+        if document.state == 'invoice_cancel':
+            document_states_to_remove.add('invoice_cancel_requested')
+
         invoice.l10n_mx_edi_invoice_document_ids \
-            .filtered(lambda x: x != document and x.state in {
-                'invoice_sent_failed',
-                'invoice_cancel_failed',
-                'ginvoice_sent_failed',
-                'ginvoice_cancel_failed',
-            }) \
+            .filtered(lambda x: x != document and x.state in document_states_to_remove) \
             .unlink()
 
-        if document.state in ('invoice_sent', 'invoice_cancel'):
+        if document.state in ('invoice_sent', 'invoice_cancel', 'invoice_cancel_requested'):
             invoice.l10n_mx_edi_invoice_document_ids \
                 .filtered(lambda x: (
                     x != document
@@ -2194,6 +2238,27 @@ Content-Disposition: form-data; name="xml"; filename="xml"
         else:
             return {'value': 'not_defined'}
 
+    def _update_document_sat_state(self, sat_state, error=None):
+        """ Update the current document with the newly fetched state from the SAT.
+
+        :param sat_state: The SAT state returned by '_fetch_sat_status'.
+        :param error:       In case of error, the message returned by the SAT.
+        """
+        self.ensure_one()
+
+        if self.move_id and self.state in ('invoice_sent', 'invoice_cancel', 'invoice_cancel_requested'):
+            self.move_id._l10n_mx_edi_cfdi_invoice_update_sat_state(self, sat_state, error=error)
+            return True
+        elif self.state in ('payment_sent', 'payment_cancel'):
+            self.move_id._l10n_mx_edi_cfdi_payment_update_sat_state(self, sat_state, error=error)
+            return True
+        else:
+            source_records = self._get_source_records()
+            if source_records and self.state in ('ginvoice_sent', 'ginvoice_cancel'):
+                source_records._l10n_mx_edi_cfdi_global_invoice_update_document_sat_state(self, sat_state, error=error)
+                return True
+        return False
+
     def _update_sat_state(self):
         """ Update the SAT state.
 
@@ -2212,16 +2277,12 @@ Content-Disposition: form-data; name="xml"; filename="xml"
             cfdi_infos['amount_total'],
             cfdi_infos['uuid'],
         )
-        self.sat_state = sat_results['value']
-
-        if sat_results.get('error') and self.invoice_ids:
-            self.invoice_ids._message_log_batch(bodies={invoice.id: sat_results['error'] for invoice in self.invoice_ids})
-
+        self._update_document_sat_state(sat_results['value'], error=sat_results.get('error'))
         return sat_results
 
     @api.model
-    def _get_update_sat_status_domains(self):
-        return [
+    def _get_update_sat_status_domains(self, from_cron=True):
+        results = [
             [
                 ('state', 'in', (
                     'ginvoice_sent',
@@ -2229,6 +2290,7 @@ Content-Disposition: form-data; name="xml"; filename="xml"
                     'payment_sent',
                     'ginvoice_cancel',
                     'invoice_cancel',
+                    'invoice_cancel_requested',
                     'payment_cancel',
                 )),
                 ('sat_state', 'not in', ('valid', 'cancelled', 'skip')),
@@ -2240,15 +2302,48 @@ Content-Disposition: form-data; name="xml"; filename="xml"
             ],
         ]
 
+        # The user still can cancel the document from the SAT portal. In that case, we need
+        # to display the SAT button just in case. However, we don't want to retroactively check
+        # all passed documents so this is happening only for the form view and not for the CRON.
+        if not from_cron:
+            results.extend([
+                [
+                    ('state', 'in', ('invoice_sent', 'payment_sent')),
+                    ('move_id.l10n_mx_edi_cfdi_state', '=', 'sent'),
+                    ('sat_state', '=', 'valid'),
+                ],
+                [
+                    ('state', '=', 'ginvoice_sent'),
+                    ('invoice_ids', 'any', [('l10n_mx_edi_cfdi_state', '=', 'global_sent')]),
+                    ('sat_state', '=', 'valid'),
+                ],
+            ])
+
+        return results
+
     @api.model
-    def _fetch_and_update_sat_status(self, batch_size=100, extra_domain=None):
-        ''' Call the SAT to know if the invoice is available government-side or if the invoice has been cancelled.
-        In the second case, the cancellation could be done Odoo-side and then we need to check if the SAT is up-to-date,
-        or could be done manually government-side forcing Odoo to update the invoice's state.
-        '''
-        domain = expression.OR(self._get_update_sat_status_domains())
+    def _get_update_sat_status_domain(self, extra_domain=None, from_cron=True):
+        """ Build the domain to filter the documents that need an update from the SAT.
+
+        :param extra_domain:    An optional extra domain to be injected when searching for documents to update.
+        :param from_cron:       Indicate if the call is from the CRON or not.
+        :return:                An odoo domain.
+        """
+        domain = expression.OR(self._get_update_sat_status_domains(from_cron=from_cron))
         if extra_domain:
             domain = expression.AND([domain, extra_domain])
+        return domain
+
+    @api.model
+    def _fetch_and_update_sat_status(self, batch_size=100, extra_domain=None):
+        """ Call the SAT to know if the invoice is available government-side or if the invoice has been cancelled.
+        In the second case, the cancellation could be done Odoo-side and then we need to check if the SAT is up-to-date,
+        or could be done manually government-side forcing Odoo to update the invoice's state.
+
+        :param batch_size:      The maximum size of the batch of documents to process to avoid timeout.
+        :param extra_domain:    An optional extra domain to be injected when searching for documents to update.
+        """
+        domain = self._get_update_sat_status_domain(extra_domain=extra_domain)
         documents = self.search(domain, limit=batch_size + 1)
 
         for counter, document in enumerate(documents):

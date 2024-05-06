@@ -5,7 +5,7 @@
 # Translators:
 # Norimichi Sugimoto <norimichi.sugimoto@tls-ltd.co.jp>, 2023
 # Wil Odoo, 2023
-# Ryoko Tsuda <ryoko@quartile.co>, 2023
+# Ryoko Tsuda <ryoko@quartile.co>, 2024
 # Junko Augias, 2024
 # 
 msgid ""
@@ -75,6 +75,17 @@ msgstr "従業員数:"
 #: model:ir.model.fields,field_description:knowledge.field_knowledge_article__favorite_count
 msgid "#Is Favorite"
 msgstr "#お気に入り"
+
+#. module: knowledge
+#. odoo-python
+#: code:addons/knowledge/models/knowledge_article.py:0
+#, python-format
+msgid ""
+"\"%(article_item_name)s\" is an Article Item from \"%(article_name)s\" and "
+"cannot be restored on its own. Contact the owner of \"%(article_name)s\" to "
+"have it restored instead."
+msgstr ""
+"\"%(article_item_name)s\"は\"%(article_name)s\"の記事アイテムであり、単独で復元することはできません。代わりに\"%(article_name)s\"の所有者に連絡して復元を依頼して下さい。"
 
 #. module: knowledge
 #. odoo-python
@@ -2427,6 +2438,7 @@ msgstr "記事項目プロパティ"
 #. odoo-javascript
 #: code:addons/knowledge/static/src/components/knowledge_article_html_field/knowledge_article_html_field.js:0
 #: code:addons/knowledge/static/src/components/knowledge_article_html_field/knowledge_article_html_field.js:0
+#: code:addons/knowledge/static/src/components/knowledge_article_html_field/knowledge_article_html_field.js:0
 #: model:ir.actions.act_window,name:knowledge.knowledge_article_action_item_calendar
 #: model:ir.actions.act_window,name:knowledge.knowledge_article_item_action
 #: model:ir.actions.act_window,name:knowledge.knowledge_article_item_action_stages
@@ -3551,7 +3563,7 @@ msgstr "ファイル"
 #. module: knowledge
 #: model_terms:ir.ui.view,arch_db:knowledge.portal_my_home_knowledge
 msgid "Find all articles shared with you"
-msgstr "共有された全てのドキュメントを見る"
+msgstr "共有されたすべてのドキュメントを参照できます。"
 
 #. module: knowledge
 #: model:ir.model.fields,field_description:knowledge.field_knowledge_article_stage__fold

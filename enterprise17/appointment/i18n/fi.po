@@ -20,9 +20,9 @@
 # Joakim Weckman, 2023
 # Jarmo Kortetjärvi <jarmo.kortetjarvi@gmail.com>, 2023
 # Tuomo Aura <tuomo.aura@web-veistamo.fi>, 2023
-# Kari Lindgren <kari.lindgren@emsystems.fi>, 2023
-# Martin Trigaux, 2023
 # Veikko Väätäjä <veikko.vaataja@gmail.com>, 2024
+# Martin Trigaux, 2024
+# Kari Lindgren <kari.lindgren@emsystems.fi>, 2024
 # Ossi Mantylahti <ossi.mantylahti@obs-solutions.fi>, 2024
 # 
 msgid ""
@@ -1906,6 +1906,7 @@ msgstr ""
 #: code:addons/appointment/static/src/views/appointment_calendar/appointment_calendar_controller.xml:0
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_invite_view_form_insert_link
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_validated
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
 #, python-format
 msgid "Discard"
 msgstr "Hylkää"
@@ -2523,6 +2524,11 @@ msgid "Monday"
 msgstr "Maanantai"
 
 #. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "More Options"
+msgstr "Lisää valintoja"
+
+#. module: appointment
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_question__question_type__text
 msgid "Multi-line text"
 msgstr "Monirivinen teksti"
@@ -2880,6 +2886,11 @@ msgid "Reminders"
 msgstr "Muistutukset"
 
 #. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "Remove"
+msgstr "Poista"
+
+#. module: appointment
 #: model:ir.ui.menu,name:appointment.menu_schedule_report
 #: model:ir.ui.menu,name:appointment.reporting_menu_calendar
 msgid "Reporting"
@@ -2915,12 +2926,14 @@ msgstr "Resurssivapaat"
 #. module: appointment
 #: model:ir.actions.act_window,name:appointment.appointment_resource_action
 #: model:ir.model.fields,field_description:appointment.field_appointment_invite__resource_ids
+#: model:ir.model.fields,field_description:appointment.field_calendar_event__resource_ids
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_type__schedule_based_on__resources
 #: model:ir.ui.menu,name:appointment.menu_appointment_resource
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_form
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree_invitation
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_validated
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
 #: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_gantt_booking_resource
 msgid "Resources"
 msgstr "Resurssit"
@@ -2981,6 +2994,11 @@ msgstr "Tekstiviestin toimitusvirhe"
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_slot__weekday__6
 msgid "Saturday"
 msgstr "Lauantai"
+
+#. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "Save"
+msgstr "Tallenna"
 
 #. module: appointment
 #: model:ir.ui.menu,name:appointment.menu_appointment_schedule_resources
@@ -3127,6 +3145,13 @@ msgstr "Aseta käytettävissä olevat aikasi"
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree
 msgid "Share"
 msgstr "Jaa"
+
+#. module: appointment
+#. odoo-javascript
+#: code:addons/appointment/static/src/views/appointment_calendar/appointment_calendar_controller.xml:0
+#, python-format
+msgid "Share Appointment Link"
+msgstr "Jaa tapaamisen linkki"
 
 #. module: appointment
 #. odoo-javascript
@@ -3370,6 +3395,13 @@ msgstr "Käytetty kapasiteetti ei voi olla pienempi kuin varattu kapasiteetti"
 #: model:ir.model.constraint,message:appointment.constraint_appointment_slot_check_start_and_end_hour
 msgid "The end time must be later than the start time."
 msgstr "Loppuajan täytyy olla alkuajan jälkeen."
+
+#. module: appointment
+#. odoo-python
+#: code:addons/appointment/models/calendar_event.py:0
+#, python-format
+msgid "The event %s cannot book resources without an appointment type."
+msgstr "Tapahtuma %s ei voi varata resursseja ilman ajanvaraustyyppiä."
 
 #. module: appointment
 #. odoo-python
@@ -3691,6 +3723,8 @@ msgid ""
 "If kept empty, the working schedule of the company set on the resource will "
 "be used"
 msgstr ""
+"Jos se jätetään tyhjäksi, käytetään resurssille asetetun yrityksen "
+"työaikataulua"
 
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.staff_user_select

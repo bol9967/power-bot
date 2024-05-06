@@ -145,7 +145,7 @@ class AccountReport(models.AbstractModel):
                 elif line_fields[fname].get("type") in ["selection", "reference"]:
                     typecast = sql.SQL('text')
                 else:
-                    typecast = sql.SQL(line_fields[fname].get("type"))
+                    typecast = sql.SQL(self.env['account.move.line']._fields[fname].column_type[0])
                 selected_fields.append(sql.SQL('cast(NULL AS {typecast}) AS "account_move_line.{fname}"').format(
                     typecast=typecast,
                     fname=sql.SQL(fname),
@@ -171,9 +171,6 @@ class AccountReport(models.AbstractModel):
             table=sql.SQL(', ').join(selected_fields),
         )
 
-        # TODO gawa need to do the auditing of the lines
-        # TODO gawa try to reduce query on analytic lines
-
         self.env.cr.execute(query)
 
     def _query_get(self, options, date_scope, domain=None):
@@ -182,10 +179,17 @@ class AccountReport(models.AbstractModel):
 
         # We add the domain filter for analytic_distribution here, as the search is not available
         tables, where_clause, where_params = super(AccountReport, context_self)._query_get(options, date_scope, domain)
-        if options.get('analytic_accounts') and not any(x in options.get('analytic_accounts_list', []) for x in options['analytic_accounts']):
-            analytic_account_ids = [[str(account_id) for account_id in options['analytic_accounts']]]
-            where_params.append(analytic_account_ids)
-            where_clause = f'{where_clause} AND "account_move_line".analytic_distribution ?| array[%s]'
+        if options.get('analytic_accounts'):
+            if 'analytic_accounts_list' in options:
+                # the table will be `analytic_temp_account_move_line` and thus analytic_distribution will be a single ID
+                analytic_account_ids = tuple(str(account_id) for account_id in options['analytic_accounts'])
+                where_params.append(analytic_account_ids)
+                where_clause = f"""{where_clause} AND "account_move_line".analytic_distribution IN %s"""
+            else:
+                # Real `account_move_line` table so real JSON with percentage
+                analytic_account_ids = [[str(account_id) for account_id in options['analytic_accounts']]]
+                where_params.append(analytic_account_ids)
+                where_clause = fr"""{where_clause} AND %s && regexp_split_to_array(jsonb_path_query_array("account_move_line".analytic_distribution, '$.keyvalue()."key"')::text, '\D+')"""
 
         return tables, where_clause, where_params
 
@@ -214,8 +218,7 @@ class AccountReport(models.AbstractModel):
                     expression = [(field, operator, right_term)]
                 # Replace the 'analytic_distribution' by the account_id domain as we expect for analytic lines.
                 elif field == 'analytic_distribution':
-                    account_ids = tuple(int(account_id) for account_id in column_group_options.get('analytic_accounts_list', []))
-                    expression = [('auto_account_id', 'in', account_ids)]
+                    expression = [('auto_account_id', 'in', right_term)]
                 # For other fields not present in on the analytic line model, map them to get the info from the move_line.
                 # Or ignore these conditions if there is no move lines.
                 elif field.split('.')[0] not in AccountAnalyticLine._fields:
@@ -268,7 +271,7 @@ class AccountMoveLine(models.Model):
         The following analytic columns and computations will just query the shadowed table instead of the real one.
         """
         query = super()._where_calc(domain, active_test)
-        if self.env.context.get('account_report_analytic_groupby'):
+        if self.env.context.get('account_report_analytic_groupby') and not self.env.context.get('account_report_cash_basis'):
             self.env['account.report']._prepare_lines_for_analytic_groupby()
             query._tables['account_move_line'] = SQL.identifier('analytic_temp_account_move_line')
         return query

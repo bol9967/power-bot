@@ -522,6 +522,8 @@ class AccountOnlineLink(models.Model):
                 # It means that the token is active on the proxy and any further call resulting in an
                 # error would lose the new refresh_token hence blocking the account ad vitam eternam
                 self.env.cr.commit()
+                if self.journal_ids:  # We can't do it unless we already have a journal
+                    self._get_consent_expiring_date()
                 return self._fetch_odoo_fin(url, data, ignore_status)
             elif error.get('code') == 300:  # redirect, not an error
                 raise OdooFinRedirectException(mode=error.get('data', {}).get('mode', 'link'))
@@ -537,6 +539,7 @@ class AccountOnlineLink(models.Model):
             ctx = self.env.context.copy()
             ctx['error_reference'] = error_details.get('error_reference')
             ctx['provider_type'] = error_details.get('provider_type')
+            ctx['redirect_warning_url'] = error_details.get('redirect_warning_url')
 
             self.with_context(ctx)._log_information(state=state, subject=subject, message=message, reset_tx=True)
 
@@ -547,35 +550,45 @@ class AccountOnlineLink(models.Model):
         if reset_tx:
             self.env.cr.rollback()
         try:
-            if reset_tx:
-                error_reference = self.env.context.get('error_reference')
-                provider = self.env.context.get('provider_type')
-                odoo_help_description = f'''ClientID: {self.client_id}\nInstitution: {self.name}\nError Reference: {error_reference}\nError Message: {message}\n'''
-                odoo_help_summary = f'Bank sync error ref: {error_reference} - Provider: {provider} - Client ID: {self.client_id}'
-                url_params = urllib.parse.urlencode({'stage': 'bank_sync', 'summary': odoo_help_summary, 'description': odoo_help_description[:1500]})
-                url = f'https://www.odoo.com/help?{url_params}'
-                message += _(" If you've already opened this issue don't report it again.")
             # if state is disconnected, and new state is error: ignore it
             if state == 'error' and self.state == 'disconnected':
                 state = 'disconnected'
-            if subject and message:
-                message_post = message
-                if reset_tx:
-                    message_post = Markup('%s<br>%s <a href="%s" >%s</a>') % (message_post, _("You can contact Odoo support"), url, _("Here"))
-                self.message_post(body=message_post, subject=subject)
             if state and self.state != state:
                 self.write({'state': state})
-            if state == 'error':
+            if state in ('error', 'disconnected'):
                 self.account_online_account_ids.fetching_status = 'done'
             if reset_tx:
+                context = self.env.context
+                if subject and message:
+                    message_post = message
+                    error_reference = context.get('error_reference')
+                    provider = context.get('provider_type')
+                    odoo_help_description = f'''ClientID: {self.client_id}\nInstitution: {self.name}\nError Reference: {error_reference}\nError Message: {message_post}\n'''
+                    odoo_help_summary = f'Bank sync error ref: {error_reference} - Provider: {provider} - Client ID: {self.client_id}'
+                    if context.get('redirect_warning_url'):
+                        if context['redirect_warning_url'] == 'odoo_support':
+                            url_params = urllib.parse.urlencode({'stage': 'bank_sync', 'summary': odoo_help_summary, 'description': odoo_help_description[:1500]})
+                            url = f'https://www.odoo.com/help?{url_params}'
+                            message += '\n\n' + _("If you've already opened a ticket for this issue, don't report it again: a support agent will contact you shortly.")
+                            message_post = Markup('%s<br>%s <a href="%s" >%s</a>') % (message, _("You can contact Odoo support"), url, _("Here"))
+                            button_label = _('Report issue')
+                        else:
+                            url = "https://www.odoo.com/documentation/17.0/applications/finance/accounting/bank/bank_synchronization.html#faq"
+                            message_post = Markup('%s<br>%s <a href="%s" >%s</a>') % (message_post, _("Check the documentation"), url, _("Here"))
+                            button_label = _('Check the documentation')
+                    self.message_post(body=message_post, subject=subject)
                 # In case of reset_tx, we commit the changes in order to have the message post saved
-                # and then raise a redirectWarning error so that customer can easily open an issue with Odoo.
                 self.env.cr.commit()
-                action_id = {
-                    "type": "ir.actions.act_url",
-                    "url": url,
-                }
-                raise RedirectWarning(message, action_id, _('Report issue'))
+                # and then raise either a redirectWarning error so that customer can easily open an issue with Odoo,
+                # or eventually bring the user to the documentation if there's no need to contact the support.
+                if subject and message and context.get('redirect_warning_url'):
+                    action_id = {
+                        "type": "ir.actions.act_url",
+                        "url": url,
+                    }
+                    raise RedirectWarning(message, action_id, button_label)
+                # either a userError if there's no need to bother the support, or link to the doc.
+                raise UserError(message)
         except (CacheMiss, MissingError):
             # This exception can happen if record was created and rollbacked due to error in same transaction
             # Therefore it is not possible to log information on it, in this case we just ignore it.
@@ -603,6 +616,10 @@ class AccountOnlineLink(models.Model):
                 resp_json = link.with_context(delete_sync=True)._fetch_odoo_fin('/proxy/v1/delete_user', data={'provider_data': link.provider_data}, ignore_status=True)  # delete proxy user
                 if resp_json.get('delete', True) is True:
                     to_unlink += link
+            except OdooFinRedirectException:
+                # Can happen that this call returns a redirect in mode link, in which case we delete the record
+                to_unlink += link
+                continue
             except (UserError, RedirectWarning):
                 continue
         return super(AccountOnlineLink, to_unlink).unlink()
@@ -651,8 +668,12 @@ class AccountOnlineLink(models.Model):
 
     def _pre_check_fetch_transactions(self):
         self.ensure_one()
-        cron_limit_time = tools.config['limit_time_real_cron']  # time after which cron process is killed
-        limit_time = (cron_limit_time if cron_limit_time > 0 else tools.config['limit_time_real']) + 20  # Add 20 seconds to be sure that the process will have been killed
+        # 'limit_time_real_cron' and 'limit_time_real' default respectively to -1 and 120.
+        # Manual fallbacks applied for non-POSIX systems where this key is disabled (set to None).
+        limit_time = tools.config['limit_time_real_cron'] or -1
+        if limit_time <= 0:
+            limit_time = tools.config['limit_time_real'] or 120
+        limit_time += 20  # Add 20 seconds to be sure that the process will have been killed
         # if any account is actually creating entries and last_refresh was made less than cron_limit_time ago, skip fetching
         if (self.account_online_account_ids.filtered(lambda account: account.fetching_status == 'processing') and
                 self.last_refresh + relativedelta(seconds=limit_time) > fields.Datetime.now()):
@@ -733,11 +754,14 @@ class AccountOnlineLink(models.Model):
                     total = sum([transaction['amount'] for transaction in transactions])
                     statement_lines = self.env['account.bank.statement.line'].with_context(transactions_total=total)._online_sync_bank_statement(sorted_transactions[:100], online_account)
                     online_account.fetching_status = 'planned' if len(transactions) > 100 else 'done'
+                    domain = None
+                    if statement_lines:
+                        domain = [('id', 'in', statement_lines.ids)]
 
                     return self.env['account.bank.statement.line']._action_open_bank_reconciliation_widget(
-                        extra_domain=[('id', 'in', statement_lines.ids)],
+                        extra_domain=domain,
                         name=_('Fetched Transactions'),
-                        default_context=self.env.context,
+                        default_context={**self.env.context, 'default_journal_id': journal.id},
                     )
                 else:
                     statement_lines = self.env['account.bank.statement.line']._online_sync_bank_statement(sorted_transactions, online_account)
@@ -838,8 +862,7 @@ class AccountOnlineLink(models.Model):
             # that provider_data is committed in database as soon as we received it.
             if data.get('provider_data'):
                 self.env.cr.commit()
-            if self.journal_ids:  # We can't do it unless we already have a journal
-                self._get_consent_expiring_date()
+
         # if for some reason we just have to update the record without doing anything else, the mode will be set to 'none'
         if mode == 'none':
             return {'type': 'ir.actions.client', 'tag': 'reload'}
@@ -939,7 +962,12 @@ class AccountOnlineLink(models.Model):
     def _open_iframe(self, mode='link'):
         self.ensure_one()
         if self.client_id and self.sudo().refresh_token:
-            self._get_access_token()
+            try:
+                self._get_access_token()
+            except OdooFinRedirectException:
+                # Delete record and open iframe in a new one
+                self.unlink()
+                return self.create({})._open_iframe('link')
 
         proxy_mode = self.env['ir.config_parameter'].sudo().get_param('account_online_synchronization.proxy_mode') or 'production'
         country = self.env.company.country_id
@@ -957,6 +985,7 @@ class AccountOnlineLink(models.Model):
                     'countryCode': country.code,
                     'countryName': country.display_name,
                     'serverVersion': odoo.release.serie,
+                    'mfa_type': self.env.user._mfa_type(),
                 }
             },
         }

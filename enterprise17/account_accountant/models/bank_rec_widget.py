@@ -36,7 +36,7 @@ class BankRecWidget(models.Model):
         related='st_line_id.journal_id',
         depends=['st_line_id'],
     )
-    st_line_narration = fields.Html(
+    st_line_narration = fields.Html(  # FIXME remove in master. Deprecated field, use st_line_transaction_details instead
         related='st_line_id.narration',
         depends=['st_line_id'],
     )
@@ -140,19 +140,20 @@ class BankRecWidget(models.Model):
                 if is_reconciled:
                     _liquidity_lines, _suspense_lines, other_lines = wizard.st_line_id._seek_for_lines()
                     for aml in other_lines:
-                        exchange_diff_aml = (aml.matched_debit_ids + aml.matched_debit_ids)\
+                        exchange_diff_amls = (aml.matched_debit_ids + aml.matched_credit_ids) \
                             .exchange_move_id.line_ids.filtered(lambda l: l.account_id != aml.account_id)
-                        if wizard.state == 'reconciled' and exchange_diff_aml:
+                        if wizard.state == 'reconciled' and exchange_diff_amls:
                             line_ids_commands.append(
                                 Command.create(wizard._lines_prepare_aml_line(
                                     aml,  # Create the aml line with un-squashed amounts (aml - exchange diff)
-                                    balance=aml.balance - exchange_diff_aml.balance,
-                                    amount_currency=aml.amount_currency - exchange_diff_aml.amount_currency
+                                    balance=aml.balance - sum(exchange_diff_amls.mapped('balance')),
+                                    amount_currency=aml.amount_currency - sum(exchange_diff_amls.mapped('amount_currency')),
                                 ))
                             )
-                            line_ids_commands.append(
-                                Command.create(wizard._lines_prepare_aml_line(exchange_diff_aml))
-                            )
+                            for exchange_diff_aml in exchange_diff_amls:
+                                line_ids_commands.append(
+                                    Command.create(wizard._lines_prepare_aml_line(exchange_diff_aml))
+                                )
                         else:
                             line_ids_commands.append(Command.create(wizard._lines_prepare_aml_line(aml)))
 
@@ -740,6 +741,9 @@ class BankRecWidget(models.Model):
         self.ensure_one()
 
         tax_rep = self.env['account.tax.repartition.line'].browse(tax_line_vals['tax_repartition_line_id'])
+        name = tax_rep.tax_id.name
+        if self.st_line_id.payment_ref:
+            name = f'{name} - {self.st_line_id.payment_ref}'
         if tax_line_vals['tax_id'] == tax_rep.tax_id.id:
             group_tax = self.env['account.tax']
         else:
@@ -753,7 +757,7 @@ class BankRecWidget(models.Model):
 
             'account_id': tax_line_vals['account_id'],
             'date': self.st_line_id.date,
-            'name': tax_rep.tax_id.name,
+            'name': name,
             'partner_id': tax_line_vals['partner_id'],
             'currency_id': currency.id,
             'amount_currency': amount_currency,
@@ -1351,7 +1355,7 @@ class BankRecWidget(models.Model):
 
         # Refresh analytic lines.
         move.line_ids.analytic_line_ids.unlink()
-        move.line_ids._create_analytic_lines()
+        move.line_ids.with_context(validate_analytic=True)._create_analytic_lines()
 
     @contextmanager
     def _action_validate_method(self):
@@ -1572,7 +1576,7 @@ class BankRecWidget(models.Model):
     def collect_global_info_data(self, journal_id):
         journal = self.env['account.journal'].browse(journal_id)
         balance = False
-        if self.env.company in journal.company_id.parent_ids:
+        if journal.exists() and self.env.company in journal.company_id._accessible_branches():
             balance = formatLang(self.env,
                                  journal.current_statement_balance,
                                  currency_obj=journal.currency_id or journal.company_id.sudo().currency_id)

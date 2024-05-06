@@ -18,6 +18,7 @@ from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 from odoo.tools.translate import _
 
 BANXICO_DATE_FORMAT = '%d/%m/%Y'
+PROXY_URL = 'https://iap-services.odoo.com'
 CBUAE_URL = "https://centralbank.ae/umbraco/Surface/Exchange/GetExchangeRateAllCurrency"
 CBEGY_URL = "https://www.cbe.org.eg/en/economic-research/statistics/cbe-exchange-rates"
 MAP_CURRENCIES = {
@@ -103,7 +104,6 @@ MAP_CURRENCIES = {
     'South Africa Rand': 'ZAR',
     'Zambian Kwacha': 'ZMW',
 }
-
 _logger = logging.getLogger(__name__)
 
 
@@ -152,8 +152,10 @@ CURRENCY_PROVIDER_SELECTION = [
     (['PL'], 'nbp', '[PL] National Bank of Poland'),
     (['RO'], 'bnr', '[RO] National Bank of Romania'),
     (['TR'], 'tcmb', '[TR] Central Bank of the Republic of Turkey'),
-    (['UK'], 'hmrc', '[UK] HM Revenue & Customs')
+    (['UK'], 'hmrc', '[UK] HM Revenue & Customs'),
+    (['MY'], 'bnm', '[MY] Bank Negara Malaysia'),
 ]
+
 
 class ResCompany(models.Model):
     _inherit = 'res.company'
@@ -569,12 +571,30 @@ class ResCompany(models.Model):
             - SF60653 USD SAT - Officially used from SAT institution
         Source: http://www.banxico.org.mx/portal-mercado-cambiario/
         """
-        icp = self.env['ir.config_parameter'].sudo()
-        token = icp.get_param('banxico_token')
-        if not token:
-            # https://www.banxico.org.mx/SieAPIRest/service/v1/token
-            token = '6a85ed7c0cbd586a8a9186f03b9911fc0ffad5f2cfc9730096c09da8bf253198'  # noqa
-            icp.set_param('banxico_token', token)
+        try:
+            payload = {
+                'jsonrpc': '2.0',
+                'method': 'call',
+                'params': {'provider': 'banxico'},
+            }
+            response = requests.get(
+                f'{PROXY_URL}/api/currency_rate/1/get_currency_rates',  # Send request to Odoo proxy
+                json=payload,
+                headers={'content-type': 'application/json'},
+                timeout=30,
+            ).json()
+
+            if response.get('error'):
+                return False
+            series = response['result']
+        except requests.RequestException as e:
+            _logger.error(e)
+            return False
+
+        available_currency_names = available_currencies.mapped('name')
+        rslt = {
+            'MXN': (1.0, fields.Date.today().strftime(DEFAULT_SERVER_DATE_FORMAT)),
+        }
         foreigns = {
             # position order of the rates from webservices
             'SF46410': 'EUR',
@@ -583,23 +603,6 @@ class ResCompany(models.Model):
             'SF46407': 'GBP',
             'SF60653': 'USD',
         }
-        url = 'https://www.banxico.org.mx/SieAPIRest/service/v1/series/%s/datos/%s/%s?token=%s' # noqa
-        date_mx = datetime.datetime.now(timezone('America/Mexico_City'))
-        today = date_mx.strftime(DEFAULT_SERVER_DATE_FORMAT)
-        yesterday = (date_mx - datetime.timedelta(days=1)).strftime(DEFAULT_SERVER_DATE_FORMAT)
-        res = requests.get(url % (','.join(foreigns), yesterday, today, token), timeout=30)
-        res.raise_for_status()
-        series = res.json()['bmx']['series']
-        series = {serie['idSerie']: {dato['fecha']: dato['dato'] for dato in serie['datos']} for serie in series if 'datos' in serie}
-
-        available_currency_names = available_currencies.mapped('name')
-
-        rslt = {
-            'MXN': (1.0, fields.Date.today().strftime(DEFAULT_SERVER_DATE_FORMAT)),
-        }
-
-        today = date_mx.strftime(BANXICO_DATE_FORMAT)
-        yesterday = (date_mx - datetime.timedelta(days=1)).strftime(BANXICO_DATE_FORMAT)
         for index, currency in foreigns.items():
             if not series.get(index, False):
                 continue
@@ -887,6 +890,43 @@ class ResCompany(models.Model):
 
         if result and 'BGN' in available_currency_names:
             result['BGN'] = (1.0, curr_date)
+        return result
+
+    @api.model
+    def _parse_bnm_data(self, available_currencies):
+        """ This method is used to update the currencies by using BNM (Bank Negara Malaysia) service API.
+            Rates are given against MYR as a JSON.
+            Source: https://apikijangportal.bnm.gov.my/openapi
+
+            If a currency has no rate, it will be skipped.
+        """
+        request_url = "https://api.bnm.gov.my/public/exchange-rate"
+        request_headers = {
+            'accept': 'application/vnd.BNM.API.v1+json',
+        }
+
+        response = requests.get(request_url, headers=request_headers, timeout=10)
+        response.raise_for_status()
+        result = response.json()
+
+        data = result.get('data')
+        if not data:
+            return False
+
+        available_currency_names = available_currencies.mapped('name')
+        result = {}
+
+        date = datetime.datetime.now()
+        for currency in data:
+            currency_code = currency['currency_code']
+            if currency_code in available_currency_names:
+                date = datetime.datetime.strptime(currency['rate']['date'], '%Y-%m-%d').date()
+                rate = (1 / currency['rate']['middle_rate']) * currency['unit']
+                result[currency_code] = (float(rate), date)
+
+        if result and 'MYR' not in result:
+            result['MYR'] = (1.0, date)
+
         return result
 
     @api.model

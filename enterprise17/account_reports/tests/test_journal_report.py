@@ -185,6 +185,8 @@ class TestJournalAuditReport(TestAccountReportsCommon):
                 # This is the tax summary line, it's rendered in a custom way and don't have values in the name/columns
                 ('',                                                                                                                                                    ),
                 ('Bank (BNK1)',                                                                                                                                         ),
+                ('Global Tax Summary',                                                                                                                                  ),
+                ('',                                                                                                                                                    ),
             ],
             options,
         )
@@ -216,6 +218,8 @@ class TestJournalAuditReport(TestAccountReportsCommon):
                 # This is the tax summary line, it's rendered in a custom way and don't have values in the name/columns
                 ('',                                                                                                                                                    ),
                 ('Bank (BNK1)',                                                                                                                                         ),
+                ('Global Tax Summary',                                                                                                                                  ),
+                ('',                                                                                                                                                    ),
             ],
             options,
         )
@@ -237,6 +241,8 @@ class TestJournalAuditReport(TestAccountReportsCommon):
                 ('',                                    '',                       '',                       '',             'Starting Balance:',  '$\xa0100.00',      ''),
                 ('BNK1/2017/00001',                     '',                       '400000 Product Sales',   0.0,            200.00,               '$\xa0300.00',      ''),
                 ('',                                    '',                       '',                       '',             'Ending Balance:',    '$\xa0300.00',      ''),
+                ('Global Tax Summary',                                                                                                                                  ),
+                ('',                                                                                                                                                    ),
             ],
             options,
         )
@@ -282,6 +288,8 @@ class TestJournalAuditReport(TestAccountReportsCommon):
                 ('BNK1/2017/00001',                     '',                       '400000 Product Sales',   0.0,            200.00,               '$\xa0300.00',      ''),
                 ('BNK1/2017/00002',                     '',                       '400000 Product Sales',   0.0,            175.00,               '$\xa0475.00',      '150.000\xa0🍫'),
                 ('',                                    '',                       '',                       '',             'Ending Balance:',    '$\xa0475.00',      ''),
+                ('Global Tax Summary',                                                                                                                                  ),
+                ('',                                                                                                                                                    ),
             ],
             options,
         )
@@ -320,6 +328,8 @@ class TestJournalAuditReport(TestAccountReportsCommon):
                 ('BNK1/2017/00001',                     '',                       '400000 Product Sales',   0.0,            200.00,               '$\xa0300.00',      ''),
                 ('BNK1/2017/00002',                     '',                       '400000 Product Sales',   0.0,            175.00,               '$\xa0475.00',      ''),
                 ('',                                    '',                       '',                       '',             'Ending Balance:',    '$\xa0475.00',      ''),
+                ('Global Tax Summary',                                                                                                                                  ),
+                ('',                                                                                                                                                    ),
             ],
             options,
         )
@@ -379,6 +389,8 @@ class TestJournalAuditReport(TestAccountReportsCommon):
                 ('INV/2017/00005',                      '2017-02-02',             '121000 partner_a',       3000.0,         0.0,           '',                        ''),
                 ('ref123',                              '',                       '400000 Product Sales',   0.0,            3000.0,        '',                        ''),
                 ('Bank (BNK1)',                                                                                                                                         ),
+                ('Global Tax Summary',                                                                                                                                  ),
+                ('',                                                                                                                                                    ),
             ],
             options,
         )
@@ -447,6 +459,55 @@ class TestJournalAuditReport(TestAccountReportsCommon):
                 # This is the tax summary line, it's rendered in a custom way and don't have values in the name/columns
                 ('',                                                                                                                                                    ),
                 ('Bank (BNK1)',                                                                                                                                         ),
+                ('Global Tax Summary',                                                                                                                                  ),
+                ('',                                                                                                                                                    ),
             ],
             options,
         )
+
+    def test_journal_report_zero_percent_distribution_line(self):
+        # Setup data for zero percent distribution line
+        # Test zero factory percent on journal report
+        tax = self.env['account.tax'].create({
+            'name': 'none of nothing X',
+            'amount': 21,
+            'amount_type': 'percent',
+            'type_tax_use': 'sale',
+            'invoice_repartition_line_ids': [
+                Command.create({'factor_percent': 100, 'repartition_type': 'base'}),
+                Command.create({'factor_percent': 0, 'repartition_type': 'tax', 'account_id': self.company_data['default_account_receivable'].id}),
+            ],
+            'refund_repartition_line_ids': [
+                Command.create({'factor_percent': 100, 'repartition_type': 'base'}),
+                Command.create({'factor_percent': 0, 'repartition_type': 'tax', 'account_id': self.company_data['default_account_payable'].id}),
+            ],
+        })
+
+        move = self.env['account.move'].create({
+            'move_type': 'entry',
+            'date': '2024-01-01',
+            'journal_id': self.company_data['default_journal_sale'].id,
+            'line_ids': [
+                Command.create({
+                    'debit': 1000.0,
+                    'credit': 0.0,
+                    'account_id': self.env.company.partner_id.property_account_receivable_id.id,
+                    'tax_repartition_line_id': tax.invoice_repartition_line_ids.filtered(lambda x: x.repartition_type == 'tax').id,
+                }),
+                Command.create({
+                    'debit': 0.0,
+                    'credit': 1000.0,
+                    'tax_repartition_line_id': tax.invoice_repartition_line_ids.filtered(lambda x: x.repartition_type == 'tax').id,
+                    'tax_ids': [Command.set([tax.id])],
+                    'account_id': self.env.company.partner_id.property_account_payable_id.id,
+                }),
+            ],
+        })
+
+        move.action_post()
+
+        report = self.env.ref('account_reports.journal_report')
+        options = self._generate_options(report, fields.Date.from_string('2024-01-01'), fields.Date.from_string('2024-01-31'))
+        options['unfolded_lines'] = [report._get_generic_line_id('account.journal', self.company_data['default_journal_sale'].id)]
+
+        self.assertTrue(report._get_lines(options))

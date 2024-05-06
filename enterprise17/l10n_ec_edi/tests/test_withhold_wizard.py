@@ -48,7 +48,9 @@ class TestEcEdiWithholdWizard(TestEcEdiCommon):
         """Creates a purchase invoice and checks that when adding a withhold
         - the suggested taxes match the product default taxes
         - the tax supports are a subset of the invoice's tax supports
-        - the withhold is successfully posted"""
+        - the withhold is successfully posted
+        - it is not allowed to add another withhold
+        """
 
         # Create purchase invoice and withhold wizard
         wizard, purchase_invoice = self.get_wizard_and_purchase_invoice()
@@ -67,6 +69,32 @@ class TestEcEdiWithholdWizard(TestEcEdiCommon):
         with freeze_time(self.frozen_today):
             withhold = wizard.action_create_and_post_withhold()
         self.assertEqual(withhold.state, 'posted')
+
+        purchase_invoice._compute_l10n_ec_withhold_inv_fields()
+        with self.assertRaises(ValidationError, msg="Multiple invoices are only supported in customer withholds"):
+            with freeze_time(self.frozen_today):
+                wizard = self.env['l10n_ec.wizard.account.withhold'].with_context(active_ids=purchase_invoice.id, active_model='account.move').create({})
+
+    def test_multiple_purchase_invoice_withhold(self, custom_taxpayer=False):
+        """
+        Test creation of single withholds from multiple bills is blocked
+        """
+        purchase_invoices = self.env['account.move']
+        for partner in (self.partner_a, self.partner_b):
+            with freeze_time(self.frozen_today):
+                purchase_invoices |= self.get_invoice({
+                    'move_type': 'in_invoice',
+                    'partner_id': partner.id,
+                    'journal_id': self.company_data['default_journal_purchase'].id,
+                    'l10n_ec_sri_payment_id': self.env.ref('l10n_ec.P1').id,
+                    'invoice_line_ids': self.get_custom_purchase_invoice_line_vals(),
+                })
+        purchase_invoices.action_post()
+        with self.assertRaises(ValidationError, msg="Multiple invoices are only supported in customer withholds"):
+            with freeze_time(self.frozen_today):
+                wizard = self.env['l10n_ec.wizard.account.withhold'].with_context(active_ids=purchase_invoices.ids, active_model='account.move').create({})
+                wizard.document_number = '001-001-000000001'
+                wizard.action_create_and_post_withhold()
 
     def test_custom_taxpayer_type_partner_on_purchase_invoice(self):
         """Tests test_purchase_invoice_withhold with a custom taxpayer as a partner."""
@@ -165,7 +193,7 @@ class TestEcEdiWithholdWizard(TestEcEdiCommon):
             ],
         })
         invoice.action_post()
-        wizard = self.env['l10n_ec.wizard.account.withhold'].with_context(active_ids=invoice.id, active_model='account.move').create({})
+        wizard = self.env['l10n_ec.wizard.account.withhold'].with_context(active_ids=invoice.id, active_model='account.move').new({})
         default_base = wizard.withhold_line_ids.mapped('base')
         wizard.withhold_line_ids._compute_base()
         computed_base = wizard.withhold_line_ids.mapped('base')
@@ -196,28 +224,61 @@ class TestEcEdiWithholdWizard(TestEcEdiCommon):
             ],
         })
         bill_1.action_post()
-        wizard = self.env['l10n_ec.wizard.account.withhold'].with_context(active_ids=bill_1.id, active_model='account.move').create({})
-        expected_values = [{
-            'taxsupport_code': '01',
-            'tax_id': bill_1.commercial_partner_id.l10n_ec_taxpayer_type_id.profit_withhold_tax_id.id,
-            'base': 100.0,
-            'amount': 10.0,
-        }, {
-            'taxsupport_code': '01',
-            'tax_id': bill_1.commercial_partner_id.l10n_ec_taxpayer_type_id.vat_goods_withhold_tax_id.id,
-            'base': 12.0,
-            'amount': 1.2,
-        }]
-        self.assertRecordValues(wizard.withhold_line_ids, expected_values)
-        with Form(wizard) as wizard_form:
-            wizard_form.document_number = '001-001-000000001'
-            with wizard_form.withhold_line_ids.edit(1) as wizard_line_form:
-                wizard_line_form.base = 10.00
-            with wizard_form.withhold_line_ids.new() as wizard_line_form:
-                wizard_line_form.taxsupport_code = '01'
-                wizard_line_form.tax_id = bill_1.commercial_partner_id.l10n_ec_taxpayer_type_id.vat_goods_withhold_tax_id
-            with wizard_form.withhold_line_ids.edit(2) as wizard_line_form:
-                wizard_line_form.tax_id = tax_withhold_vat_20
+        Wizard = self.env['l10n_ec.wizard.account.withhold'].with_context(active_ids=bill_1.id, active_model='account.move')
+        wizard_form = Form(Wizard)
+        wizard_form.document_number = '001-001-000000001'
+
+        # Initial Wizard data
+        # Tax Support | Tax     | Base  | Amount |
+        # 01          | 10% 303 | 100.0 | 10.0   |
+        # 01          | 10% WH  | 12.0  | 1.2    |
+        with wizard_form.withhold_line_ids.edit(0) as wizard_line_form:
+            self.assertEqual(wizard_line_form.base, 100.0, 'base should be the subtotal from bill line')
+            self.assertEqual(wizard_line_form.amount, 10.0, 'amount should be the tax amount from bill line')
+
+        # Edit WH tax amount
+        # Tax Support | Tax      | Base  | Amount |
+        # 01          | 10% 303  | 100.0 | 10.0   |
+        # 01          | 10% WH   | 10.0  | 1.0    |
+        with wizard_form.withhold_line_ids.edit(1) as wizard_line_form:
+            self.assertEqual(wizard_line_form.base, 12.0, 'base should be calculated on tax amount')
+            self.assertEqual(wizard_line_form.amount, 1.2)
+            wizard_line_form.base = 10.0
+
+        # Add another line with no available remaining amount
+        # Tax Support | Tax     | Base  | Amount |
+        # 01          | 10% 303 | 100.0 | 10.0   |
+        # 01          | 10% WH  | 10.0  | 1.0    |
+        # 01          | 10% 303 | 0.0   | 0.0    |
+        with wizard_form.withhold_line_ids.new() as wizard_line_form:
+            wizard_line_form.taxsupport_code = '01'
+            wizard_line_form.tax_id = bill_1.commercial_partner_id.l10n_ec_taxpayer_type_id.profit_withhold_tax_id
+            self.assertEqual(wizard_line_form.base, 0.0, 'base should be 0')
+
+        # Change last line tax to 20%, remaining base should recompute accordingly
+        # Tax Support | Tax     | Base  | Amount |
+        # 01          | 10% 303 | 100.0 | 10.0   |
+        # 01          | 10% WH  | 10.0  | 1.0    |
+        # 01          | 20% WH  | 2.0   | 0.4    |
+        with wizard_form.withhold_line_ids.edit(2) as wizard_line_form:
+            wizard_line_form.tax_id = tax_withhold_vat_20
+            self.assertEqual(wizard_line_form.base, 2.0, 'base should be the remaining amount (2.0)')
+
+        # Add another tax line 20%, with no remaining base amounts should be 0
+        # Tax Support | Tax     | Base  | Amount |
+        # 01          | 10% 303 | 100.0 | 10.0   |
+        # 01          | 10% WH  | 10.0  | 1.0    |
+        # 01          | 20% WH  | 2.0   | 0.4    |
+        # 01          | 20% WH  | 0.0   | 0.0    |
+        with wizard_form.withhold_line_ids.new() as wizard_line_form:
+            wizard_line_form.taxsupport_code = '01'
+            wizard_line_form.tax_id = tax_withhold_vat_20
+            self.assertEqual(wizard_line_form.base, 0.0, 'base should be 0')
+
+        # Remove last line before saving
+        wizard_form.withhold_line_ids.remove(3)
+
+        wizard = wizard_form.save()
 
         expected_values = [{
             'taxsupport_code': '01',

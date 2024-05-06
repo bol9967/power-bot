@@ -444,7 +444,7 @@ class GeneralLedgerCustomHandler(models.AbstractModel):
                 LEFT JOIN account_journal journal           ON journal.id = account_move_line.journal_id
                 LEFT JOIN account_full_reconcile full_rec   ON full_rec.id = account_move_line.full_reconcile_id
                 WHERE {where_clause}
-                ORDER BY account_move_line.date, account_move_line.id)
+                ORDER BY account_move_line.date, account_move_line.move_name, account_move_line.id)
             '''
 
             queries.append(query)
@@ -614,11 +614,12 @@ class GeneralLedgerCustomHandler(models.AbstractModel):
             col_value = eval_dict[column['column_group_key']].get(col_expr_label)
             col_currency = None
 
-            if col_expr_label == 'amount_currency':
-                col_currency = self.env['res.currency'].browse(eval_dict[column['column_group_key']]['currency_id'])
-                col_value = None if col_currency == self.env.company.currency_id else col_value
-            elif col_expr_label == 'balance':
-                col_value += init_bal_by_col_group[column['column_group_key']]
+            if col_value is not None:
+                if col_expr_label == 'amount_currency':
+                    col_currency = self.env['res.currency'].browse(eval_dict[column['column_group_key']]['currency_id'])
+                    col_value = None if col_currency == self.env.company.currency_id else col_value
+                elif col_expr_label == 'balance':
+                    col_value += (init_bal_by_col_group[column['column_group_key']] or 0)
 
             line_columns.append(report._build_column_dict(
                 col_value,

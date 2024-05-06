@@ -3,17 +3,17 @@
 # 	* account_reports
 # 
 # Translators:
-# Thi Huong Nguyen, 2024
 # Wil Odoo, 2024
 # Martin Trigaux, 2024
+# Thi Huong Nguyen, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-26 16:10+0000\n"
+"POT-Creation-Date: 2024-04-04 14:45+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Martin Trigaux, 2024\n"
+"Last-Translator: Thi Huong Nguyen, 2024\n"
 "Language-Team: Vietnamese (https://app.transifex.com/odoo/teams/41243/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -40,7 +40,14 @@ msgstr " and one other"
 #: code:addons/account_reports/models/account_journal_report.py:0
 #, python-format
 msgid " is not supported by the Journal Report"
-msgstr ""
+msgstr "không được Báo cáo sổ nhật ký hỗ trợ"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "\" account balance is affected by"
+msgstr "\" số dư tài khoản bị ảnh hưởng bởi"
 
 #. module: account_reports
 #. odoo-python
@@ -93,6 +100,16 @@ msgid "(%s lines)"
 msgstr "(%s dòng)"
 
 #. module: account_reports
+#: model:account.report.line,name:account_reports.outstanding_receipts
+msgid "(+) Outstanding Receipts"
+msgstr "(+) Biên nhận trước"
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.outstanding_payments
+msgid "(-) Outstanding Payments"
+msgstr "(-) Thanh toán trả trước"
+
+#. module: account_reports
 #. odoo-python
 #: code:addons/account_reports/models/account_report.py:0
 #, python-format
@@ -111,14 +128,21 @@ msgstr "(Không gom)"
 #: code:addons/account_reports/static/src/components/account_report/filters/filter_extra_options.xml:0
 #, python-format
 msgid ", Including Analytic Simulations"
-msgstr ""
+msgstr ", Bao gồm mô phỏng phân tích"
 
 #. module: account_reports
 #. odoo-javascript
 #: code:addons/account_reports/static/src/components/account_report/filters/filter_extra_options.xml:0
 #, python-format
 msgid ", Only Show Unreconciled Entries"
-msgstr ""
+msgstr ", Chỉ hiển thị bút toán chưa đối chiếu"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid ", leading to an unexplained difference of"
+msgstr ", dẫn đến chênh lệch không thể lý giải của"
 
 #. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.view_move_form_vat_return
@@ -162,6 +186,11 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_reports.partner_view_buttons
 msgid "<span class=\"o_stat_text\">Partner Ledger</span>"
 msgstr "<span class=\"o_stat_text\">Sổ cái đối tác</span>"
+
+#. module: account_reports
+#: model_terms:ir.ui.view,arch_db:account_reports.account_reports_journal_dashboard_kanban_view
+msgid "<span role=\"separator\">Reconciliation</span>"
+msgstr "<span role=\"separator\">Đối chiếu</span>"
 
 #. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.view_account_report_file_download_error_wizard_form
@@ -229,7 +258,7 @@ msgstr "Mẫu sơ đồ tài khoản"
 #: code:addons/account_reports/models/account_report.py:0
 #, python-format
 msgid "Account Code / Tag"
-msgstr ""
+msgstr "Mã/thẻ tài khoản"
 
 #. module: account_reports
 #: model:ir.model.fields,field_description:account_reports.field_res_company__account_display_representative_field
@@ -465,12 +494,14 @@ msgstr "Tất cả biến thể báo cáo"
 
 #. module: account_reports
 #: model:account.report.column,name:account_reports.account_financial_report_ec_sales_amount
+#: model:account.report.column,name:account_reports.bank_reconciliation_report_amount
 msgid "Amount"
 msgstr "Số tiền"
 
 #. module: account_reports
 #: model:account.report.column,name:account_reports.aged_payable_report_amount_currency
 #: model:account.report.column,name:account_reports.aged_receivable_report_amount_currency
+#: model:account.report.column,name:account_reports.bank_reconciliation_report_amount_currency
 #: model:account.report.column,name:account_reports.partner_ledger_report_amount_currency
 msgid "Amount Currency"
 msgstr "Số tiền theo loại tiền"
@@ -494,7 +525,7 @@ msgstr "Số tiền theo loại tiền tệ: %s"
 #: code:addons/account_reports/models/account_journal_report.py:0
 #, python-format
 msgid "Analytic Accounts Groupby"
-msgstr ""
+msgstr "Nhóm theo Tài khoản phân tích"
 
 #. module: account_reports
 #. odoo-javascript
@@ -516,7 +547,7 @@ msgstr "Nhóm phân tích theo"
 #: code:addons/account_reports/models/account_journal_report.py:0
 #, python-format
 msgid "Analytic Plans Groupby"
-msgstr ""
+msgstr "Nhóm theo Kế hoạch phân tích"
 
 #. module: account_reports
 #. odoo-javascript
@@ -630,6 +661,18 @@ msgstr "Số dư theo ngoại tệ"
 
 #. module: account_reports
 #. odoo-python
+#: code:addons/account_reports/models/bank_reconciliation_report.py:0
+#, python-format
+msgid "Balance of '%s'"
+msgstr "Số dư của '%s'"
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.balance_bank
+msgid "Balance of Bank"
+msgstr "Số dư tài khoản ngân hàng"
+
+#. module: account_reports
+#. odoo-python
 #: code:addons/account_reports/models/account_generic_tax_report.py:0
 #, python-format
 msgid "Balance tax advance payment account"
@@ -648,6 +691,21 @@ msgstr "Số dư tài khoản thuế hiện tại (phải trả)"
 #, python-format
 msgid "Balance tax current account (receivable)"
 msgstr "Số dư tài khoản thuế hiện tại (phải thu)"
+
+#. module: account_reports
+#: model:ir.actions.client,name:account_reports.action_account_report_bank_reconciliation
+msgid "Bank Reconciliation"
+msgstr "Đối soát thanh toán"
+
+#. module: account_reports
+#: model:account.report,name:account_reports.bank_reconciliation_report
+msgid "Bank Reconciliation Report"
+msgstr "Báo cáo đối soát ngân hàng"
+
+#. module: account_reports
+#: model:ir.model,name:account_reports.model_account_bank_reconciliation_report_handler
+msgid "Bank Reconciliation Report Custom Handler"
+msgstr "Trình xử lý tuỳ chỉnh báo cáo đối chiếu ngân hàng"
 
 #. module: account_reports
 #: model:account.report.line,name:account_reports.account_financial_report_bank_view0
@@ -1046,6 +1104,7 @@ msgstr "Có"
 #. module: account_reports
 #: model:account.report.column,name:account_reports.aged_payable_report_currency
 #: model:account.report.column,name:account_reports.aged_receivable_report_currency
+#: model:account.report.column,name:account_reports.bank_reconciliation_report_currency
 #: model:account.report.column,name:account_reports.general_ledger_report_amount_currency
 msgid "Currency"
 msgstr "Tiền tệ"
@@ -1111,8 +1170,20 @@ msgid "Custom Handler Model Name"
 msgstr "Tên mô hình trình xử lý tuỳ chỉnh"
 
 #. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/bank_reconciliation_report.py:0
+#, python-format
+msgid ""
+"Custom engine _report_custom_engine_last_statement_balance_amount does not "
+"support groupby"
+msgstr ""
+"Công cụ tùy chỉnh _report_custom_engine_last_statement_balance_amount không "
+"hỗ trợ nhóm"
+
+#. module: account_reports
 #. odoo-javascript
 #: code:addons/account_reports/static/src/components/account_report/filters/filter_comparison.xml:0
+#: model:account.report.column,name:account_reports.bank_reconciliation_report_date
 #: model:ir.model.fields,field_description:account_reports.field_account_multicurrency_revaluation_wizard__date
 #, python-format
 msgid "Date"
@@ -1135,6 +1206,14 @@ msgstr "Ngày không thể bỏ trống"
 #, python-format
 msgid "Debit"
 msgstr "Nợ"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/journal_report/line/line.xml:0
+#: model_terms:ir.ui.view,arch_db:account_reports.journal_report_pdf_export_main_table_body
+#, python-format
+msgid "Deductible"
+msgstr "Khấu trừ"
 
 #. module: account_reports
 #. odoo-javascript
@@ -1205,6 +1284,13 @@ msgid "Depreciation"
 msgstr "Khấu hao"
 
 #. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/account_generic_tax_report.py:0
+#, python-format
+msgid "Difference from rounding taxes"
+msgstr "Chênh lệch từ làm tròn thuế"
+
+#. module: account_reports
 #: model:ir.model.fields,field_description:account_reports.field_account_report_line__display_custom_groupby_warning
 msgid "Display Custom Groupby Warning"
 msgstr "Hiển thị cảnh báo nhóm theo tuỳ chỉnh"
@@ -1247,6 +1333,14 @@ msgstr "Vẫn tải xuống"
 #: model_terms:ir.ui.view,arch_db:account_reports.res_config_settings_view_form
 msgid "Download the Data Inalterability Check Report"
 msgstr "Tải xuống Báo cáo kiểm tra tính không thay đổi dữ liệu"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/journal_report/line/line.xml:0
+#: model_terms:ir.ui.view,arch_db:account_reports.journal_report_pdf_export_main_table_body
+#, python-format
+msgid "Due"
+msgstr "Đến hạn"
 
 #. module: account_reports
 #: model:account.report.column,name:account_reports.partner_ledger_report_date_maturity
@@ -1488,6 +1582,9 @@ msgid ""
 "the current report. Make sure the cross-report aggregations of this report "
 "only reference terms belonging to other reports."
 msgstr ""
+"Biểu thức được gắn nhãn '%s' của dòng '%s' đang bị ghi đè khi tính toán báo "
+"cáo hiện tại. Hãy đảm bảo rằng các tích hợp báo cáo chéo của báo cáo này chỉ"
+" tham chiếu các điều khoản thuộc các báo cáo khác."
 
 #. module: account_reports
 #: model:ir.model.fields,field_description:account_reports.field_account_report_horizontal_group_rule__field_name
@@ -1634,6 +1731,7 @@ msgstr "Chức năng để gọi đến"
 #. odoo-python
 #: code:addons/account_reports/models/account_report.py:0
 #: code:addons/account_reports/models/account_trial_balance_report.py:0
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
 #: code:addons/account_reports/static/src/components/multicurrency_revaluation_report/line_name.xml:0
 #: model:account.report,name:account_reports.general_ledger_report
 #: model:ir.actions.client,name:account_reports.action_account_report_general_ledger
@@ -1680,6 +1778,13 @@ msgstr "Trình xử lý tùy chỉnh báo cáo thuế chung (Tài khoản -> Thu
 #: model:ir.model,name:account_reports.model_account_generic_tax_report_handler_tax_account
 msgid "Generic Tax Report Custom Handler (Tax -> Account)"
 msgstr "Trình xử lý tùy chỉnh báo cáo thuế chung (Thuế -> Tài khoản)"
+
+#. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/account_journal_report.py:0
+#, python-format
+msgid "Global Tax Summary"
+msgstr "Tổng kết thuế chung"
 
 #. module: account_reports
 #. odoo-python
@@ -1777,7 +1882,7 @@ msgstr "Nhóm theo hàng ngang:"
 #: code:addons/account_reports/models/account_journal_report.py:0
 #, python-format
 msgid "Horizontal Grouping"
-msgstr ""
+msgstr "Nhóm theo hàng ngang"
 
 #. module: account_reports
 #: model:ir.actions.act_window,name:account_reports.action_account_report_horizontal_groups
@@ -1835,6 +1940,13 @@ msgid "Impacted Tax Grids"
 msgstr "Lưới thuế bị ảnh hưởng"
 
 #. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/account_report/filters/filters.js:0
+#, python-format
+msgid "In %s"
+msgstr "In %s"
+
+#. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.view_account_report_search
 msgid "Inactive"
 msgstr "Không hoạt động"
@@ -1870,6 +1982,18 @@ msgid "Including Analytic Simulations"
 msgstr "Bao gồm mô phỏng phân tích"
 
 #. module: account_reports
+#: model:account.report.line,name:account_reports.no_statement_unreconciled_payments
+#: model:account.report.line,name:account_reports.unreconciled_last_statement_payments
+msgid "Including Unreconciled Payments"
+msgstr "Bao gồm thanh toán chưa đối chiếu"
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.no_statement_unreconciled_receipt
+#: model:account.report.line,name:account_reports.unreconciled_last_statement_receipts
+msgid "Including Unreconciled Receipts"
+msgstr "Bao gồm biên lai chưa đối chiếu"
+
+#. module: account_reports
 #: model:account.report.line,name:account_reports.account_financial_report_executivesummary_income0
 #: model:account.report.line,name:account_reports.account_financial_report_totalincome0
 msgid "Income"
@@ -1891,6 +2015,13 @@ msgstr "Income Provision Account"
 #, python-format
 msgid "Income Provision for %s"
 msgstr "Dự phòng doanh thu cho %s"
+
+#. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/bank_reconciliation_report.py:0
+#, python-format
+msgid "Inconsistent Statements"
+msgstr "Báo cáo không nhất quán"
 
 #. module: account_reports
 #. odoo-python
@@ -1932,7 +2063,7 @@ msgstr "Điền ghi chú chân trang ở đây"
 #: code:addons/account_reports/static/src/components/account_report/filters/filter_extra_options.xml:0
 #, python-format
 msgid "Integer Rounding"
-msgstr ""
+msgstr "Làm tròn số nguyên"
 
 #. module: account_reports
 #. odoo-javascript
@@ -2042,6 +2173,7 @@ msgstr "Hạng mục bút toán"
 #: code:addons/account_reports/models/account_deferred_reports.py:0
 #: code:addons/account_reports/models/account_report.py:0
 #: code:addons/account_reports/models/account_trial_balance_report.py:0
+#: code:addons/account_reports/models/bank_reconciliation_report.py:0
 #: code:addons/account_reports/static/src/components/aged_partner_balance/line_name/line_name.xml:0
 #: code:addons/account_reports/static/src/components/general_ledger/line_name.xml:0
 #: code:addons/account_reports/static/src/components/journal_report/line_name.xml:0
@@ -2107,6 +2239,7 @@ msgstr "NỢ + VỐN CHỦ SỞ HỮU"
 #. odoo-python
 #: code:addons/account_reports/static/src/components/account_report/line/popover/debug_popover.xml:0
 #: code:addons/account_reports/wizard/multicurrency_revaluation.py:0
+#: model:account.report.column,name:account_reports.bank_reconciliation_report_label
 #: model:account.report.column,name:account_reports.journal_report_partner_name
 #, python-format
 msgid "Label"
@@ -2166,6 +2299,11 @@ msgstr "Cập nhật lần cuối bởi"
 #: model:ir.model.fields,field_description:account_reports.field_account_tax_unit__write_date
 msgid "Last Updated on"
 msgstr "Cập nhật lần cuối vào"
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.last_statement_balance
+msgid "Last statement balance"
+msgstr "Số dư sao kê cuối cùng"
 
 #. module: account_reports
 #. odoo-python
@@ -2258,6 +2396,11 @@ msgstr "Thành viên của đơn vị này"
 #, python-format
 msgid "Method '%s' must start with the '%s' prefix."
 msgstr "Phương thức '%s' phải bắt đầu với tiền tố '%s'."
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.misc_operations
+msgid "Misc. operations"
+msgstr "Hoạt động khác"
 
 #. module: account_reports
 #. odoo-python
@@ -2430,6 +2573,14 @@ msgstr "Phải thu phi thương mại"
 
 #. module: account_reports
 #. odoo-javascript
+#: code:addons/account_reports/static/src/components/journal_report/line/line.xml:0
+#: model_terms:ir.ui.view,arch_db:account_reports.journal_report_pdf_export_main_table_body
+#, python-format
+msgid "Non-Deductible"
+msgstr "Không khấu trừ"
+
+#. module: account_reports
+#. odoo-javascript
 #: code:addons/account_reports/static/src/components/account_report/filters/filter_horizontal_groups.xml:0
 #: code:addons/account_reports/static/src/components/account_report/filters/filters.js:0
 #: code:addons/account_reports/static/src/components/account_report/filters/filters.js:0
@@ -2442,7 +2593,7 @@ msgstr "Không"
 #: code:addons/account_reports/models/account_deferred_reports.py:0
 #, python-format
 msgid "Not Started"
-msgstr ""
+msgstr "Chưa bắt đầu"
 
 #. module: account_reports
 #. odoo-javascript
@@ -2488,6 +2639,7 @@ msgstr "Chỉ có quản trị kế toán mới được phép thay đỏi ngày
 #. odoo-javascript
 #. odoo-python
 #: code:addons/account_reports/models/account_report.py:0
+#: code:addons/account_reports/static/src/components/account_report/filters/filter_extra_options.xml:0
 #: code:addons/account_reports/static/src/components/account_report/filters/filter_extra_options.xml:0
 #, python-format
 msgid "Only Show Unreconciled Entries"
@@ -2535,6 +2687,11 @@ msgid "Other Income"
 msgstr "Doanh thu khác"
 
 #. module: account_reports
+#: model:account.report.line,name:account_reports.outstanding
+msgid "Outstanding Receipts/Payments"
+msgstr "tThanh toán/biên lai chưa liên kết"
+
+#. module: account_reports
 #. odoo-python
 #: code:addons/account_reports/models/account_report.py:0
 #: code:addons/account_reports/models/account_report.py:0
@@ -2562,7 +2719,7 @@ msgstr "Đối tác"
 #: code:addons/account_reports/models/account_report.py:0
 #, python-format
 msgid "Partner Categories"
-msgstr ""
+msgstr "Danh mục đối tác"
 
 #. module: account_reports
 #: model:account.report,name:account_reports.partner_ledger_report
@@ -2654,7 +2811,7 @@ msgstr "Hiệu suất"
 #: code:addons/account_reports/models/account_journal_report.py:0
 #, python-format
 msgid "Period comparison"
-msgstr ""
+msgstr "So sánh kỳ"
 
 #. module: account_reports
 #: model:ir.model.fields,field_description:account_reports.field_res_config_settings__account_tax_periodicity
@@ -2727,18 +2884,20 @@ msgid "Post"
 msgstr "Vào sổ"
 
 #. module: account_reports
-#: model_terms:ir.ui.view,arch_db:account_reports.view_move_form_vat_return
-msgid ""
-"Posting this entry will also update and post the unposted closings of the "
-"depending companies."
-msgstr ""
-
-#. module: account_reports
 #. odoo-javascript
 #: code:addons/account_reports/static/src/components/account_report/filters/filter_extra_options.xml:0
 #, python-format
 msgid "Posted Entries Only"
 msgstr "Chỉ bút toán vào sổ"
+
+#. module: account_reports
+#: model_terms:ir.ui.view,arch_db:account_reports.view_move_form_vat_return
+msgid ""
+"Posting this entry will also update and post the unposted closings of the "
+"depending companies."
+msgstr ""
+"Việc ghi sổ bút toán này cũng sẽ cập nhật và ghi sổ các bút toán khoá sổ "
+"chưa đăng của các công ty phụ thuộc."
 
 #. module: account_reports
 #: model:account.report.line,name:account_reports.account_financial_report_prepayements0
@@ -2822,6 +2981,11 @@ msgstr "Số thuế phải thu"
 #: model:account.report.line,name:account_reports.account_financial_report_receivable0
 msgid "Receivables"
 msgstr "Các khoản phải thu"
+
+#. module: account_reports
+#: model_terms:ir.ui.view,arch_db:account_reports.account_reports_journal_dashboard_kanban_view
+msgid "Reconciliation Report"
+msgstr "Báo cáo đối soát"
 
 #. module: account_reports
 #: model:ir.model.fields,field_description:account_reports.field_account_financial_year_op__account_tax_periodicity_reminder_day
@@ -2971,6 +3135,13 @@ msgstr "Show Warning Move"
 
 #. module: account_reports
 #. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "Some"
+msgstr "Một số"
+
+#. module: account_reports
+#. odoo-javascript
 #: code:addons/account_reports/static/src/components/journal_report/filter_extra_options.xml:0
 #, python-format
 msgid "Sort By Date"
@@ -3046,7 +3217,7 @@ msgstr "Tax Closing End Date"
 #: model:ir.model.fields,field_description:account_reports.field_account_move__tax_closing_show_multi_closing_warning
 #: model:ir.model.fields,field_description:account_reports.field_account_payment__tax_closing_show_multi_closing_warning
 msgid "Tax Closing Show Multi Closing Warning"
-msgstr ""
+msgstr "Tax Closing Show Multi Closing Warning"
 
 #. module: account_reports
 #. odoo-python
@@ -3216,6 +3387,9 @@ msgid ""
 "model='account.move' data-oe-id='%s'>closing entry</a> of the representative"
 " company."
 msgstr ""
+"Các tệp đính kèm của báo cáo thuế có thể được tìm thấy trong <a href='#' "
+"data-oe-model='account.move' data-oe-id='%s'>bút toán khoá sổ</a> của công "
+"ty đại diện."
 
 #. module: account_reports
 #. odoo-python
@@ -3236,6 +3410,13 @@ msgid ""
 msgstr ""
 "Quốc gia nơi đơn vị thuế này được sử dụng để nhóm tờ khai báo cáo thuế của "
 "công ty bạn."
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "The current balance in the"
+msgstr "Số dư hiện tại trong"
 
 #. module: account_reports
 #. odoo-javascript
@@ -3276,7 +3457,7 @@ msgstr "Đơn vị thuế mà công ty này trực thuộc."
 #: code:addons/account_reports/models/account_report.py:0
 #, python-format
 msgid "The used operator is not supported for this expression."
-msgstr ""
+msgstr "Toán tử đã sử dụng không được hỗ trợ cho biểu thức này."
 
 #. module: account_reports
 #. odoo-javascript
@@ -3394,7 +3575,7 @@ msgstr "Tùy chọn này ẩn các dòng có giá trị là 0"
 #: code:addons/account_reports/models/account_report.py:0
 #, python-format
 msgid "This report already has a menuitem."
-msgstr ""
+msgstr "Báo cáo này đã có một mục menu."
 
 #. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.account_report_form
@@ -3416,10 +3597,19 @@ msgstr "Báo cáo này chỉ hiển thị dữ liệu của công ty đang hoạ
 #. odoo-python
 #: code:addons/account_reports/models/account_report.py:0
 #, python-format
+msgid "This subformula references an unknown expression: %s"
+msgstr "Công thức phụ này tham chiếu đến một biểu thức không xác định: %s"
+
+#. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/account_report.py:0
+#, python-format
 msgid ""
 "This tag is reported in a line of the report but is not linked to any "
 "account of the Chart of Accounts"
 msgstr ""
+"Thẻ này được báo cáo trong một dòng của báo cáo nhưng không liên kết với bất"
+" kỳ tài khoản nào trong hệ thống tài khoản"
 
 #. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.view_move_form_vat_return
@@ -3466,6 +3656,11 @@ msgstr "Tổng %s"
 #, python-format
 msgid "Trade Partners"
 msgstr "Đối tác thương mại"
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.transaction_without_statement
+msgid "Transactions without statement"
+msgstr "Giao dịch không có sao kê"
 
 #. module: account_reports
 #: model:account.report,name:account_reports.trial_balance_report
@@ -3761,6 +3956,17 @@ msgstr "Bạn không thể tạo bút toán cho một kỳ đã khoá."
 #: code:addons/account_reports/models/account_move.py:0
 #, python-format
 msgid ""
+"You cannot reset this closing entry to draft, as another closing entry has "
+"been posted at a later date."
+msgstr ""
+"Bạn không thể đặt lại bút toán khoá sổ này thành bản nháp vì một bút toán "
+"khoá sổ khác đã được ghi sổ vào một ngày sau đó."
+
+#. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/account_move.py:0
+#, python-format
+msgid ""
 "You cannot reset this closing entry to draft, as it would delete carryover "
 "values impacting the tax report of a locked period. To do this, you first "
 "need to modify you tax return lock date."
@@ -3810,6 +4016,13 @@ msgid "days after period"
 msgstr "ngày sau kỳ"
 
 #. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "doesn't match the balance of your"
+msgstr "không khớp với số dư của"
+
+#. module: account_reports
 #: model:ir.model.fields.selection,name:account_reports.selection__res_company__account_tax_periodicity__2_months
 msgid "every 2 months"
 msgstr "mỗi 2 tháng"
@@ -3818,6 +4031,13 @@ msgstr "mỗi 2 tháng"
 #: model:ir.model.fields.selection,name:account_reports.selection__res_company__account_tax_periodicity__4_months
 msgid "every 4 months"
 msgstr "mỗi 4 tháng"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "have a starting balance different from the previous ending balance."
+msgstr "có số dư đầu kỳ khác với số dư cuối kỳ trước đó"
 
 #. module: account_reports
 #. odoo-javascript
@@ -3834,6 +4054,20 @@ msgstr "trong kỳ tiếp theo."
 #, python-format
 msgid "invoices"
 msgstr "hoá đơn"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "journal items"
+msgstr "chi tiết bút toán"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "last bank statement"
+msgstr "sao kê ngân hàng cuối cùng"
 
 #. module: account_reports
 #: model:ir.model.fields.selection,name:account_reports.selection__res_company__account_tax_periodicity__monthly
@@ -3872,6 +4106,13 @@ msgstr "hàng quý"
 #: model:ir.model.fields.selection,name:account_reports.selection__res_company__account_tax_periodicity__semester
 msgid "semi-annually"
 msgstr "nửa năm một lần"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "statements"
+msgstr "sao kê"
 
 #. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.view_tax_unit_form
@@ -3913,6 +4154,13 @@ msgstr "bút toán chưa đưa vào sổ"
 #, python-format
 msgid "were carried over to this line from previous period."
 msgstr "đã được kết chuyển sang dòng này từ kỳ trước đó."
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "which don't originate from a bank statement nor payment."
+msgstr "không bắt nguồn từ sao kê ngân hàng cũng như thanh toán."
 
 #. module: account_reports
 #. odoo-javascript

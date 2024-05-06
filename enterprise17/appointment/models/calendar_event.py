@@ -6,7 +6,9 @@ import logging
 from datetime import datetime, timedelta
 
 from odoo import _, api, Command, fields, models, SUPERUSER_ID
+from odoo.exceptions import ValidationError
 from odoo.tools import html2plaintext, email_normalize, email_split_tuples
+from odoo.addons.appointment.utils import invert_intervals
 from odoo.addons.resource.models.utils import Intervals, timezone_datetime
 from ..utils import interval_from_events, intervals_overlap
 
@@ -27,20 +29,28 @@ class CalendarEvent(models.Model):
         if res.get('stop') and isinstance(res['stop'], datetime) and res['stop'].second != 0:
             res['stop'] = datetime.min + round((res['stop'] - datetime.min) / timedelta(minutes=1)) * timedelta(minutes=1)
         user_id = res.get('user_id')
-        resource_id = res.get('appointment_resource_id') or self.env.context.get('default_appointment_resource_id')
+        resource_ids = self.env.context.get('default_resource_ids', [])
         # get a relevant appointment type for ease of use when coming from a view that groups by resource
         if not res.get('appointment_type_id') and 'appointment_type_id' in fields_list:
             appointment_types = False
-            if resource_id:
-                appointment_types = self.env['appointment.resource'].browse(resource_id).appointment_type_ids
+            if resource_ids:
+                appointment_types = self.env['appointment.resource'].browse(resource_ids).appointment_type_ids
             elif user_id:
                 appointment_types = self.env['appointment.type'].search([('staff_user_ids', 'in', user_id)])
             if appointment_types:
                 res['appointment_type_id'] = appointment_types[0].id
-        if self.env.context.get('appointment_default_add_organizer_to_attendees') and 'partner_ids' in fields_list:
-            organizer_partner = self.env['res.users'].browse(res.get('user_id', [])).partner_id
-            if organizer_partner:
-                res['partner_ids'] = [Command.set(organizer_partner.ids)]
+        if self.env.context.get('appointment_default_assign_user_attendees'):
+            default_partner_ids = self.env.context.get('default_partner_ids', [])
+            # If there is only one attendee -> set him as organizer of the calendar event
+            # Mostly used when you click on a specific slot in the appointment kanban
+            if len(default_partner_ids) == 1 and 'user_id' in fields_list:
+                attendee_user = self.env['res.partner'].browse(default_partner_ids).user_ids
+                if attendee_user:
+                    res['user_id'] = attendee_user[0].id
+            # Special gantt case: we want to assign the current user to the attendees if he's set as organizer
+            elif res.get('user_id') and res.get('partner_ids', Command.set([])) == [Command.set([])] and \
+                res['user_id'] == self.env.uid and 'partner_ids' in fields_list:
+                res['partner_ids'] = [Command.set(self.env.user.partner_id.ids)]
         return res
 
     def _default_access_token(self):
@@ -54,23 +64,38 @@ class CalendarEvent(models.Model):
     appointment_type_schedule_based_on = fields.Selection(related="appointment_type_id.schedule_based_on")
     appointment_type_manage_capacity = fields.Boolean(related="appointment_type_id.resource_manage_capacity")
     appointment_invite_id = fields.Many2one('appointment.invite', 'Appointment Invitation', readonly=True, ondelete='set null')
+    # currently unused but kept because of stable constraint, properly removed by: https://github.com/odoo/enterprise/commit/dea2f65fcb106848c9f1985e3d49f177c597fe71
     appointment_resource_id = fields.Many2one('appointment.resource', string="Appointment Resource",
                                               compute="_compute_appointment_resource_id", inverse="_inverse_appointment_resource_id_or_capacity",
                                               store=True, group_expand="_read_group_appointment_resource_id")
-    appointment_resource_ids = fields.Many2many('appointment.resource', string="Appointment Resources", compute="_compute_resource_ids")
+    appointment_resource_ids = fields.Many2many('appointment.resource', 'appointment_booking_line', 'calendar_event_id', 'appointment_resource_id',
+                                                string="Appointment Resources", group_expand="_read_group_appointment_resource_id",
+                                                depends=['booking_line_ids'], readonly=True)
+    # This field is used in the form view to create/manage the booking lines based on the resource_total_capacity_reserved
+    # selected. This allows to have the appointment_resource_ids field linked to the appointment_booking_line model and
+    # thus avoid the duplication of information.
+    resource_ids = fields.Many2many('appointment.resource', string="Resources",
+                                    compute="_compute_resource_ids", inverse="_inverse_resource_ids_or_capacity",
+                                    group_expand="_read_group_appointment_resource_id")
     booking_line_ids = fields.One2many('appointment.booking.line', 'calendar_event_id', string="Booking Lines")
     partner_ids = fields.Many2many('res.partner', group_expand="_read_group_partner_ids")
     resource_total_capacity_reserved = fields.Integer('Total Capacity Reserved', compute="_compute_resource_total_capacity", inverse="_inverse_appointment_resource_id_or_capacity")
     resource_total_capacity_used = fields.Integer('Total Capacity Used', compute="_compute_resource_total_capacity")
     user_id = fields.Many2one('res.users', group_expand="_read_group_user_id")
     videocall_redirection = fields.Char('Meeting redirection URL', compute='_compute_videocall_redirection')
-    appointment_booker_id = fields.Many2one('res.partner', string="Person who is booking the appointment")
+    appointment_booker_id = fields.Many2one('res.partner', string="Person who is booking the appointment", index='btree_not_null')
     resources_on_leave = fields.Many2many('appointment.resource', string='Resources intersecting with leave time', compute="_compute_resources_on_leave")
     _sql_constraints = [
         ('check_resource_and_appointment_type',
          "CHECK(appointment_resource_id IS NULL OR (appointment_resource_id IS NOT NULL AND appointment_type_id IS NOT NULL))",
          "An event cannot book resources without an appointment type.")
     ]
+
+    @api.constrains('appointment_resource_ids', 'appointment_type_id')
+    def _check_resource_and_appointment_type(self):
+        for event in self:
+            if event.appointment_resource_ids and not event.appointment_type_id:
+                raise ValidationError(_("The event %s cannot book resources without an appointment type.", event.name))
 
     @api.depends('appointment_type_id')
     def _compute_alarm_ids(self):
@@ -86,10 +111,10 @@ class CalendarEvent(models.Model):
             else:
                 event.appointment_resource_id = False
 
-    @api.depends('booking_line_ids')
+    @api.depends('booking_line_ids', 'booking_line_ids.appointment_resource_id')
     def _compute_resource_ids(self):
         for event in self:
-            event.appointment_resource_ids = event.booking_line_ids.appointment_resource_id
+            event.resource_ids = event.booking_line_ids.appointment_resource_id
 
     @api.depends('start', 'stop', 'appointment_resource_ids', 'appointment_resource_id')
     def _compute_resources_on_leave(self):
@@ -172,27 +197,79 @@ class CalendarEvent(models.Model):
         """
         for event in self:
             if not event.booking_line_ids and event.appointment_resource_id:
-                self.env['appointment.booking.line'].create({
+                self.env['appointment.booking.line'].sudo().create({
                     'appointment_resource_id': event.appointment_resource_id.id,
                     'calendar_event_id': event.id,
                     'capacity_reserved': event.resource_total_capacity_reserved,
                 })
             elif len(event.booking_line_ids) == 1 and event.appointment_resource_id:
                 event.booking_line_ids.appointment_resource_id = event.appointment_resource_id
-                event.booking_line_ids.capacity_reserved = event.resource_total_capacity_reserved
+                event.booking_line_ids.capacity_reserved = min(
+                    event.resource_total_capacity_reserved or event.booking_line_ids.capacity_reserved,
+                    event.appointment_resource_id.capacity
+                )
             elif len(event.booking_line_ids) == 1:
-                event.booking_line_ids.unlink()
+                event.booking_line_ids.sudo().unlink()
+
+    def _inverse_resource_ids_or_capacity(self):
+        """Update booking lines as inverse of both resource capacity and resource_ids.
+
+        As both values are related to the booking line and resource capacity is dependant
+        on resources existing in the first place. They need to both use the same inverse
+        field to ensure there is no ordering conflict.
+        """
+        booking_lines = []
+        for event in self:
+            resources = event.resource_ids
+            if resources:
+                if event.appointment_type_manage_capacity and self.resource_total_capacity_reserved:
+                    capacity_to_reserve = self.resource_total_capacity_reserved
+                else:
+                    capacity_to_reserve = sum(event.booking_line_ids.mapped('capacity_reserved')) or sum(resources.mapped('capacity'))
+                event.booking_line_ids.sudo().unlink()
+                for resource in resources.sorted("shareable"):
+                    if event.appointment_type_manage_capacity and capacity_to_reserve <= 0:
+                        break
+                    booking_lines.append({
+                        'appointment_resource_id': resource.id,
+                        'calendar_event_id': event.id,
+                        'capacity_reserved': min(resource.capacity, capacity_to_reserve),
+                    })
+                    capacity_to_reserve -= min(resource.capacity, capacity_to_reserve)
+                    capacity_to_reserve = max(0, capacity_to_reserve)
+            else:
+                event.booking_line_ids.sudo().unlink()
+        self.env['appointment.booking.line'].sudo().create(booking_lines)
+
+    @api.model
+    def read_group(self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True):
+        """ Simulate group_by on resource_ids by using appointment_resource_ids.
+            appointment_resource_ids is only used to store the data through the appointment_booking_line
+            table. All computation on the resources and the capacity reserved is done with capacity_reserved.
+            Simulating the group_by on resource_ids also avoids to do weird override in JS on appointment_resource_ids.
+            This is needed because when simply writing on the field, it tries to create the corresponding booking line
+            with the field capacity_reserved required leading to ValidationError.
+        """
+        groupby = [group_element if group_element != "resource_ids" else "appointment_resource_ids" for group_element in groupby]
+        read_group_data = super().read_group(domain, fields, groupby, offset, limit, orderby, lazy)
+        for data in read_group_data:
+            if 'appointment_resource_ids' in data:
+                data['resource_ids'] = data['appointment_resource_ids']
+            if 'appointment_resource_ids_count' in data:
+                data['resource_ids_count'] = data['appointment_resource_ids_count']
+        return read_group_data
 
     def _read_group_appointment_resource_id(self, resources, domain, order):
         if not self.env.context.get('appointment_booking_gantt_show_all_resources'):
             return resources
-        # Assume shared resources will be used with multi-resource bookings -> hide
-        filter_shared_resources = [('appointment_type_ids.resource_manage_capacity', '=', False)]
+        resources_domain = [
+            '|', ('company_id', '=', False), ('company_id', 'in', self.env.context.get('allowed_company_ids', [])),
+        ]
         # If we have a default appointment type, we only want to show those resources
         default_appointment_type = self.env.context.get('default_appointment_type_id')
         if default_appointment_type:
-            return self.env['appointment.type'].browse(default_appointment_type).resource_ids.filtered_domain(filter_shared_resources)
-        return self.env['appointment.resource'].search(filter_shared_resources)
+            return self.env['appointment.type'].browse(default_appointment_type).resource_ids.filtered_domain(resources_domain)
+        return self.env['appointment.resource'].search(resources_domain)
 
     def _read_group_partner_ids(self, partners, domain, order):
         """Show the partners associated with relevant staff users in appointment gantt context."""
@@ -228,6 +305,13 @@ class CalendarEvent(models.Model):
     def _generate_access_token(self):
         for event in self:
             event.access_token = self._default_access_token()
+
+    def action_calendar_more_options(self):
+        self.ensure_one()
+        action = self.env["ir.actions.actions"]._for_xml_id("calendar.action_calendar_event")
+        action["views"] = [(False, 'form')]
+        action["res_id"] = self.id
+        return action
 
     def action_cancel_meeting(self, partner_ids):
         """ In case there are more than two attendees (responsible + another attendee),
@@ -290,6 +374,7 @@ class CalendarEvent(models.Model):
             'appointment_resource_id',
             'appointment_resource_ids',
             'appointment_type_id',
+            'resource_ids',
             'resource_total_capacity_reserved',
             'resource_total_capacity_used',
         }
@@ -351,24 +436,50 @@ class CalendarEvent(models.Model):
     def gantt_unavailability(self, start_date, end_date, scale, group_bys=None, rows=None):
         # skip if not dealing with appointments
         resource_ids = [row['resId'] for row in rows if row.get('resId')]  # remove empty rows
-        if not group_bys or group_bys[0] not in ('appointment_resource_id', 'partner_ids') or not resource_ids:
+        if not group_bys or group_bys[0] not in ('resource_ids', 'partner_ids') or not resource_ids:
             return super().gantt_unavailability(start_date, end_date, scale, group_bys=group_bys, rows=rows)
 
         start_datetime = fields.Datetime.from_string(start_date)
         end_datetime = fields.Datetime.from_string(end_date)
+        start_datetime_utc = timezone_datetime(start_datetime)
+        end_datetime_utc = timezone_datetime(end_datetime)
 
+        # if viewing a specific appointment type generate unavailable intervals outside of the defined slots
+        slots_unavailable_intervals = []
+        appointment_type = self.env['appointment.type']
+        if appointment_type_id := self.env.context.get('default_appointment_type_id'):
+            appointment_type = appointment_type.browse(appointment_type_id)
+
+        if appointment_type:
+            slot_available_intervals = [
+                (slot['utc'][0], slot['utc'][1])
+                for slot in appointment_type._slots_generate(start_datetime_utc, end_datetime_utc, 'utc', reference_date=start_datetime_utc)
+            ]
+            slots_unavailable_intervals = invert_intervals(slot_available_intervals, start_datetime_utc, end_datetime_utc)
+
+        # in staff view, add conflicting events to unavailabilities and return
         if group_bys[0] == 'partner_ids':
             unavailabilities = self._gantt_unavailabilities_events(start_datetime, end_datetime, self.env['res.partner'].browse(resource_ids))
             for row in rows:
-                row['unavailabilities'] = [{'start': start, 'stop': stop} for start, stop, _ in unavailabilities.get(row['resId'], [])]
+                row_unavailabilities = unavailabilities.get(row['resId'], Intervals([]))
+                row_unavailabilities |= Intervals([(start, stop, self.env['res.partner']) for start, stop in slots_unavailable_intervals])
+                row['unavailabilities'] = [{'start': start, 'stop': stop} for start, stop, _ in row_unavailabilities]
             return rows
 
         appointment_resource_ids = self.env['appointment.resource'].browse(resource_ids)
+
+        # in multi-company, if people can't access some of the resources we don't really care
+        if self.env.context.get('allowed_company_ids'):
+            appointment_resource_ids = appointment_resource_ids.filtered_domain([('company_id', 'in', self.env.context['allowed_company_ids'])])
+
         resource_unavailabilities = appointment_resource_ids.resource_id._get_unavailable_intervals(start_datetime, end_datetime)
         for row in rows:
             appointment_resource_id = appointment_resource_ids.browse(row.get('resId'))
-            row['unavailabilities'] = [{'start': start, 'stop': stop}
-                                       for start, stop in resource_unavailabilities.get(appointment_resource_id.resource_id.id, [])]
+            unavailabilities = Intervals([
+                (start, stop, set())
+                for start, stop in resource_unavailabilities.get(appointment_resource_id.resource_id.id, [])])
+            unavailabilities |= Intervals([(start, stop, set()) for start, stop in slots_unavailable_intervals])
+            row['unavailabilities'] = [{'start': start, 'stop': stop} for start, stop, _ in unavailabilities]
         return rows
 
     def _gantt_unavailabilities_events(self, start_datetime, end_datetime, partners):
@@ -389,5 +500,5 @@ class CalendarEvent(models.Model):
         gantt_data = super().get_gantt_data(domain, groupby, read_specification, limit=limit, offset=offset)
         if self.env.context.get('appointment_booking_gantt_show_all_resources') and groupby and groupby[0] == 'partner_ids':
             staff_partner_ids = self.env['appointment.type'].search([('schedule_based_on', '=', 'users')]).staff_user_ids.partner_id.ids
-            gantt_data['groups'] = [group for group in gantt_data['groups'] if group['partner_ids'][0] in staff_partner_ids]
+            gantt_data['groups'] = [group for group in gantt_data['groups'] if group.get('partner_ids') and group['partner_ids'][0] in staff_partner_ids]
         return gantt_data

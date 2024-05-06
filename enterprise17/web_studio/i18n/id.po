@@ -4,6 +4,7 @@
 # 
 # Translators:
 # Wil Odoo, 2023
+# Martin Trigaux, 2024
 # Abe Manyo, 2024
 # 
 msgid ""
@@ -1560,6 +1561,21 @@ msgstr "Error!"
 
 #. module: web_studio
 #. odoo-javascript
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#, python-format
+msgid "Error message:"
+msgstr "Pesan error:"
+
+#. module: web_studio
+#. odoo-javascript
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#, python-format
+msgid "Error name:"
+msgstr "Nama error:"
+
+#. module: web_studio
+#. odoo-javascript
 #: code:addons/web_studio/static/src/client_action/view_editor/editors/form/form_editor_sidebar/properties/button_properties/button_properties.xml:0
 #, python-format
 msgid "Exclusive Approval"
@@ -1931,6 +1947,13 @@ msgstr "ID"
 
 #. module: web_studio
 #. odoo-javascript
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#, python-format
+msgid "IDs"
+msgstr "ID"
+
+#. module: web_studio
+#. odoo-javascript
 #: code:addons/web_studio/static/src/client_action/view_editor/editors/form/form_editor_sidebar/properties/button_properties/new_button_box_dialog.xml:0
 #, python-format
 msgid "Icon"
@@ -2275,6 +2298,7 @@ msgstr "Mode"
 #. module: web_studio
 #. odoo-javascript
 #: code:addons/web_studio/static/src/client_action/menu_creator/menu_creator.xml:0
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
 #: model:ir.model.fields,field_description:web_studio.field_studio_approval_rule__model_id
 #: model_terms:ir.ui.view,arch_db:web_studio.studio_approval_entry_search_view
 #: model_terms:ir.ui.view,arch_db:web_studio.studio_approval_rule_search_view
@@ -2399,8 +2423,17 @@ msgid "My entries"
 msgstr "Entri Saya"
 
 #. module: web_studio
+#. odoo-javascript
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#, python-format
+msgid "N/A"
+msgstr "N/A"
+
+#. module: web_studio
+#. odoo-javascript
 #. odoo-python
 #: code:addons/web_studio/models/ir_model.py:0
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
 #: model:ir.model.fields,field_description:web_studio.field_studio_approval_entry__name
 #: model:ir.model.fields,field_description:web_studio.field_studio_approval_rule__name
 #, python-format
@@ -2571,6 +2604,13 @@ msgstr "Odoo Studio"
 
 #. module: web_studio
 #. odoo-javascript
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#, python-format
+msgid "On view (ir.ui.view):"
+msgstr "Pada tampilan (ir.ui.view):"
+
+#. module: web_studio
+#. odoo-javascript
 #: code:addons/web_studio/static/src/client_action/view_editor/view_structures/view_structures.js:0
 #, python-format
 msgid "One2Many"
@@ -2638,6 +2678,13 @@ msgstr "Format kertas"
 #, python-format
 msgid "Parent Menu"
 msgstr "Menu Induk"
+
+#. module: web_studio
+#. odoo-javascript
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#, python-format
+msgid "Parent View (inherit_id)"
+msgstr "Parent View (inherit_id)"
 
 #. module: web_studio
 #. odoo-python
@@ -3246,6 +3293,13 @@ msgstr "Tetapkan Element yang Tidak Terlihat"
 
 #. module: web_studio
 #. odoo-javascript
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#, python-format
+msgid "Show Traceback"
+msgstr "Tunjukkan Traceback"
+
+#. module: web_studio
+#. odoo-javascript
 #: code:addons/web_studio/static/src/client_action/view_editor/interactive_editor/properties/field_properties/field_properties.js:0
 #, python-format
 msgid "Show by default"
@@ -3583,6 +3637,20 @@ msgstr "Field yang terkait tombol harus many2one ke %s."
 
 #. module: web_studio
 #. odoo-javascript
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#, python-format
+msgid ""
+"The report could not be loaded as some error occured. Usually it means that "
+"some view inherits from another but targets a node that doesn't exist. It "
+"might be due to the mutations of the base views during the upgrade process."
+msgstr ""
+"Laporan tidak dapat dimuat karena ada beberapa error. Biasanya ini berarti "
+"beberapa tampilan mewarisi dari tampilan lain tapi menarget node yang tidak "
+"tersedia. Ini mungkin terjadi oleh karena mutasi tampilan dasar pada proses "
+"upgrade."
+
+#. module: web_studio
+#. odoo-javascript
 #: code:addons/web_studio/static/src/client_action/report_editor/report_editor_model.js:0
 #, python-format
 msgid "The report is in error. Only editing the XML sources is permitted"
@@ -3847,6 +3915,13 @@ msgstr "Value dari daftar"
 #, python-format
 msgid "View"
 msgstr "Tampilan"
+
+#. module: web_studio
+#. odoo-javascript
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#, python-format
+msgid "View in Error:"
+msgstr "View in Error:"
 
 #. module: web_studio
 #. odoo-javascript

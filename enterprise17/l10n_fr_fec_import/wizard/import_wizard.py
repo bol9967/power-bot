@@ -106,7 +106,10 @@ class FecImportWizard(models.TransientModel):
     # -----------------------------------
     def _make_xml_id(self, prefix, key):
         if '_' in prefix:
-            raise ValueError('`prefix` cannot contain an underscore')
+            raise ValueError(_('`prefix` cannot contain an underscore'))
+
+        if not key:
+            raise UserError(_("%s not found", prefix))
         key = key.replace(' ', '_')
         return f"l10n_fr_fec_import.{self.company_id.id}_{prefix}_{key}"
 
@@ -741,7 +744,7 @@ class FecImportWizard(models.TransientModel):
         journals = created_vals.get("account.journal", [])
         if journals:
             for journal_id, journal_type in self._get_journal_type(journals, ratio=0.7, min_moves=3):
-                journal = self.env['account.journal'].browse(journal_id)
+                journal = self.env['account.journal'].browse(journal_id).with_context(account_journal_skip_alias_sync=True)
                 # The bank journal needs a default liquidity account and outstanding payments accounts to be set
                 if journal_type == 'bank':
                     self._setup_bank_journal(journal)

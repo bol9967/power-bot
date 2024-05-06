@@ -295,7 +295,7 @@ class PaymentPortal(payment_portal.PaymentPortal):
         tx_sudo = super()._create_transaction(
             *args, **kwargs
         )
-        if tx_sudo.operation != 'validation':
+        if tx_sudo.operation != 'validation' and tx_sudo.state not in ['done', 'cancel', 'error']:
             subscriptions = tx_sudo.sale_order_ids.filtered('is_subscription')
             subscriptions.pending_transaction = True
         return tx_sudo
@@ -322,27 +322,34 @@ class PaymentPortal(payment_portal.PaymentPortal):
         self._validate_transaction_kwargs(kwargs)
         kwargs.update(partner_id=partner_sudo.id)
         if not is_validation:  # Renewal transaction
-            unpaid_invoice_sudo = order_sudo.invoice_ids.filtered(
-                lambda am: am.state == 'posted' and
-                           am.move_type == 'out_invoice' and
-                           am.payment_state not in ['paid', 'in_payment', 'reversed'])
-            draft_invoice_sudo = order_sudo.invoice_ids.filtered(lambda am: am.state == 'draft' and
-                                                                            am.move_type == 'out_invoice')
-            invoice_sudo = unpaid_invoice_sudo or draft_invoice_sudo
-            if not invoice_sudo:
-                invoice_sudo = order_sudo.with_context(lang=partner_sudo.lang,) \
-                    ._create_invoices(final=True)
+            invoice_to_pay = None
+            for invoice in order_sudo.invoice_ids:
+                if (invoice.state == 'posted' and
+                    invoice.move_type == 'out_invoice' and
+                    invoice.payment_state not in ['paid', 'in_payment', 'reversed']):
+                    invoice_to_pay = invoice
+                    break
+                elif not invoice_to_pay and invoice.state == 'draft' and invoice.move_type == 'out_invoice':
+                    invoice_to_pay = invoice
+
+            amount_to_invoice = invoice_to_pay.amount_total if invoice_to_pay else order_sudo.amount_to_invoice
+            amount = kwargs.get('amount', 0) or amount_to_invoice
+
+            if amount >= order_sudo.amount_to_invoice and not invoice_to_pay:
+                invoice_to_pay = order_sudo.with_context(lang=partner_sudo.lang)._create_invoices(final=True)
+            recurring_amount = sum(order_sudo.order_line.filtered(lambda l: l.recurring_invoice).mapped('price_total'))
+            tokenize = amount >= recurring_amount
             kwargs.update({
-                'amount': invoice_sudo[:1].amount_total,
+                'amount': amount,
                 'currency_id': order_sudo.currency_id.id,
-                'tokenization_requested': True,  # Renewal transactions are always tokenized
+                'tokenization_requested': tokenize,  # Renewal transactions are always tokenized
             })
             # Create the transaction.
             tx_sudo = self._create_transaction(
                 custom_create_values={
                     'sale_order_ids': [Command.set([order_id])],
-                    'invoice_ids': [Command.set([invoice_sudo[:1].id])],
-                    'subscription_action': 'assign_token',
+                    'invoice_ids': [Command.set([invoice_to_pay[:1].id])] if invoice_to_pay else [],
+                    'subscription_action': 'assign_token' if tokenize else None,
                 },
                 is_validation=is_validation,
                 **kwargs

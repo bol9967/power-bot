@@ -73,8 +73,11 @@ class AccountJournal(models.Model):
             2 different things. This cron should only be used for asynchronous fetchs.
         """
 
-        cron_limit_time = tools.config['limit_time_real_cron']  # time after which cron process is killed, default = -1
-        limit_time = (cron_limit_time if cron_limit_time > 0 else tools.config['limit_time_real'])
+        # 'limit_time_real_cron' and 'limit_time_real' default respectively to -1 and 120.
+        # Manual fallbacks applied for non-POSIX systems where this key is disabled (set to None).
+        limit_time = tools.config['limit_time_real_cron'] or -1
+        if limit_time <= 0:
+            limit_time = tools.config['limit_time_real'] or 120
         journals = self.search([(
             'account_online_account_id', '!=', False),
             '|',
@@ -230,7 +233,7 @@ class AccountJournal(models.Model):
 
     def _consume_connection_state_details(self):
         self.ensure_one()
-        if self.account_online_link_id:
+        if self.account_online_link_id and self.user_has_groups('account.group_account_manager'):
             # In case we have a bank synchronization connected to the journal
             # we want to remove the last connection state because it means that we
             # have "mark as read" this state, and we don't want to display it again to

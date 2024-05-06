@@ -309,6 +309,11 @@ class HelpdeskTeam(models.Model):
         self.ensure_one()
         return self.get_portal_url()
 
+    @api.onchange('auto_assignment')
+    def _onchange_assign_method(self):
+        if not self.member_ids:
+            self.member_ids = [(6, 0, self.env.user.ids)]
+
     # ------------------------------------------------------------
     # ORM overrides
     # ------------------------------------------------------------
@@ -734,11 +739,8 @@ class HelpdeskTeam(models.Model):
             :param is_ticket_closed: Boolean if True, then we want to see the tickets closed in last 7 days
             :returns dict containing the params to update into the action.
         """
-        domain = [
-            '&',
-            ('stage_id.fold', '=', is_ticket_closed),
-            ('team_id', 'in', self.ids),
-        ]
+        domain = [('team_id', 'in', self.ids)]
+
         context = {
             'search_default_is_open': not is_ticket_closed,
             'default_team_id': self.id,
@@ -758,10 +760,10 @@ class HelpdeskTeam(models.Model):
     def action_view_closed_ticket(self):
         action = self.action_view_ticket()
         action_params = self._get_action_view_ticket_params(True)
-        action.update(
-            action_params,
-            views=[(False, view) for view in action_params['view_mode'].split(",")],
-        )
+        action.update({
+            **action_params,
+            'domain': expression.AND([action_params['domain'], [('stage_id.fold', '=', True)]]),
+        })
         return action
 
     def action_view_success_rate(self):
@@ -770,7 +772,7 @@ class HelpdeskTeam(models.Model):
         action.update(
             domain=expression.AND([
                 action_params['domain'],
-                [('team_id', 'in', self.ids)],
+                [('sla_fail', "!=", True), ('team_id', 'in', self.ids), ('stage_id.fold', '=', True)],
             ]),
             context={
                 **action_params['context'],
@@ -922,7 +924,7 @@ class HelpdeskTeam(models.Model):
                     break
 
             if team.assign_method == 'randomly':  # randomly means new tickets get uniformly distributed
-                last_assigned_user = self.env['helpdesk.ticket'].search([('team_id', '=', team.id)], order='create_date desc, id desc', limit=1).user_id
+                last_assigned_user = self.env['helpdesk.ticket'].search([('team_id', '=', team.id), ('user_id', '!=', False)], order='create_date desc, id desc', limit=1).user_id
                 index = 0
                 if last_assigned_user and last_assigned_user.id in member_ids:
                     previous_index = member_ids.index(last_assigned_user.id)

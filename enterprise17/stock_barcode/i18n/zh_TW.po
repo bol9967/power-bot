@@ -451,7 +451,7 @@ msgstr "顯示名稱"
 msgid ""
 "Do you want to permanently remove this message ? It won't appear anymore, so"
 " make sure you don't need the barcodes sheet or you have a copy."
-msgstr ""
+msgstr "確定永久移除此訊息？它不會再出現，因此請確保你不再需要條碼表，或已有副本。"
 
 #. module: stock_barcode
 #: model:ir.model.fields,help:stock_barcode.field_stock_picking_type__restrict_put_in_pack
@@ -635,7 +635,7 @@ msgstr "盤點位置"
 #. module: stock_barcode
 #: model:ir.model.fields,field_description:stock_barcode.field_stock_picking_type__is_barcode_picking_type
 msgid "Is Barcode Picking Type"
-msgstr ""
+msgstr "是條碼提取類型"
 
 #. module: stock_barcode
 #: model:ir.model.fields,field_description:stock_barcode.field_stock_barcode_cancel_operation__write_uid
@@ -741,7 +741,7 @@ msgstr "沒有找到對應的條碼%(barcode)s的揀貨單或者產品"
 #: code:addons/stock_barcode/models/stock_picking.py:0
 #, python-format
 msgid "No product, lot or package found for barcode %s"
-msgstr ""
+msgstr "找不到條碼為 %s 的產品、批次或包裝"
 
 #. module: stock_barcode
 #: model:ir.model.fields,field_description:stock_barcode.field_res_config_settings__barcode_nomenclature_id
@@ -874,7 +874,7 @@ msgstr "點擊驗證按鈕或掃描其他產品"
 #: code:addons/stock_barcode/static/src/models/barcode_picking_model.js:0
 #, python-format
 msgid "Print Barcodes"
-msgstr ""
+msgstr "列印條碼"
 
 #. module: stock_barcode
 #. odoo-javascript
@@ -934,7 +934,7 @@ msgstr "產品包裝"
 #: model:ir.model.fields,field_description:stock_barcode.field_stock_move_line__product_reference_code
 #: model:ir.model.fields,field_description:stock_barcode.field_stock_quant__product_reference_code
 msgid "Product Reference Code"
-msgstr ""
+msgstr "產品參考代碼"
 
 #. module: stock_barcode
 #: model:ir.model.fields,field_description:stock_barcode.field_stock_move_line__product_stock_quant_ids
@@ -966,7 +966,7 @@ msgstr "放入包裹"
 #. module: stock_barcode
 #: model:ir.model.fields,field_description:stock_barcode.field_stock_move_line__qty_done
 msgid "Qty Done"
-msgstr ""
+msgstr "已完成數量"
 
 #. module: stock_barcode
 #: model_terms:ir.ui.view,arch_db:stock_barcode.stock_move_line_product_selector
@@ -1141,7 +1141,7 @@ msgstr "掃描產品，然後掃描目的位置"
 #, python-format
 msgid ""
 "Scan a product, a lot/serial number or a package to filter the transfers."
-msgstr ""
+msgstr "掃瞄產品、批次/序號或包裝，以篩選轉移。"
 
 #. module: stock_barcode
 #. odoo-javascript
@@ -1314,7 +1314,7 @@ msgstr "掃描的數量使用%s作為計量單位，但這個計量單位與產�
 #: code:addons/stock_barcode/static/src/models/barcode_picking_model.js:0
 #, python-format
 msgid "Scanning package"
-msgstr ""
+msgstr "掃瞄包裹"
 
 #. module: stock_barcode
 #. odoo-javascript
@@ -1383,7 +1383,7 @@ msgstr "點擊即可掃描"
 msgid ""
 "Technical field indicating if should be used in barcode app and used to "
 "control visibility in the related UI."
-msgstr ""
+msgstr "技術欄位，表示是否應在條碼應用程式使用，及用於控制是否在相關操作界面中顯示。"
 
 #. module: stock_barcode
 #: model:ir.model.fields,help:stock_barcode.field_stock_picking_type__show_barcode_validation
@@ -1399,6 +1399,13 @@ msgstr "計算是否顯示「最終確認」組的技術領域，解決組合群
 #, python-format
 msgid "The inventory adjustment has been validated"
 msgstr "庫存調整已驗證"
+
+#. module: stock_barcode
+#. odoo-javascript
+#: code:addons/stock_barcode/static/src/models/barcode_picking_model.js:0
+#, python-format
+msgid "The scanned location doesn't belong to this operation's location"
+msgstr ""
 
 #. module: stock_barcode
 #. odoo-javascript
@@ -1576,6 +1583,8 @@ msgid ""
 "You are about to take the product %(productName)s from the location %(locationName)s but this product isn't reserved in this location.\n"
 "Scan the current location to confirm that."
 msgstr ""
+"你即將從位置 %(locationName)s 取得產品 %(productName)s，但此產品未在此位置保留。\n"
+"請掃瞄目前位置，以確認這一點。"
 
 #. module: stock_barcode
 #. odoo-javascript
@@ -1621,7 +1630,7 @@ msgstr "在此運行狀態下，無法登記報廢"
 msgid ""
 "You have already scanned %s items of this package. Do you want to scan the "
 "whole package?"
-msgstr ""
+msgstr "你已掃瞄此包裹中的 %s 個項目。要掃瞄整個包裹嗎？"
 
 #. module: stock_barcode
 #: model_terms:ir.ui.view,arch_db:stock_barcode.view_backorder_confirmation
@@ -1647,7 +1656,7 @@ msgstr "必須掃描產品"
 #: code:addons/stock_barcode/static/src/models/barcode_picking_model.js:0
 #, python-format
 msgid "[${product.code}] "
-msgstr ""
+msgstr "[${product.code}] "
 
 #. module: stock_barcode
 #. odoo-javascript

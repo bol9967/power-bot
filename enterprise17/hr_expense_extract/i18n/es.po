@@ -74,7 +74,7 @@ msgstr ""
 #: code:addons/hr_expense_extract/static/src/js/tours/expense_tour.js:0
 #, python-format
 msgid "<b>Congratulations</b>, you are now an expert of Expenses."
-msgstr "<b>Enhorabuena</b>, ahora eres un experto en Gastos."
+msgstr "<b>Enhorabuena</b>, ahora es un experto de gastos."
 
 #. module: hr_expense_extract
 #: model_terms:ir.ui.view,arch_db:hr_expense_extract.hr_expense_extract_view_form
@@ -125,7 +125,7 @@ msgstr "Importe"
 #. module: hr_expense_extract
 #: model:ir.model,name:hr_expense_extract.model_ir_attachment
 msgid "Attachment"
-msgstr "Adjunto"
+msgstr "Archivo adjunto"
 
 #. module: hr_expense_extract
 #: model:ir.model.fields,field_description:hr_expense_extract.field_hr_expense__message_attachment_count
@@ -140,7 +140,7 @@ msgstr "Línea de método de pago disponible"
 #. module: hr_expense_extract
 #: model:ir.model.fields,field_description:hr_expense_extract.field_hr_expense__extract_can_show_send_button
 msgid "Can show the ocr send button"
-msgstr "Puede mostrar el botón de reenvío OCR"
+msgstr "Puede mostrar el botón de envío de OCR"
 
 #. module: hr_expense_extract
 #: model_terms:ir.ui.view,arch_db:hr_expense_extract.expense_sample_register_view_form
@@ -152,12 +152,12 @@ msgstr "Cancelar"
 #: code:addons/hr_expense_extract/static/src/js/tours/expense_tour.js:0
 #, python-format
 msgid "Choose a receipt."
-msgstr "Elige un recibo."
+msgstr "Elija un recibo."
 
 #. module: hr_expense_extract
 #: model_terms:ir.ui.view,arch_db:hr_expense_extract.expense_sample_receipt_view_form
 msgid "Choose a receipt:"
-msgstr "Elige un recibo:"
+msgstr "Elija un recibo:"
 
 #. module: hr_expense_extract
 #: model:ir.model,name:hr_expense_extract.model_res_company
@@ -237,7 +237,7 @@ msgstr "Gasto"
 #. module: hr_expense_extract
 #: model:ir.actions.server,name:hr_expense_extract.ir_cron_update_ocr_status_ir_actions_server
 msgid "Expense OCR: Update All Status"
-msgstr "OCR de gastos: Actualizar todos los estados"
+msgstr "OCR de gastos: actualizar todos los estados"
 
 #. module: hr_expense_extract
 #: model:ir.actions.server,name:hr_expense_extract.ir_cron_ocr_validate_ir_actions_server
@@ -359,8 +359,8 @@ msgid ""
 "Let's try a sample receipt to test the automated processing of expenses with"
 " Artificial Intelligence."
 msgstr ""
-"Hagamos un recibo de prueba par probar el procesamiento automático de gastos"
-" con Inteligencia Artificial"
+"Usemos un recibo de prueba para probar el procesamiento automático de gastos"
+" con Inteligencia Artificial."
 
 #. module: hr_expense_extract
 #: model:ir.model.fields,field_description:hr_expense_extract.field_hr_expense__message_main_attachment_id
@@ -392,7 +392,7 @@ msgstr "Marcar como totalmente pagado"
 #. module: hr_expense_extract
 #: model:ir.model.fields,field_description:hr_expense_extract.field_expense_sample_register__memo
 msgid "Memo"
-msgstr "Memo"
+msgstr "Nota"
 
 #. module: hr_expense_extract
 #: model:ir.model.fields,field_description:hr_expense_extract.field_hr_expense__message_has_error
@@ -432,7 +432,7 @@ msgstr "Fecha de pago"
 #. module: hr_expense_extract
 #: model:ir.model.fields,field_description:hr_expense_extract.field_expense_sample_register__partial_mode
 msgid "Payment Difference"
-msgstr "Diferencia en pago"
+msgstr "Diferencia de pago"
 
 #. module: hr_expense_extract
 #: model:ir.model.fields,field_description:hr_expense_extract.field_expense_sample_register__payment_method_line_id
@@ -442,7 +442,7 @@ msgstr "Método de pago"
 #. module: hr_expense_extract
 #: model:ir.model.fields,field_description:hr_expense_extract.field_hr_expense__rating_ids
 msgid "Ratings"
-msgstr "Valoraciones"
+msgstr "Calificaciones"
 
 #. module: hr_expense_extract
 #: model_terms:ir.ui.view,arch_db:hr_expense_extract.expense_sample_register_view_form
@@ -464,7 +464,7 @@ msgstr "Registrar pagos de muestra"
 #: code:addons/hr_expense_extract/static/src/js/tours/expense_tour.js:0
 #, python-format
 msgid "Report this expense to your manager for validation."
-msgstr "Reporta este gasto a tu responsable para que lo valide."
+msgstr "Informe de este gasto a su gerente para que lo valide."
 
 #. module: hr_expense_extract
 #: model:ir.model.fields,field_description:hr_expense_extract.field_hr_expense__message_has_sms_error
@@ -501,8 +501,8 @@ msgid ""
 "The data extraction is not finished yet. The extraction usually takes "
 "between 5 and 10 seconds."
 msgstr ""
-"La extracción de datos aún no ha terminado, suele tomar entre 5 y 10 "
-"segundos."
+"La extracción de datos todavía no se ha completado. La extracción suele "
+"tomar entre 5 y 60 segundos. "
 
 #. module: hr_expense_extract
 #. odoo-python
@@ -511,19 +511,19 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:hr_expense_extract.expense_sample_receipt_view_form
 #, python-format
 msgid "Try Sample Receipt"
-msgstr "Prueba el recibo de muestra"
+msgstr "Probar recibo de muestra"
 
 #. module: hr_expense_extract
 #: model:ir.model,name:hr_expense_extract.model_expense_sample_receipt
 msgid "Try Sample Receipts"
-msgstr "Prueba los recibos de muestra"
+msgstr "Probar recibos de muestra"
 
 #. module: hr_expense_extract
 #. odoo-javascript
 #: code:addons/hr_expense_extract/static/src/js/tours/expense_tour.js:0
 #, python-format
 msgid "Try the AI with a sample receipt."
-msgstr "Prueba la IA con un recibo de muestra."
+msgstr "Pruebe la IA con un recibo de muestra."
 
 #. module: hr_expense_extract
 #. odoo-javascript
@@ -531,7 +531,7 @@ msgstr "Prueba la IA con un recibo de muestra."
 #, python-format
 msgid "Wasting time recording your receipts? Let’s try a better way."
 msgstr ""
-"¿Perdiendo el tiempo registrando tus recibos? Probemos una forma mejor."
+"¿Registrar sus recibos le toma mucho tiempo? Probemos una mejor forma."
 
 #. module: hr_expense_extract
 #: model:ir.model.fields,field_description:hr_expense_extract.field_hr_expense__website_message_ids
@@ -548,19 +548,19 @@ msgstr "Historial de comunicación del sitio web"
 #: code:addons/hr_expense_extract/models/hr_expense.py:0
 #, python-format
 msgid "You can't mix sample expenses and regular ones"
-msgstr "No puedes mezclar gastos muestra con gastos regulares"
+msgstr "No puede mezclar gastos de muestra con gastos regulares"
 
 #. module: hr_expense_extract
 #. odoo-python
 #: code:addons/hr_expense_extract/models/hr_expense.py:0
 #, python-format
 msgid "You cannot send a expense that is not in draft state!"
-msgstr "¡No puedes enviar un gasto que no esté en estado de borrador!"
+msgstr "No puede enviar un gasto que no esté en estado de borrador"
 
 #. module: hr_expense_extract
 #: model_terms:ir.ui.view,arch_db:hr_expense_extract.hr_expense_extract_view_form
 msgid "You don't have enough credit to extract data from your expense."
-msgstr "No tienes crédito suficiente para extraer datos de tu gasto."
+msgstr "No tiene crédito suficiente para extraer datos de su gasto."
 
 #. module: hr_expense_extract
 #. odoo-javascript
@@ -568,5 +568,4 @@ msgstr "No tienes crédito suficiente para extraer datos de tu gasto."
 #: code:addons/hr_expense_extract/static/src/js/tours/expense_tour.js:0
 #, python-format
 msgid "Your manager will have to approve (or refuse) your expense reports."
-msgstr ""
-"Su responsable tendrá que aprobar (o rechazar) sus informes de gastos."
+msgstr "Su gerente tendrá que aprobar (o rechazar) sus informes de gastos."

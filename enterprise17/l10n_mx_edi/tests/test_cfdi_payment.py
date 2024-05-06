@@ -155,53 +155,104 @@ class TestCFDIPayment(TestMxEdiCommon):
         )
 
     @freeze_time('2017-01-01')
-    def test_invoice_partial_payment_tax_rounding(self):
-        '''
-        In order to succesfully validate the payment we need to avoid
-        rounding errors coming from the several mathematical operations performed during
-        collection of invoice/payment data.
-        In particular in case of partial payment the system uses a payment percentage
-        (payment amount / invoice amount) to compute the correct amounts for the document.
-        To reduce the risk of rounding errors it is best to compute the "full" tax and base amounts
-        and multiply for the percentage paid as last step.
-        '''
-        invoice_vals = [
-            # pylint: disable=C0326
-            ( 30,  84.88,  13.00),
-            ( 30,  18.00,  13.00),
-            (  3, 564.32,  13.00),
-            ( 33,   7.00,  13.00),
-            ( 20,  49.88,  13.00),
-            (100,   3.10,  13.00),
-            (  2, 300.00,  13.00),
-            ( 36,  36.43,  13.00),
-            ( 36,  15.00,  13.00),
-            (  2,  61.08,      0),
-            (  2,  13.05,      0),
-        ]
-        invoice = self._create_invoice(
-            invoice_line_ids=[
-                Command.create({
-                    'product_id': self.product.id,
-                    'quantity': quantity,
-                    'price_unit': price_unit,
-                    'discount': discount,
-                    'tax_ids': [Command.set(self.tax_16.ids)],
-                }) for quantity, price_unit, discount in invoice_vals
-            ])
+    def test_residual_payment_partial_on_different_date_mxn_invoice(self):
+        invoice = self._create_invoice() # 1160 MXN
         with self.with_mocked_pac_sign_success():
             invoice._l10n_mx_edi_cfdi_invoice_try_send()
-        self._assert_invoice_cfdi(invoice, 'test_invoice_partial_payment_tax_rounding_1')
 
-        # Partial payment in MXN.
-        payment = self._create_payment(
+        # Pay 30% on the same day.
+        payment1 = self._create_payment(
             invoice,
-            amount=4450.14,
+            payment_date='2017-01-01',
+            amount=348.0,
             currency_id=self.comp_curr.id,
         )
+        # Residual amount should be 812 MXN
         with self.with_mocked_pac_sign_success():
-            payment.move_id._l10n_mx_edi_cfdi_payment_try_send()
+            payment1.move_id._l10n_mx_edi_cfdi_payment_try_send()
         self._assert_invoice_payment_cfdi(
-            payment.move_id,
-            'test_invoice_partial_payment_tax_rounding_2',
+            payment1.move_id,
+            'test_residual_payment_partial_on_different_date_mxn_invoice_1',
         )
+
+        # Pay 70% on the next day.
+        payment2 = self._create_payment(
+            invoice,
+            payment_date='2017-01-02',
+            amount=812.0,
+            currency_id=self.comp_curr.id,
+        )
+        # Residual amount should be 0 MXN
+        with self.with_mocked_pac_sign_success():
+            payment2.move_id._l10n_mx_edi_cfdi_payment_try_send()
+        self._assert_invoice_payment_cfdi(
+            payment2.move_id,
+            'test_residual_payment_partial_on_different_date_mxn_invoice_2',
+        )
+
+    def test_foreign_curr_payment_comp_curr_invoice_forced_balance(self):
+        with freeze_time('2016-01-02'):
+            invoice = self._create_invoice(
+                invoice_date='2016-01-01',
+                date='2016-01-01',
+                invoice_line_ids=[
+                    Command.create({
+                        'product_id': self.product.id,
+                        'price_unit': 2000.0,
+                    }),
+                ],
+            )
+            with self.with_mocked_pac_sign_success():
+                invoice._l10n_mx_edi_cfdi_invoice_try_send()
+
+        with freeze_time('2017-01-02'):
+            payment = self.env['account.payment.register'] \
+                .with_context(active_model='account.move', active_ids=invoice.ids) \
+                .create({
+                    'payment_date': '2017-01-01',
+                    'currency_id': self.foreign_curr_1.id,
+                    'amount': 4600,  # instead of 4640
+                    'payment_difference_handling': 'reconcile',
+                    'writeoff_account_id': self.env.company.expense_currency_exchange_account_id.id,
+                }) \
+                ._create_payments()
+            with self.with_mocked_pac_sign_success():
+                payment.move_id._l10n_mx_edi_cfdi_payment_try_send()
+            self._assert_invoice_payment_cfdi(
+                payment.move_id,
+                'test_foreign_curr_payment_comp_curr_invoice_forced_balance',
+            )
+
+    def test_comp_curr_payment_foreign_curr_invoice_forced_balance(self):
+        with freeze_time('2016-01-02'):
+            invoice = self._create_invoice(
+                invoice_date='2016-01-01',
+                date='2016-01-01',
+                currency_id=self.foreign_curr_1.id,
+                invoice_line_ids=[
+                    Command.create({
+                        'product_id': self.product.id,
+                        'price_unit': 6000.0,
+                    }),
+                ],
+            )
+            with self.with_mocked_pac_sign_success():
+                invoice._l10n_mx_edi_cfdi_invoice_try_send()
+
+        with freeze_time('2017-01-02'):
+            payment = self.env['account.payment.register'] \
+                .with_context(active_model='account.move', active_ids=invoice.ids) \
+                .create({
+                    'payment_date': '2017-01-01',
+                    'currency_id': self.comp_curr.id,
+                    'amount': 2300,  # instead of 2320
+                    'payment_difference_handling': 'reconcile',
+                    'writeoff_account_id': self.env.company.expense_currency_exchange_account_id.id,
+                }) \
+                ._create_payments()
+            with self.with_mocked_pac_sign_success():
+                payment.move_id._l10n_mx_edi_cfdi_payment_try_send()
+            self._assert_invoice_payment_cfdi(
+                payment.move_id,
+                'test_comp_curr_payment_foreign_curr_invoice_forced_balance',
+            )

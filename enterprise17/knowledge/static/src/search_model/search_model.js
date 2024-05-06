@@ -2,7 +2,7 @@
 
 import { SearchModel } from "@web/search/search_model";
 
-export class KnowledgeSearchModel extends SearchModel {
+export const KnowledgeSearchModelMixin = (T) => class extends T {
     setup(services, args) {
         this.onSaveKnowledgeFavorite = args.onSaveKnowledgeFavorite;
         this.onDeleteKnowledgeFavorite = args.onDeleteKnowledgeFavorite;
@@ -26,9 +26,11 @@ export class KnowledgeSearchModel extends SearchModel {
             const activateFavorite = "activateFavorite" in config ? config.activateFavorite : true;
             if (activateFavorite) {
                 defaultFavoriteId = this._createGroupOfFavorites(this.irFilters || []);
+                if (defaultFavoriteId) {
+                    // activate default search items (populate this.query)
+                    this._activateDefaultSearchItems(defaultFavoriteId);
+                }
             }
-            // activate default search items (populate this.query)
-            this._activateDefaultSearchItems(defaultFavoriteId);
         }
     }
 
@@ -67,3 +69,5 @@ export class KnowledgeSearchModel extends SearchModel {
         this.isStateCompleteForEmbeddedView = state.isStateCompleteForEmbeddedView;
     }
 }
+
+export class KnowledgeSearchModel extends KnowledgeSearchModelMixin(SearchModel) {}

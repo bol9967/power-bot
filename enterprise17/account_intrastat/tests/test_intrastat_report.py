@@ -172,7 +172,7 @@ class TestIntrastatReport(TestAccountReportsCommon):
     @freeze_time('2022-02-01')
     def test_intrastat_report_values(self):
         self._create_invoices(code_type='transaction')
-        options = self._generate_options(self.report, '2022-01-01', '2022-01-31')
+        options = self._generate_options(self.report, '2022-01-01', '2022-01-31', {'intrastat_grouped': True})
 
         lines = self.report._get_lines(options)
         self.assertLinesValues(
@@ -204,6 +204,99 @@ class TestIntrastatReport(TestAccountReportsCommon):
                 ('Total',  '', 320),
             ],
             options,
+        )
+
+    def test_intrastat_ungrouped_report_lines(self):
+        partner_be, partner_no_vat = self.env['res.partner'].create([
+            {
+                'name': 'BE Partner',
+                'country_id': self.env.ref('base.be').id,
+                'vat': 'BE0477472701',
+            },
+            {
+                'name': 'FR No VAT Partner',
+                'country_id': self.env.ref('base.fr').id,
+                'vat': None,
+            },
+        ])
+        moves = self.env['account.move'].create([
+            {
+                'move_type': 'out_invoice',
+                'partner_id': partner_be.id,
+                'invoice_date': '2022-01-01',
+                'date': '2022-01-01',
+                'intrastat_country_id': self.env.ref('base.be').id,
+                'invoice_line_ids': [
+                    Command.create({
+                        'name': 'line_1',
+                        'product_id': self.spanish_rioja.id,
+                        'intrastat_transaction_id': None,
+                        'product_uom_id': self.env.ref('uom.product_uom_unit').id,
+                        'quantity': 1.0,
+                        'account_id': self.company_data['default_account_revenue'].id,
+                        'price_unit': 80.0,
+                        'tax_ids': [],
+                    }),
+                ],
+            },
+            {
+                'move_type': 'out_invoice',
+                'partner_id': partner_be.id,
+                'invoice_date': '2022-01-02',
+                'date': '2022-01-02',
+                'intrastat_country_id': self.env.ref('base.be').id,
+                'invoice_line_ids': [
+                    Command.create({
+                        'name': 'line_1',
+                        'product_id': self.spanish_rioja.id,
+                        'intrastat_transaction_id': None,
+                        'product_uom_id': self.env.ref('uom.product_uom_unit').id,
+                        'quantity': 1.0,
+                        'account_id': self.company_data['default_account_revenue'].id,
+                        'price_unit': 80.0,
+                        'tax_ids': [],
+                    }),
+                ],
+
+            },
+            {
+                'move_type': 'out_invoice',
+                'partner_id': partner_no_vat.id,
+                'invoice_date': '2022-01-03',
+                'date': '2022-01-03',
+                'intrastat_country_id': self.env.ref('base.fr').id,
+                'invoice_line_ids': [
+                    Command.create({
+                        'name': 'line_1',
+                        'product_id': self.product_1.id,
+                        'intrastat_transaction_id': self.intrastat_codes['transaction'].id,
+                        'product_uom_id': self.env.ref('uom.product_uom_unit').id,
+                        'quantity': 1.0,
+                        'account_id': self.company_data['default_account_revenue'].id,
+                        'price_unit': 50.0,
+                        'tax_ids': [],
+                    }),
+                ],
+
+            },
+        ])
+        moves.action_post()
+
+        options = self._generate_options(self.report, '2022-01-01', '2022-01-31', default_options={'unfold_all': True})
+
+        self.assertLinesValues(
+            # pylint: disable=C0326
+            self.report._get_lines(options),
+            # 0/name, 1/system, 2/country, 3/transaction code, 4/region code, 5/commodity code, 6/origin country, 10/weight, 12/value
+            [    0,                                                           2,        3,     4,      5,          6,    12],
+            [
+                # FR Partner without VAT
+                ('INV/2022/00003',                                            'France', '101', '102',      '100', 'QV', 50.0),
+                # BE Partner with VAT
+                ('INV/2022/00002',                                            'Belgium',   '', '102', '22042176', 'ES', 80.0),
+                ('INV/2022/00001',                                            'Belgium',   '', '102', '22042176', 'ES', 80.0),
+            ],
+            options
         )
 
     def test_unfold_intrastat_report_lines(self):
@@ -282,20 +375,79 @@ class TestIntrastatReport(TestAccountReportsCommon):
         ])
         moves.action_post()
 
-        options = self._generate_options(self.report, '2022-01-01', '2022-01-31', default_options={'unfold_all': True})
+        options = self._generate_options(self.report, '2022-01-01', '2022-01-31', default_options={'unfold_all': True, 'intrastat_grouped': True})
         self.assertLinesValues(
             # pylint: disable=C0326
             self.report._get_lines(options),
-            # 0/name, 1/system, 2/country, 3/transaction code, 4/region code, 5/commodity code, 6/origin country, 10/weight, 12/value
+            # 0/name, 1/system, 2/country, 3/transaction code, 4/region code, 5/commodity code, 6/origin country, 12/value
             [    0,                                                           1,               2,         3,     4,     5,          6,    12],
             [
                 # BE Partner with VAT
                 ('Dispatch - None - 22042176 - ES - BE0477472701 - BE - 102', '19 (Dispatch)', 'Belgium',    '', '102', '22042176', 'ES', 160.0),
-                ('INV/2022/00002',                                            '19 (Dispatch)', 'Belgium',  None, '102', '22042176', 'ES',  80.0),
-                ('INV/2022/00001',                                            '19 (Dispatch)', 'Belgium',  None, '102', '22042176', 'ES',  80.0),
+                ('INV/2022/00002',                                            '19 (Dispatch)', 'Belgium',    '', '102', '22042176', 'ES',  80.0),
+                ('INV/2022/00001',                                            '19 (Dispatch)', 'Belgium',    '', '102', '22042176', 'ES',  80.0),
                 # FR Partner without VAT
                 ('Dispatch - 101 - 100 - QV - QV999999999999 - FR - 102',     '19 (Dispatch)',  'France', '101', '102',      '100', 'QV',  50.0),
                 ('INV/2022/00003',                                            '19 (Dispatch)',  'France', '101', '102',      '100', 'QV',  50.0),
+            ],
+            options,
+        )
+
+    def test_unfold_with_product_origin_country_united_kingdom(self):
+        """ The aim of this test is verifying that we can unfold
+            grouped lines for product that have an origin country
+            set to United Kingdom
+        """
+        move = self.env['account.move'].create([
+            {
+                'move_type': 'out_invoice',
+                'partner_id': self.partner_a.id,
+                'invoice_date': '2022-01-04',
+                'date': '2022-01-04',
+                'intrastat_country_id': self.env.ref('base.fr').id,
+                'invoice_line_ids': [
+                    Command.create({
+                        'name': 'line_1',
+                        'product_id': self.product_1.id,
+                        'intrastat_transaction_id': self.intrastat_codes['transaction'].id,
+                        'intrastat_product_origin_country_id': self.env.ref('base.uk').id,
+                        'quantity': 1.0,
+                        'account_id': self.company_data['default_account_revenue'].id,
+                        'price_unit': 50.0,
+                    }),
+                ],
+            },
+            {
+                'move_type': 'out_invoice',
+                'partner_id': self.partner_a.id,
+                'invoice_date': '2022-01-05',
+                'date': '2022-01-05',
+                'intrastat_country_id': self.env.ref('base.fr').id,
+                'invoice_line_ids': [
+                    Command.create({
+                        'name': 'line_1',
+                        'product_id': self.product_1.id,
+                        'intrastat_transaction_id': self.intrastat_codes['transaction'].id,
+                        'intrastat_product_origin_country_id': self.env.ref('base.uk').id,
+                        'quantity': 1.0,
+                        'account_id': self.company_data['default_account_revenue'].id,
+                        'price_unit': 50.0,
+                    }),
+                ],
+            },
+        ])
+        move.action_post()
+
+        options = self._generate_options(self.report, '2022-01-01', '2022-01-31', default_options={'unfold_all': True, 'intrastat_grouped': True})
+        self.assertLinesValues(
+            # pylint: disable=C0326
+            self.report._get_lines(options),
+            # 0/name,                                                 2/country, 6/origin country, 12/value
+            [   0,                                                        2,        6,    12],
+            [
+                ('Dispatch - 101 - 100 - XU - QV999999999999 - FR - 102', 'France', 'XU', 100.0),
+                ('INV/2022/00002',                                        'France', 'XU', 50.0),
+                ('INV/2022/00001',                                        'France', 'XU', 50.0),
             ],
             options,
         )
@@ -308,7 +460,7 @@ class TestIntrastatReport(TestAccountReportsCommon):
             in "Arrival" report lines.
         """
         self._create_invoices('transaction')
-        options = self._generate_options(self.report, '2022-01-01', '2022-01-31', default_options={'unfold_all': True})
+        options = self._generate_options(self.report, '2022-01-01', '2022-01-31', default_options={'unfold_all': True, 'intrastat_grouped': True})
 
         self.assertLinesValues(
             # pylint: disable=C0326
@@ -318,11 +470,11 @@ class TestIntrastatReport(TestAccountReportsCommon):
             [
                 # account.move (invoice)
                 ('Dispatch - 101 - 100 - QV - QV999999999999 - NL - 102', '19 (Dispatch)', 'Netherlands', '101', '102', '100', 'QV', '1.5', 320.0),
-                ('INV/2022/00001',                                        '19 (Dispatch)', 'Netherlands', '101', '102', '100', 'QV',  0.3,  80.0),
-                ('INV/2022/00001',                                        '19 (Dispatch)', 'Netherlands', '101', '102', '100', 'QV',  1.2, 240.0),
+                ('INV/2022/00001',                                        '19 (Dispatch)', 'Netherlands', '101', '102', '100', 'QV', '0.3',  80.0),
+                ('INV/2022/00001',                                        '19 (Dispatch)', 'Netherlands', '101', '102', '100', 'QV', '1.2', 240.0),
                 # account.move (bill)
                 ('Arrival - 101 - 100 - QV - QV999999999999 - NL - 102',  '29 (Arrival)',  'Netherlands', '101', '102', '100', 'QV', '0.5', 950.0),
-                ('BILL/2022/01/0001',                                     '29 (Arrival)',  'Netherlands', '101', '102', '100', 'QV',  0.5, 950.0),
+                ('BILL/2022/01/0001',                                     '29 (Arrival)',  'Netherlands', '101', '102', '100', 'QV', '0.5', 950.0),
             ],
             options,
         )
@@ -402,7 +554,7 @@ class TestIntrastatReport(TestAccountReportsCommon):
         ])
         moves.action_post()
 
-        options = self._generate_options(self.report, '2022-01-01', '2022-01-31', default_options={'unfold_all': True})
+        options = self._generate_options(self.report, '2022-01-01', '2022-01-31', default_options={'unfold_all': True, 'intrastat_grouped': True})
         lines = self.report._get_lines(options)
 
         existing_ids = [line['id'] for line in lines]
@@ -504,7 +656,7 @@ class TestIntrastatReport(TestAccountReportsCommon):
         ])
         moves.action_post()
 
-        options = self._generate_options(self.report, '2016-01-01', '2017-12-31', default_options={'unfold_all': True})
+        options = self._generate_options(self.report, '2016-01-01', '2017-12-31', default_options={'unfold_all': True, 'intrastat_grouped': True})
         self.assertLinesValues(
             # pylint: disable=C0326
             self.report._get_lines(options),
@@ -524,6 +676,62 @@ class TestIntrastatReport(TestAccountReportsCommon):
 
             ],
             options
+        )
+
+    def test_intrastat_report_only_one_line_even_with_different_warnings(self):
+        """ This test checks that we only have one grouped line
+            even if its sublines have different warnings.
+            We check in this test the expired_trans value, to do it
+            we have 2 moves, one before the expiry date and one after the
+            expiry date. This situation should have 2 lines that are grouped together
+            even if we have a warning of one of the two lines.
+        """
+        transaction_code = self.intrastat_codes['transaction']
+        transaction_code.expiry_date = fields.Date.from_string('2022-01-14')
+        moves = self.env['account.move'].create([
+            {
+                'move_type': 'out_invoice',
+                'partner_id': self.partner_a.id,
+                'invoice_date': '2022-01-05',
+                'currency_id': self.env.ref('base.EUR').id,
+                'invoice_line_ids': [
+                    Command.create({
+                        'product_id': self.spanish_rioja.id,
+                        'account_id': self.company_data['default_account_revenue'].id,
+                        'price_unit': 20.0,
+                        'intrastat_transaction_id': transaction_code.id,
+                    }),
+                ],
+            },
+            {
+                'move_type': 'out_invoice',
+                'partner_id': self.partner_a.id,
+                'invoice_date': '2022-01-15',
+                'currency_id': self.env.ref('base.EUR').id,
+                'invoice_line_ids': [
+                    Command.create({
+                        'product_id': self.spanish_rioja.id,
+                        'account_id': self.company_data['default_account_revenue'].id,
+                        'price_unit': 21.0,
+                        'intrastat_transaction_id': transaction_code.id,
+                    }),
+                ],
+            },
+        ])
+        moves.action_post()
+
+        options = self._generate_options(self.report, '2022-01-01', '2022-01-31', default_options={'unfold_all': True, 'intrastat_grouped': True})
+        self.assertLinesValues(
+            # pylint: disable=C0326
+            self.report._get_lines(options),
+            # 0/name,                                                           12/value
+            [    0,                                                             12],
+            [
+                ('Dispatch - 101 - 22042176 - ES - QV999999999999 - BE - 102',  41.0),
+                ('INV/2022/00002',                                              21.0),
+                ('INV/2022/00001',                                              20.0),
+            ],
+            options,
         )
 
     def test_intrastat_invoice_having_minus_quantity(self):
@@ -556,7 +764,7 @@ class TestIntrastatReport(TestAccountReportsCommon):
         })
         move.action_post()
 
-        options = self._generate_options(self.report, '2022-01-01', '2022-01-31', default_options={'unfold_all': True})
+        options = self._generate_options(self.report, '2022-01-01', '2022-01-31', default_options={'unfold_all': True, 'intrastat_grouped': True})
         self.assertLinesValues(
             # pylint: disable=C0326
             self.report._get_lines(options),
@@ -569,6 +777,31 @@ class TestIntrastatReport(TestAccountReportsCommon):
             ],
             options
         )
+
+    def test_intrastat_no_service_product(self):
+        service_product = self.env['product.product'].create({
+            'name': 'Consultancy',
+            'type': 'service',
+            'intrastat_code_id': None,
+            'intrastat_origin_country_id': None,
+        })
+        move = self.env['account.move'].create({
+            'move_type': 'out_invoice',
+            'partner_id': self.partner_a.id,
+            'invoice_date': '2022-01-01',
+            'currency_id': self.env.ref('base.EUR').id,
+            'invoice_line_ids': [
+                Command.create({
+                    'product_id': service_product.id,
+                    'account_id': self.company_data['default_account_revenue'].id,
+                    'price_unit': 20.0,
+                }),
+            ],
+        })
+        move.action_post()
+
+        options = self._generate_options(self.report, '2022-01-01', '2022-01-31', default_options={'intrastat_grouped': True})
+        self.assertEqual(len(self.report._get_lines(options)), 0, "Services shouldn't be included in the intrastat report")
 
     def test_no_supplementary_units(self):
         """ Test a report from an invoice with no units """
@@ -589,7 +822,7 @@ class TestIntrastatReport(TestAccountReportsCommon):
         })
         no_supplementary_units_invoice.action_post()
 
-        options = self._generate_options(self.report, date_from=fields.Date.from_string('2022-05-01'), date_to=fields.Date.from_string('2022-05-31'))
+        options = self._generate_options(self.report, date_from=fields.Date.from_string('2022-05-01'), date_to=fields.Date.from_string('2022-05-31'), default_options={'intrastat_grouped': True})
         lines = self.report._get_lines(options)
         self.assertLinesValues(
             lines,
@@ -650,7 +883,7 @@ class TestIntrastatReport(TestAccountReportsCommon):
         })
         unitary_supplementary_units_invoice.action_post()
 
-        options = self._generate_options(self.report, date_from=fields.Date.from_string('2022-05-01'), date_to=fields.Date.from_string('2022-05-31'))
+        options = self._generate_options(self.report, date_from=fields.Date.from_string('2022-05-01'), date_to=fields.Date.from_string('2022-05-31'), default_options={'intrastat_grouped': True})
         lines = self.report._get_lines(options)
         self.assertLinesValues(
             lines,
@@ -688,7 +921,7 @@ class TestIntrastatReport(TestAccountReportsCommon):
         })
         metre_supplementary_units_invoice.action_post()
 
-        options = self._generate_options(self.report, date_from=fields.Date.from_string('2022-05-01'), date_to=fields.Date.from_string('2022-05-31'))
+        options = self._generate_options(self.report, date_from=fields.Date.from_string('2022-05-01'), date_to=fields.Date.from_string('2022-05-31'), default_options={'intrastat_grouped': True})
         lines = self.report._get_lines(options)
         self.assertLinesValues(
             lines,
@@ -741,7 +974,7 @@ class TestIntrastatReport(TestAccountReportsCommon):
         })
         belgian_invoice.action_post()
         dutch_bill.action_post()
-        options = self._generate_options(self.report, '2022-05-01', '2022-05-31', default_options={'country_format': 'code', 'commodity_flow': 'code'})
+        options = self._generate_options(self.report, '2022-05-01', '2022-05-31', default_options={'country_format': 'code', 'commodity_flow': 'code', 'intrastat_grouped': True})
 
         lines = self.report._get_lines(options)
         self.assertLinesValues(
@@ -777,7 +1010,7 @@ class TestIntrastatReport(TestAccountReportsCommon):
             ]
         })
         invoice.action_post()
-        options = self._generate_options(self.report, '2024-01-01', '2024-01-31', default_options={'country_format': 'code'})
+        options = self._generate_options(self.report, '2024-01-01', '2024-01-31', default_options={'country_format': 'code', 'intrastat_grouped': True})
         lines = self.report._get_lines(options)
         self.assertLinesValues(
             lines,
@@ -828,7 +1061,7 @@ class TestIntrastatReport(TestAccountReportsCommon):
         })
         belgian_invoice.action_post()
         dutch_bill.action_post()
-        options = self._generate_options(self.report, '2022-05-01', '2022-05-31', default_options={'country_format': 'code', 'commodity_flow': 'code'})
+        options = self._generate_options(self.report, '2022-05-01', '2022-05-31', default_options={'country_format': 'code', 'commodity_flow': 'code', 'intrastat_grouped': True})
 
         self.assertLinesValues(
             self.report._get_lines(options),
@@ -887,6 +1120,7 @@ class TestIntrastatReport(TestAccountReportsCommon):
             'country_format': 'code',
             'commodity_flow': 'code',
             'intrastat_type': default_type,
+            'intrastat_grouped': True,
         }
         options = self._generate_options(self.report, '2022-05-01', '2022-05-31', default_options=default_options)
 

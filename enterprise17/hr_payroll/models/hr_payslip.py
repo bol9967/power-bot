@@ -36,7 +36,7 @@ class HrPayslip(models.Model):
 
     struct_id = fields.Many2one(
         'hr.payroll.structure', string='Structure', precompute=True,
-        compute='_compute_struct_id', store=True, readonly=False,
+        compute='_compute_struct_id', store=True, readonly=False, tracking=True,
         help='Defines the rules that have to be applied to this payslip, according '
              'to the contract chosen. If the contract is empty, this field isn\'t '
              'mandatory anymore and all the valid rules of the structures '
@@ -59,10 +59,10 @@ class HrPayslip(models.Model):
     department_id = fields.Many2one('hr.department', string='Department', related='employee_id.department_id', readonly=True, store=True)
     job_id = fields.Many2one('hr.job', string='Job Position', related='employee_id.job_id', readonly=True, store=True)
     date_from = fields.Date(
-        string='From', readonly=False, required=True,
+        string='From', readonly=False, required=True, tracking=True,
         compute="_compute_date_from", store=True, precompute=True)
     date_to = fields.Date(
-        string='To', readonly=False, required=True,
+        string='To', readonly=False, required=True, tracking=True,
         compute="_compute_date_to", store=True, precompute=True)
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -102,7 +102,7 @@ class HrPayslip(models.Model):
     contract_domain_ids = fields.Many2many('hr.contract', compute='_compute_contract_domain_ids')
     contract_id = fields.Many2one(
         'hr.contract', string='Contract', precompute=True,
-        domain="[('id', 'in', contract_domain_ids)]",
+        domain="[('id', 'in', contract_domain_ids)]", tracking=True,
         compute='_compute_contract_id', store=True, readonly=False)
     credit_note = fields.Boolean(
         string='Credit Note',
@@ -110,7 +110,7 @@ class HrPayslip(models.Model):
     has_refund_slip = fields.Boolean(compute='_compute_has_refund_slip')
     payslip_run_id = fields.Many2one(
         'hr.payslip.run', string='Batch Name',
-        copy=False, ondelete='cascade',
+        copy=False, ondelete='cascade', tracking=True,
         domain="[('company_id', '=', company_id)]")
     sum_worked_hours = fields.Float(compute='_compute_worked_hours', store=True, help='Total hours of attendance and time off (paid or not)')
     compute_date = fields.Date('Computed On')
@@ -436,7 +436,7 @@ class HrPayslip(models.Model):
         template = self._get_email_template()
         for report, payslips in mapped_reports.items():
             for payslip in payslips:
-                pdf_content, dummy = self.env['ir.actions.report'].sudo().with_context(lang=payslip.employee_id.lang)._render_qweb_pdf(report, payslip.id)
+                pdf_content, dummy = self.env['ir.actions.report'].sudo().with_context(lang=payslip.employee_id.lang or self.env.lang)._render_qweb_pdf(report, payslip.id)
                 if report.print_report_name:
                     pdf_name = safe_eval(report.print_report_name, {'object': payslip})
                 else:
@@ -841,7 +841,7 @@ class HrPayslip(models.Model):
                 })
                 if rule._satisfy_condition(localdict):
                     # Retrieve the line name in the employee's lang
-                    employee_lang = payslip.employee_id.lang
+                    employee_lang = payslip.employee_id.lang or self.env.lang
                     # This actually has an impact, don't remove this line
                     context = {'lang': employee_lang}
                     if rule.code in localdict['same_type_input_lines']:

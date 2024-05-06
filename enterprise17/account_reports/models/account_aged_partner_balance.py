@@ -205,9 +205,9 @@ class AgedPartnerBalanceCustomHandler(models.AbstractModel):
                     SUM(part.debit_amount_currency) AS debit_amount_currency,
                     part.debit_move_id
                 FROM account_partial_reconcile part
-                WHERE part.max_date <= %s
+                WHERE part.max_date <= %s AND part.debit_move_id = account_move_line.id
                 GROUP BY part.debit_move_id
-            ) part_debit ON part_debit.debit_move_id = account_move_line.id
+            ) part_debit ON TRUE
 
             LEFT JOIN LATERAL (
                 SELECT
@@ -215,9 +215,9 @@ class AgedPartnerBalanceCustomHandler(models.AbstractModel):
                     SUM(part.credit_amount_currency) AS credit_amount_currency,
                     part.credit_move_id
                 FROM account_partial_reconcile part
-                WHERE part.max_date <= %s
+                WHERE part.max_date <= %s AND part.credit_move_id = account_move_line.id
                 GROUP BY part.credit_move_id
-            ) part_credit ON part_credit.credit_move_id = account_move_line.id
+            ) part_credit ON TRUE
 
             JOIN period_table ON
                 (
@@ -365,12 +365,13 @@ class AgedPartnerBalanceCustomHandler(models.AbstractModel):
         """
         report = self.env['account.report'].browse(options['report_id'])
         action = self.env['ir.actions.actions']._for_xml_id('account.action_open_payment_items')
+        journal_type_to_exclude = {'purchase': 'sale', 'sale': 'purchase'}
         if options:
             domain = [
                 ('account_id.reconcile', '=', True),
-                ('journal_id.type', '=', journal_type),
+                ('journal_id.type', '!=', journal_type_to_exclude.get(journal_type)),
                 *self._build_domain_from_period(options, params['expression_label']),
-                *report._get_options_domain(options, None),
+                *report._get_options_domain(options, 'normal'),
                 *report._get_audit_line_groupby_domain(params['calling_line_dict_id']),
             ]
             action['domain'] = domain

@@ -82,6 +82,19 @@ msgstr "#Es Favorito"
 #. module: knowledge
 #. odoo-python
 #: code:addons/knowledge/models/knowledge_article.py:0
+#, python-format
+msgid ""
+"\"%(article_item_name)s\" is an Article Item from \"%(article_name)s\" and "
+"cannot be restored on its own. Contact the owner of \"%(article_name)s\" to "
+"have it restored instead."
+msgstr ""
+"\"%(article_item_name)s\" es un elemento de artículo de \"%(article_name)s\""
+" y no puede restaurarse por sí solo. En su lugar, contacte al proprietario "
+"de \"%(article_name)s\" para restaurarlo."
+
+#. module: knowledge
+#. odoo-python
+#: code:addons/knowledge/models/knowledge_article.py:0
 #: code:addons/knowledge/models/knowledge_article.py:0
 #: code:addons/knowledge/models/knowledge_article.py:0
 #, python-format
@@ -238,7 +251,7 @@ msgid ""
 "                </em>"
 msgstr ""
 "<em>\n"
-"                    <font class=\"text-600\">Explique de forma resumida el problema que se resolverá con este cambio.</font>\n"
+"                    <font class=\"text-600\">Explique en pocas palabras el problema que este cambio va a resolver.</font>\n"
 "                </em>"
 
 #. module: knowledge
@@ -271,7 +284,7 @@ msgid ""
 "                </em>"
 msgstr ""
 "<em>\n"
-"                    <font class=\"text-600\">Explique de forma resumida los errores que ocurrieron.</font>\n"
+"                    <font class=\"text-600\">Explique en pocas palabras qué ha fallado.\n"
 "                </em>"
 
 #. module: knowledge
@@ -1079,8 +1092,8 @@ msgstr ""
 "            <font class=\"bg-o-color-2\">resaltarlo</font>,\n"
 "            <span style=\"text-decoration-line: line-through;\">tacharlo</span>\n"
 "            o\n"
-"            <span style=\"font-weight: bolder;\">darle</span>\n"
-"            <span style=\"font-style: italic; text-decoration-line: underline;\">estilo</span>\n"
+"            <span style=\"font-style: italic; text-decoration-line: underline;\">darle</span>\n"
+"            <span style=\"font-weight: bolder;\">estilo</span>\n"
 "        </span>"
 
 #. module: knowledge
@@ -2014,7 +2027,7 @@ msgstr "Acceso restringido. Puede que no se comparta con todos en "
 #. module: knowledge
 #: model:knowledge.article,template_name:knowledge.knowledge_article_template_account_management
 msgid "Account Management"
-msgstr "Gestión contable"
+msgstr "Gestión de cuentas"
 
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_account_management
@@ -2501,6 +2514,7 @@ msgstr "Propiedades del elemento del artículo"
 #. odoo-javascript
 #: code:addons/knowledge/static/src/components/knowledge_article_html_field/knowledge_article_html_field.js:0
 #: code:addons/knowledge/static/src/components/knowledge_article_html_field/knowledge_article_html_field.js:0
+#: code:addons/knowledge/static/src/components/knowledge_article_html_field/knowledge_article_html_field.js:0
 #: model:ir.actions.act_window,name:knowledge.knowledge_article_action_item_calendar
 #: model:ir.actions.act_window,name:knowledge.knowledge_article_item_action
 #: model:ir.actions.act_window,name:knowledge.knowledge_article_item_action_stages
@@ -2517,7 +2531,7 @@ msgstr "Miembro del artículo"
 #. module: knowledge
 #: model:ir.model,name:knowledge.model_knowledge_article_template_category
 msgid "Article Template Category"
-msgstr "Categoría de plantilla del artículo"
+msgstr "Categoría de plantilla de artículo"
 
 #. module: knowledge
 #: model:ir.actions.act_window,name:knowledge.knowledge_article_template_action
@@ -3267,7 +3281,7 @@ msgstr "Crear un artículo"
 #: code:addons/knowledge/static/src/components/topbar/topbar.xml:0
 #, python-format
 msgid "Created"
-msgstr "Creada"
+msgstr "Creado"
 
 #. module: knowledge
 #: model:ir.model.fields,field_description:knowledge.field_knowledge_article__create_uid
@@ -3338,7 +3352,7 @@ msgstr "Propiedades de fecha y hora"
 #. module: knowledge
 #: model_terms:ir.ui.view,arch_db:knowledge.knowledge_article_trash_notification
 msgid "Dear"
-msgstr "Estimado"
+msgstr "Estimado/a"
 
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_meeting_minutes_template
@@ -3392,7 +3406,7 @@ msgid ""
 "                 before being permanently removed for your database"
 msgstr ""
 "Los artículos eliminados se almacenan en la papelera durante <b>%(threshold)s</b> días adicionales\n"
-"                 antes de ser eliminados de forma permanente de su base de datos"
+"                 antes de ser eliminados permanentemente de su base de datos"
 
 #. module: knowledge
 #: model:ir.model.fields,field_description:knowledge.field_knowledge_article__deletion_date
@@ -3544,14 +3558,14 @@ msgstr "Correo electrónico:"
 #: code:addons/knowledge/static/src/components/prompt_embedded_view_name_dialog/prompt_embedded_view_name_dialog.js:0
 #, python-format
 msgid "Embed a View"
-msgstr "Insertar una vista"
+msgstr "Incrustar una vista"
 
 #. module: knowledge
 #. odoo-javascript
 #: code:addons/knowledge/static/src/components/video_selector_dialog/video_selector_dialog.js:0
 #, python-format
 msgid "Embed a video"
-msgstr "Insertar un video"
+msgstr "Incrustar un video"
 
 #. module: knowledge
 #: model:ir.model.fields,field_description:knowledge.field_knowledge_article__icon
@@ -3664,7 +3678,7 @@ msgstr "Consulte todos los artículos que han compartido con usted"
 #. module: knowledge
 #: model:ir.model.fields,field_description:knowledge.field_knowledge_article_stage__fold
 msgid "Folded in kanban view"
-msgstr "Replegado en la vista kanban"
+msgstr "Plegado en la vista kanban"
 
 #. module: knowledge
 #: model:ir.model.fields,field_description:knowledge.field_knowledge_article__message_follower_ids
@@ -3695,7 +3709,7 @@ msgstr "Para las demás categorías, solo le pedimos que siga estas reglas."
 #: code:addons/knowledge/static/src/components/topbar/topbar.xml:0
 #, python-format
 msgid "Full Width"
-msgstr "Anchura completa"
+msgstr "Ancho completo"
 
 #. module: knowledge
 #: model:ir.model.fields,field_description:knowledge.field_knowledge_article__full_width
@@ -3815,7 +3829,7 @@ msgid ""
 "                <br>\n"
 "                They can also be shared with customers, journalists and resellers."
 msgstr ""
-"Estos son los logos que puede utilizar.\n"
+"Estos son los logotipos que puede utilizar.\n"
 "                <br>\n"
 "                También puede compartirlos con clientes, periodistas y distribuidores."
 
@@ -4268,7 +4282,7 @@ msgstr "¿El artículo está activo?"
 #. module: knowledge
 #: model:ir.model.fields,field_description:knowledge.field_knowledge_article__is_user_favorite
 msgid "Is Favorited"
-msgstr "Favorito"
+msgstr "Es favorito"
 
 #. module: knowledge
 #: model:ir.model.fields,field_description:knowledge.field_knowledge_article__message_is_follower
@@ -4425,7 +4439,7 @@ msgid ""
 "Keep your colleagues informed about the company's latest developments and "
 "activities through periodic updates."
 msgstr ""
-"Mantenga a sus compañeros informados sobre los últimos acontecimientos y "
+"Mantenga a sus colegas informados sobre los últimos acontecimientos y "
 "actividades de la empresa a través de actualizaciones periódicas."
 
 #. module: knowledge
@@ -4527,7 +4541,7 @@ msgstr "Última actualización el"
 #: code:addons/knowledge/static/src/components/permission_panel/permission_panel.js:0
 #, python-format
 msgid "Leave"
-msgstr "Ausencia"
+msgstr "Abandonar"
 
 #. module: knowledge
 #. odoo-javascript
@@ -5035,7 +5049,7 @@ msgid ""
 "Nth <strong>Q</strong>uarter of the fiscal year.<br>\n"
 "                            <em>E.g. Q4 starts on Oct. 1 and ends on Dec. 31.</em>"
 msgstr ""
-"<strong>T</strong>rimestre del año fiscal.<br>\n"
+"Número de <strong>T</strong>rimestrea del ejercicio fiscal.<br>\n"
 "                            <em>Por ejemplo, el T4 comienza el 1 de octubre y termina el 31 de diciembre.</em>"
 
 #. module: knowledge
@@ -5102,7 +5116,7 @@ msgstr "Aceptar"
 #. module: knowledge
 #: model_terms:ir.ui.view,arch_db:knowledge.knowledge_article_user_onboarding
 msgid "Onboarding.pdf"
-msgstr "Integración.pdf"
+msgstr "Incorporación.pdf"
 
 #. module: knowledge
 #. odoo-python
@@ -5111,6 +5125,13 @@ msgstr "Integración.pdf"
 #, python-format
 msgid "Ongoing"
 msgstr "En proceso"
+
+#. module: knowledge
+#. odoo-javascript
+#: code:addons/knowledge/static/src/components/behaviors/view_link_behavior/view_link_behavior.js:0
+#, python-format
+msgid "Only Internal Users can access this view."
+msgstr "Sólo los usuarios internos tienen acceso a esta vista."
 
 #. module: knowledge
 #. odoo-python
@@ -6487,12 +6508,12 @@ msgstr "Papelera"
 #: model:ir.ui.menu,name:knowledge.knowledge_article_menu_trashed
 #: model_terms:ir.ui.view,arch_db:knowledge.knowledge_article_view_search
 msgid "Trashed"
-msgstr "Eliminado"
+msgstr "Movido a la papelera"
 
 #. module: knowledge
 #: model:ir.model.constraint,message:knowledge.constraint_knowledge_article_check_trash
 msgid "Trashed articles must be archived."
-msgstr "Los artículos eliminados se deben archivar."
+msgstr "Los artículos movidos a la papelera se deben archivar."
 
 #. module: knowledge
 #. odoo-python
@@ -6595,7 +6616,7 @@ msgstr ""
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_brand_assets
 msgid "Use the logo instead of the word inside sentences"
-msgstr "Usar el logotipo en lugar de la palabra dentro de las oraciones."
+msgstr "Use el logotipo en lugar de la palabra dentro de las oraciones."
 
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_brand_assets
@@ -6748,7 +6769,7 @@ msgid ""
 "                (default is 30)"
 msgstr ""
 "Cuando se envían a la papelera, los artículos se marcan para ser eliminados\n"
-"                días tras la última edición. El parámetro knowledge_article_trash_limit_days config\n"
+"                días tras la última edición. El parámetro knowledge_article_trash_limit_days\n"
 "                se puede utilizar para modificar el número de días. \n"
 "                (los días predeterminados son 30)"
 
@@ -6859,7 +6880,7 @@ msgstr "Espacio de trabajo"
 #: code:addons/knowledge/models/knowledge_article.py:0
 #, python-format
 msgid "Write"
-msgstr "Editar"
+msgstr "Escribir"
 
 #. module: knowledge
 #. odoo-javascript

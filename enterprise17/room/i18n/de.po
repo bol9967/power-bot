@@ -4,7 +4,7 @@
 # 
 # Translators:
 # Michael Hofer, 2023
-# Wil Odoo, 2023
+# Wil Odoo, 2024
 # Larissa Manderfeld, 2024
 # 
 msgid ""
@@ -88,6 +88,20 @@ msgid "Action Needed"
 msgstr "Aktion notwendig"
 
 #. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_form/room_booking_form.xml:0
+#, python-format
+msgid "Add"
+msgstr "Hinzufügen"
+
+#. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.xml:0
+#, python-format
+msgid "Add a Booking"
+msgstr "Eine Buchung hinzufügen"
+
+#. module: room
 #: model:ir.model.fields,field_description:room.field_room_room__description
 msgid "Amenities"
 msgstr "Einrichtungen"
@@ -98,6 +112,13 @@ msgstr "Einrichtungen"
 #, python-format
 msgid "Are you sure you want to delete this booking?"
 msgstr "Sind Sie sicher, dass Sie diese Buchung löschen möchten?"
+
+#. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.js:0
+#, python-format
+msgid "Are you sure you want to end the current booking ?"
+msgstr "Sind Sie sicher, dass Sie die aktuelle Buchung beenden möchten?"
 
 #. module: room
 #: model:ir.model.fields,field_description:room.field_room_booking__message_attachment_count
@@ -238,6 +259,13 @@ msgid "Delete"
 msgstr "Löschen"
 
 #. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.xml:0
+#, python-format
+msgid "Discard"
+msgstr "Verwerfen"
+
+#. module: room
 #: model:ir.model.fields,field_description:room.field_room_booking__display_name
 #: model:ir.model.fields,field_description:room.field_room_office__display_name
 #: model:ir.model.fields,field_description:room.field_room_room__display_name
@@ -258,6 +286,14 @@ msgstr "z. B. Projektor, Kapazität von 6 Personen"
 #: model:ir.module.category,description:room.module_category_room
 msgid "Enable the user to manage meeting rooms available for booking"
 msgstr "Ermöglicht dem Benutzer die Verwaltung von buchbaren Konferenzräumen"
+
+#. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.js:0
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.xml:0
+#, python-format
+msgid "End Booking"
+msgstr "Buchung beenden"
 
 #. module: room
 #: model:ir.model.fields,field_description:room.field_room_booking__stop_datetime
@@ -442,6 +478,16 @@ msgid "Office Name"
 msgstr "Name des Büros"
 
 #. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.xml:0
+#, python-format
+msgid ""
+"Oops! Looks like you have multiple tabs opened. Make sure to use only one."
+msgstr ""
+"Hoppla! Sie haben wohl mehrere Reiter geöffnet. Verwenden Sie bitte nur "
+"einen."
+
+#. module: room
 #: model_terms:ir.ui.view,arch_db:room.room_room_view_form
 msgid "Open"
 msgstr "Öffnen"
@@ -481,12 +527,6 @@ msgstr "Projektor, Whiteboard"
 #, python-format
 msgid "Public Booking"
 msgstr "Öffentliche Buchung"
-
-#. module: room
-#: model:ir.model.fields,field_description:room.field_room_booking__rating_ids
-#: model:ir.model.fields,field_description:room.field_room_room__rating_ids
-msgid "Ratings"
-msgstr "Bewertungen"
 
 #. module: room
 #: model:ir.actions.act_window,name:room.room_room_action
@@ -562,6 +602,13 @@ msgstr "Kurzzeichen"
 #: model:ir.model.fields,field_description:room.field_room_booking__start_datetime
 msgid "Start Datetime"
 msgstr "Startdatum/-zeit"
+
+#. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.xml:0
+#, python-format
+msgid "Start now"
+msgstr "Jetzt starten"
 
 #. module: room
 #: model:ir.model.constraint,message:room.constraint_room_room_uniq_access_token

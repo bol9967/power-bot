@@ -4,16 +4,16 @@
 # 
 # Translators:
 # Wichanon Jamwutthipreecha, 2023
-# Rasareeyar Lappiam, 2024
 # Wil Odoo, 2024
+# Rasareeyar Lappiam, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-24 20:55+0000\n"
+"POT-Creation-Date: 2024-02-22 15:46+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Wil Odoo, 2024\n"
+"Last-Translator: Rasareeyar Lappiam, 2024\n"
 "Language-Team: Thai (https://app.transifex.com/odoo/teams/41243/th/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1111,11 +1111,29 @@ msgid "Add a new plan"
 msgstr "เพิ่มแผนการใหม่"
 
 #. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid "Add a new rule"
+msgstr ""
+
+#. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.product_pricelist_view
 #: model_terms:ir.ui.view,arch_db:sale_subscription.product_template_view_form_recurring
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_plan_view_form
 msgid "Add a price rule"
 msgstr "เพิ่มกฎของราคา"
+
+#. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid ""
+"Add a recurring plan for this product, or create a new one with the desired "
+"recurrence (e.g., Monthly)"
+msgstr ""
+"เพิ่มแผนการเกิดซ้ำสำหรับผลิตภัณฑ์นี้ "
+"หรือสร้างแผนใหม่ด้วยการเกิดซ้ำที่ต้องการ (เช่น รายเดือน)"
 
 #. module: sale_subscription
 #. odoo-python
@@ -1211,13 +1229,6 @@ msgstr "มอบหมายให้"
 #: model:ir.model.fields.selection,name:sale_subscription.selection__payment_transaction__subscription_action__assign_token
 msgid "Assign Token"
 msgstr "กำหนดโทเค็น"
-
-#. module: sale_subscription
-#. odoo-javascript
-#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
-#, python-format
-msgid "Assign a new partner to the contract"
-msgstr "กำหนดพาร์ทเนอร์ใหม่ให้กับสัญญา"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__message_attachment_count
@@ -1465,6 +1476,13 @@ msgid "Choose a product name.<br/><i>(e.g. eLearning Access)</i>"
 msgstr "เลือกชื่อสินค้า<br/><i>(เช่น การเข้าถึง eLearning)</i>"
 
 #. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid "Choose the invoice duration for your subscription"
+msgstr ""
+
+#. module: sale_subscription
 #: model:ir.model.fields.selection,name:sale_subscription.selection__sale_order_log__event_type__2_churn
 #: model:ir.model.fields.selection,name:sale_subscription.selection__sale_order_log_report__event_type__2_churn
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_order_log_report_search
@@ -1487,8 +1505,8 @@ msgstr "การเสียลูกค้า"
 #. odoo-javascript
 #: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
 #, python-format
-msgid "Click here to add some products or services to your quotation."
-msgstr "คลิกที่นี่เพื่อเพิ่มสินค้าหรือบริการในใบเสนอราคาของคุณ"
+msgid "Click here to add some products or services"
+msgstr ""
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__user_closable
@@ -2462,8 +2480,15 @@ msgstr "มาเพิ่มการกำหนดราคาด้วยก
 #. odoo-javascript
 #: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
 #, python-format
-msgid "Let's configure the product price"
-msgstr "มากำหนดราคาสินค้าไปด้วยกัน"
+msgid "Let's add price for selected recurrence"
+msgstr ""
+
+#. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid "Let's choose the customer for your subscription"
+msgstr ""
 
 #. module: sale_subscription
 #. odoo-javascript
@@ -3373,6 +3398,8 @@ msgstr "รายได้ประจำ"
 #. module: sale_subscription
 #. odoo-python
 #: code:addons/sale_subscription/models/sale_order.py:0
+#: code:addons/sale_subscription/models/sale_subscription_plan.py:0
+#: model:ir.model.constraint,message:sale_subscription.constraint_sale_subscription_plan_check_for_valid_billing_period_value
 #, python-format
 msgid ""
 "Recurring period must be a positive number. Please ensure the input is a "
@@ -4693,11 +4720,9 @@ msgstr "ปริมาตร"
 #: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
 #, python-format
 msgid ""
-"Want recurring billing via subscription management? Get started by clicking "
-"here"
+"Want a recurring billing through subscription management? Get started by "
+"clicking here"
 msgstr ""
-"ต้องการการเรียกเก็บเงินแบบประจำผ่านการจัดการการสมัครสมาชิกหรือไม่? "
-"เริ่มต้นโดยคลิกที่นี่"
 
 #. module: sale_subscription
 #. odoo-python
@@ -5005,13 +5030,6 @@ msgid ""
 msgstr ""
 "คุณจะพบการสมัครสมาชิกที่จะต่ออายุได้ที่นี่ "
 "(วันที่สิ้นสุดใกล้จะถึงหรือผ่านไปแล้ว)"
-
-#. module: sale_subscription
-#. odoo-javascript
-#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
-#, python-format
-msgid "Your contract is recurrent"
-msgstr "สัญญาของคุณเกิดขึ้นซ้ำ"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.payment_method_form

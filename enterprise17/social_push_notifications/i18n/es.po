@@ -87,7 +87,7 @@ msgstr "Dominio desde el cual se envían notificaciones push a los visitantes."
 #: model:ir.model.fields,field_description:social_push_notifications.field_res_config_settings__firebase_enable_push_notifications
 #: model:ir.model.fields,field_description:social_push_notifications.field_website__firebase_enable_push_notifications
 msgid "Enable Web Push Notifications"
-msgstr "Activar las notificaciones push del sitio web"
+msgstr "Habilitar las notificaciones push del sitio web"
 
 #. module: social_push_notifications
 #. odoo-python
@@ -126,7 +126,7 @@ msgstr "ID de proyecto de Firebase"
 #: model:ir.model.fields,field_description:social_push_notifications.field_social_account__firebase_push_certificate_key
 #: model:ir.model.fields,field_description:social_push_notifications.field_website__firebase_push_certificate_key
 msgid "Firebase Push Certificate Key"
-msgstr "Notificación push de la clave de certificación de Firebase"
+msgstr "Clave del certificado push de Firebase"
 
 #. module: social_push_notifications
 #: model:ir.model.fields,field_description:social_push_notifications.field_res_config_settings__firebase_sender_id
@@ -195,7 +195,7 @@ msgstr "Nuevo mensaje"
 #: model:ir.model.fields,field_description:social_push_notifications.field_social_account__notification_request_delay
 #: model:ir.model.fields,field_description:social_push_notifications.field_website__notification_request_delay
 msgid "Notification Request Delay (seconds)"
-msgstr "Retraso en la solicitud de notificación (segundos)"
+msgstr "Retraso de solicitud de notificación (segundos)"
 
 #. module: social_push_notifications
 #. odoo-javascript
@@ -205,7 +205,7 @@ msgstr "Retraso en la solicitud de notificación (segundos)"
 #: model:ir.model.fields,field_description:social_push_notifications.field_website__notification_request_icon
 #, python-format
 msgid "Notification Request Icon"
-msgstr "Icono de solicitud de notificación"
+msgstr "Icono de la solicitud de notificación"
 
 #. module: social_push_notifications
 #: model:ir.model.fields,field_description:social_push_notifications.field_res_config_settings__notification_request_body
@@ -241,7 +241,7 @@ msgstr "Número de notificaciones push"
 #. module: social_push_notifications
 #: model_terms:ir.ui.view,arch_db:social_push_notifications.res_config_settings_view_form
 msgid "Project ID"
-msgstr "Identificador de proyecto"
+msgstr "ID del proyecto"
 
 #. module: social_push_notifications
 #: model_terms:ir.ui.view,arch_db:social_push_notifications.website_visitor_view_kanban
@@ -251,7 +251,7 @@ msgstr "Push"
 #. module: social_push_notifications
 #: model_terms:ir.ui.view,arch_db:social_push_notifications.res_config_settings_view_form
 msgid "Push Certificate Key ID"
-msgstr "ID de la notificación push de la clave de certificación"
+msgstr "ID de la notificación push de la clave del certificado"
 
 #. module: social_push_notifications
 #: model:ir.model.fields,field_description:social_push_notifications.field_social_post__push_notification_image
@@ -359,33 +359,33 @@ msgid ""
 "Send push notifications and configure this website's notifications "
 "permission request"
 msgstr ""
-"Enviar notificaciones push y configurar la solicitud de permiso de "
+"Envíe notificaciones push y configure la solicitud de permiso de "
 "notificaciones de este sitio web"
 
 #. module: social_push_notifications
 #: model_terms:ir.ui.view,arch_db:social_push_notifications.res_config_settings_view_form
 msgid "Sender ID"
-msgstr "ID del Remitente"
+msgstr "ID del remitente"
 
 #. module: social_push_notifications
 #: model:ir.model,name:social_push_notifications.model_social_account
 msgid "Social Account"
-msgstr "Cuenta social"
+msgstr "Cuenta de red social"
 
 #. module: social_push_notifications
 #: model:ir.model,name:social_push_notifications.model_social_live_post
 msgid "Social Live Post"
-msgstr "Publicación de redes sociales en vivo"
+msgstr "Publicación en redes sociales en vivo"
 
 #. module: social_push_notifications
 #: model:ir.model,name:social_push_notifications.model_social_media
 msgid "Social Media"
-msgstr "Medios de comunicación social"
+msgstr "Redes sociales"
 
 #. module: social_push_notifications
 #: model:ir.model,name:social_push_notifications.model_social_post
 msgid "Social Post"
-msgstr "Publicar en redes sociales"
+msgstr "Publicación en redes sociales"
 
 #. module: social_push_notifications
 #: model:ir.model,name:social_push_notifications.model_social_post_template
@@ -437,15 +437,15 @@ msgstr "Campaña UTM"
 #: model_terms:ir.ui.view,arch_db:social_push_notifications.res_config_settings_view_form
 msgid "Use your own Firebase Account for this website's push notifications"
 msgstr ""
-"Utiliza tu propia cuenta de Firebase para las notificaciones push de este "
-"sitio web"
+"Use su propia cuenta de Firebase para las notificaciones push de este sitio "
+"web"
 
 #. module: social_push_notifications
 #: model:ir.model.fields,field_description:social_push_notifications.field_res_config_settings__firebase_use_own_account
 #: model:ir.model.fields,field_description:social_push_notifications.field_social_account__firebase_use_own_account
 #: model:ir.model.fields,field_description:social_push_notifications.field_website__firebase_use_own_account
 msgid "Use your own Firebase account"
-msgstr "Utiliza tu propia cuenta de Firebase"
+msgstr "Utilice su propia cuenta de Firebase"
 
 #. module: social_push_notifications
 #: model:ir.model.fields,help:social_push_notifications.field_social_media__media_type
@@ -454,7 +454,8 @@ msgid ""
 "specific media ('facebook', 'twitter', ...)."
 msgstr ""
 "Se utiliza para hacer comparaciones cuando necesitamos restringir algunas "
-"características para una red social específica ('facebook', 'twitter', ...)."
+"características para una red social específica (\"Facebook\", \"Twitter\", "
+"entre otras)."
 
 #. module: social_push_notifications
 #: model:ir.model.fields,field_description:social_push_notifications.field_social_post__visitor_domain

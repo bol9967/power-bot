@@ -1,25 +1,25 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* mrp_mps
-#
+# 
 # Translators:
-# Hongu Cosmin <cosmin513@gmail.com>, 2022
-# Foldi Robert <foldirobert@nexterp.ro>, 2022
-# Martin Trigaux, 2022
-# Dorin Hongu <dhongu@gmail.com>, 2023
-#
+# Hongu Cosmin <cosmin513@gmail.com>, 2024
+# Foldi Robert <foldirobert@nexterp.ro>, 2024
+# Martin Trigaux, 2024
+# Dorin Hongu <dhongu@gmail.com>, 2024
+# 
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 16.0+e\n"
+"Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-16 16:01+0000\n"
-"PO-Revision-Date: 2022-09-22 05:47+0000\n"
-"Last-Translator: Dorin Hongu <dhongu@gmail.com>, 2023\n"
+"POT-Creation-Date: 2024-01-26 16:10+0000\n"
+"PO-Revision-Date: 2023-10-26 23:10+0000\n"
+"Last-Translator: Dorin Hongu <dhongu@gmail.com>, 2024\n"
 "Language-Team: Romanian (https://app.transifex.com/odoo/teams/41243/ro/)\n"
-"Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
+"Language: ro\n"
 "Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 
 #. module: mrp_mps
@@ -38,6 +38,7 @@ msgstr "ATP"
 
 #. module: mrp_mps
 #. odoo-javascript
+#: code:addons/mrp_mps/static/src/components/line.xml:0
 #: code:addons/mrp_mps/static/src/components/line.xml:0
 #, python-format
 msgid "Actual"
@@ -63,7 +64,7 @@ msgstr "Cerere Actuală %s%s(%s-%s)"
 #: code:addons/mrp_mps/static/src/search/group_menu.xml:0
 #, python-format
 msgid "Actual Demand Y-1"
-msgstr ""
+msgstr "Cerere Actuală A-1"
 
 #. module: mrp_mps
 #. odoo-javascript
@@ -71,7 +72,7 @@ msgstr ""
 #: code:addons/mrp_mps/static/src/search/group_menu.xml:0
 #, python-format
 msgid "Actual Demand Y-2"
-msgstr ""
+msgstr "Cerere Actuală A-2"
 
 #. module: mrp_mps
 #. odoo-javascript
@@ -191,8 +192,11 @@ msgstr "Unitatea de măsură implicită folosită în toate operațiunile stocul
 #. module: mrp_mps
 #: model:ir.model.fields,help:mrp_mps.field_res_company__manufacturing_period
 #: model:ir.model.fields,help:mrp_mps.field_res_config_settings__manufacturing_period
-msgid "Default value for the time ranges in Master Production Schedule report."
-msgstr "Valoare implicită pentru intervalele de timp din raportul Master Production Schedule."
+msgid ""
+"Default value for the time ranges in Master Production Schedule report."
+msgstr ""
+"Valoare implicită pentru intervalele de timp din raportul Master Production "
+"Schedule."
 
 #. module: mrp_mps
 #. odoo-javascript
@@ -217,12 +221,12 @@ msgstr "Afișare Cerere Actuală"
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__mrp_mps_show_actual_demand_year_minus_2
 msgid "Display Actual Demand Before Year"
-msgstr ""
+msgstr "Afișați Cererea Actuală înainte de An"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__mrp_mps_show_actual_demand_year_minus_1
 msgid "Display Actual Demand Last Year"
-msgstr ""
+msgstr "Afișați Cererea Actuală Anul Trecut"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__mrp_mps_show_actual_replenishment
@@ -232,17 +236,17 @@ msgstr "Afișați Reaprovizionarea Actuală"
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__mrp_mps_show_available_to_promise
 msgid "Display Available to Promise"
-msgstr ""
+msgstr "Afișați Disponibil pentru a promite"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__mrp_mps_show_demand_forecast
 msgid "Display Demand Forecast"
-msgstr ""
+msgstr "Afișați Estimarea Cererii"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__mrp_mps_show_indirect_demand
 msgid "Display Indirect Demand"
-msgstr ""
+msgstr "Afișați Cererea Indirectă"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_mrp_mps_forecast_details__display_name
@@ -254,7 +258,7 @@ msgstr "Nume afișat"
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__mrp_mps_show_safety_stock
 msgid "Display Safety Stock"
-msgstr ""
+msgstr "Afișare Stoc de Siguranță"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__mrp_mps_show_starting_inventory
@@ -269,7 +273,7 @@ msgstr "Afișaj pentru Aprovizionare"
 #. module: mrp_mps
 #: model:ir.model.fields.selection,name:mrp_mps.selection__mrp_production_schedule__replenish_state__excessive_replenishment
 msgid "Excessive Replenishment"
-msgstr ""
+msgstr "Reaprovizionare Excesivă"
 
 #. module: mrp_mps
 #. odoo-javascript
@@ -288,7 +292,7 @@ msgstr "ID extern"
 #. module: mrp_mps
 #: model:ir.model,name:mrp_mps.model_mrp_mps_forecast_details
 msgid "Forecast Demand Details"
-msgstr ""
+msgstr "Detalii prognoză cerere"
 
 #. module: mrp_mps
 #. odoo-javascript
@@ -300,6 +304,7 @@ msgstr "Raport prognoză"
 #. module: mrp_mps
 #. odoo-javascript
 #: code:addons/mrp_mps/static/src/components/line.xml:0
+#: code:addons/mrp_mps/static/src/components/line.xml:0
 #, python-format
 msgid "Forecasted"
 msgstr "Prognozat"
@@ -309,7 +314,7 @@ msgstr "Prognozat"
 #: code:addons/mrp_mps/static/src/components/line.xml:0
 #, python-format
 msgid "Forecasted Demand"
-msgstr ""
+msgstr "Cerere prognozată"
 
 #. module: mrp_mps
 #. odoo-javascript
@@ -341,7 +346,7 @@ msgstr "ID"
 #: code:addons/mrp_mps/static/src/search/group_menu.xml:0
 #, python-format
 msgid "Indirect Demand Forecast"
-msgstr ""
+msgstr "Prognoza cererii indirecte"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_mrp_mps_forecast_details__write_uid
@@ -360,12 +365,12 @@ msgstr "Ultima actualizare pe"
 #. module: mrp_mps
 #: model:ir.ui.menu,name:mrp_mps.mrp_mps_menu_planning
 msgid "MPS"
-msgstr ""
+msgstr "MPS"
 
 #. module: mrp_mps
 #: model_terms:ir.ui.view,arch_db:mrp_mps.mrp_mps_forecast_details_form_view
 msgid "Manufacturing Orders"
-msgstr "Comenzi de producție"
+msgstr "Comandă de producție"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__manufacturing_period
@@ -422,8 +427,12 @@ msgstr "Numărul de coloane din perioada de fabricație"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__manufacturing_period_to_display
-msgid "Number of columns for the        given period to display in Master Production Schedule"
-msgstr "Numărul de coloane pentru          perioada dată de afișat în Master Production Schedule"
+msgid ""
+"Number of columns for the        given period to display in Master "
+"Production Schedule"
+msgstr ""
+"Numărul de coloane pentru          perioada dată de afișat în Master "
+"Production Schedule"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_mrp_product_forecast__procurement_launched
@@ -464,7 +473,7 @@ msgstr "Variantă produs"
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_mrp_product_forecast__production_schedule_id
 msgid "Production Schedule"
-msgstr "Program de productie"
+msgstr "Program de producție"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_mrp_production_schedule__warehouse_id
@@ -500,16 +509,21 @@ msgstr "Cantitatea din RFQ"
 #. odoo-javascript
 #: code:addons/mrp_mps/static/src/components/line.xml:0
 #, python-format
-msgid "Quantity predicted to be available for sale at the end of the period (= to replenish - actual demand)."
-msgstr "Cantitatea estimată a fi disponibilă pentru vânzare la sfârșitul perioadei (= pentru completare - cerere efectivă)."
+msgid ""
+"Quantity predicted to be available for sale at the end of the period (= to "
+"replenish - actual demand)."
+msgstr ""
+"Cantitatea estimată a fi disponibilă pentru vânzare la sfârșitul perioadei "
+"(= pentru completare - cerere efectivă)."
 
 #. module: mrp_mps
 #: model_terms:ir.ui.view,arch_db:mrp_mps.mrp_mps_forecast_details_form_view
 msgid "Receipts"
-msgstr "Bonuri"
+msgstr "Recepții"
 
 #. module: mrp_mps
 #. odoo-javascript
+#: code:addons/mrp_mps/static/src/components/line.xml:0
 #: code:addons/mrp_mps/static/src/components/line.xml:0
 #: code:addons/mrp_mps/static/src/components/main.js:0
 #: code:addons/mrp_mps/static/src/components/main.xml:0
@@ -520,22 +534,22 @@ msgstr "Reaprovizionare"
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_mrp_production_schedule__replenish_state
 msgid "Replenish State"
-msgstr ""
+msgstr "Stare de reaprovizionare"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_mrp_product_forecast__replenish_qty_updated
 msgid "Replenish_qty has been manually updated"
-msgstr ""
+msgstr "Replenish_qty a fost actualizat manual"
 
 #. module: mrp_mps
 #: model_terms:ir.ui.view,arch_db:mrp_mps.mrp_mps_search_view
 msgid "Replenishment Too High"
-msgstr ""
+msgstr "Reaprovizionare prea mare"
 
 #. module: mrp_mps
 #: model_terms:ir.ui.view,arch_db:mrp_mps.mrp_mps_search_view
 msgid "Replenishment Too Low"
-msgstr ""
+msgstr "Reaprovizionare prea mică"
 
 #. module: mrp_mps
 #: model_terms:ir.ui.view,arch_db:mrp_mps.mrp_mps_forecast_details_form_view
@@ -577,7 +591,7 @@ msgstr "Dată planificată"
 #: model_terms:ir.ui.view,arch_db:mrp_mps.product_normal_form_view_mps
 #: model_terms:ir.ui.view,arch_db:mrp_mps.product_template_only_form_view_mps
 msgid "Schedules"
-msgstr ""
+msgstr "Planificări"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_mrp_production_schedule__sequence
@@ -606,12 +620,12 @@ msgstr "Reaprovizionare Sugerată"
 #. module: mrp_mps
 #: model:ir.model.fields,help:mrp_mps.field_mrp_production_schedule__replenish_state
 msgid "Technical field to support filtering by replenish state"
-msgstr ""
+msgstr "Câmp tehnic pentru a susține filtrarea după starea de reaprovizionare"
 
 #. module: mrp_mps
 #: model:ir.model.constraint,message:mrp_mps.constraint_mrp_production_schedule_warehouse_product_ref_uniq
 msgid "The combination of warehouse and product must be unique!"
-msgstr ""
+msgstr "Combinația de depozit și produs trebuie să fie unică!"
 
 #. module: mrp_mps
 #. odoo-javascript
@@ -624,8 +638,12 @@ msgstr "Cererea confirmată, pe baza comenzilor de vânzare confirmate."
 #. odoo-javascript
 #: code:addons/mrp_mps/static/src/components/line.xml:0
 #, python-format
-msgid "The forecasted demand to fulfill the needs in components of the Manufacturing Orders."
-msgstr "Cererea prognozată pentru a satisface nevoile componentelor comenzilor de fabricație."
+msgid ""
+"The forecasted demand to fulfill the needs in components of the "
+"Manufacturing Orders."
+msgstr ""
+"Cererea prognozată pentru a satisface nevoile componentelor comenzilor de "
+"fabricație."
 
 #. module: mrp_mps
 #. odoo-javascript
@@ -663,27 +681,43 @@ msgstr ""
 
 #. module: mrp_mps
 #: model:ir.model.fields,help:mrp_mps.field_mrp_production_schedule__max_to_replenish_qty
-msgid "The maximum replenishment you would like to launch for each period in the MPS. Note that if the demand is higher than that amount, the remaining quantity will be transferred to the next period automatically."
+msgid ""
+"The maximum replenishment you would like to launch for each period in the "
+"MPS. Note that if the demand is higher than that amount, the remaining "
+"quantity will be transferred to the next period automatically."
 msgstr ""
+"Reaprovizionarea maximă pe care doriți să o lansați pentru fiecare perioadă "
+"în MPS. Rețineți că, dacă cererea este mai mare decât acea cantitate, "
+"cantitatea rămasă va fi transferată automat în perioada următoare."
 
 #. module: mrp_mps
 #. odoo-javascript
 #: code:addons/mrp_mps/static/src/components/line.xml:0
 #, python-format
-msgid "The quantity being replenished, based on the Requests for Quotation and the Manufacturing Orders."
-msgstr "Cantitatea completată, pe baza cererilor de ofertă și a comenzilor de fabricație."
+msgid ""
+"The quantity being replenished, based on the Requests for Quotation and the "
+"Manufacturing Orders."
+msgstr ""
+"Cantitatea completată, pe baza cererilor de ofertă și a comenzilor de "
+"fabricație."
 
 #. module: mrp_mps
 #. odoo-javascript
 #: code:addons/mrp_mps/static/src/components/line.xml:0
 #, python-format
-msgid "The quantity to replenish through Purchase Orders or Manufacturing Orders."
-msgstr "Cantitatea de completat prin comenzi de cumpărare sau comenzi de fabricație."
+msgid ""
+"The quantity to replenish through Purchase Orders or Manufacturing Orders."
+msgstr ""
+"Cantitatea de completat prin comenzi de achiziție sau comenzi de fabricație."
 
 #. module: mrp_mps
 #: model:ir.model.fields,help:mrp_mps.field_mrp_production_schedule__forecast_target_qty
-msgid "This is the minimum free stock you want to keep for that product at all times."
+msgid ""
+"This is the minimum free stock you want to keep for that product at all "
+"times."
 msgstr ""
+"Acesta este stocul minim liber pe care doriți să-l păstrați pentru acel "
+"produs în orice moment."
 
 #. module: mrp_mps
 #: model_terms:ir.ui.view,arch_db:mrp_mps.res_config_settings_view_form
@@ -703,19 +737,22 @@ msgstr "De Reaprovizionat"
 #. module: mrp_mps
 #: model:ir.model.fields.selection,name:mrp_mps.selection__mrp_production_schedule__replenish_state__under_replenishment
 msgid "Under Replenishment"
-msgstr ""
+msgstr "Sub-reaprovizionare"
 
 #. module: mrp_mps
 #: model:ir.model.fields,help:mrp_mps.field_mrp_production_schedule__min_to_replenish_qty
-msgid "Unless the demand is 0, Odoo will always at least replenish this quantity."
+msgid ""
+"Unless the demand is 0, Odoo will always at least replenish this quantity."
 msgstr ""
+"Cu excepția cazului în care cererea este 0, Odoo va completa întotdeauna cel"
+" puțin această cantitate."
 
 #. module: mrp_mps
 #. odoo-python
 #: code:addons/mrp_mps/models/res_company.py:0
 #, python-format
-msgid "Week {week_num} ({start_date}-{end_date}/{month})"
-msgstr ""
+msgid "Week %(week_num)s (%(start_date)s-%(end_date)s/%(month)s)"
+msgstr "Săptămâna %(week_num)s (%(start_date)s-%(end_date)s/%(month)s)"
 
 #. module: mrp_mps
 #: model:ir.model.fields.selection,name:mrp_mps.selection__res_company__manufacturing_period__week

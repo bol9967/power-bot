@@ -18,8 +18,8 @@
 # Mihkel avalah, 2023
 # Anna, 2023
 # Piia Paurson <piia@avalah.ee>, 2024
-# Kärt Villako, 2024
 # Leaanika Randmets, 2024
+# Kärt Villako, 2024
 # Birgit Vijar, 2024
 # 
 msgid ""
@@ -41,7 +41,7 @@ msgstr ""
 #: code:addons/account_online_synchronization/models/account_online.py:0
 #, python-format
 msgid " If you've already opened this issue don't report it again."
-msgstr ""
+msgstr "Kui olete selle probleemi juba avanud, ärge seda uuesti raporteerige."
 
 #. module: account_online_synchronization
 #. odoo-javascript
@@ -126,6 +126,22 @@ msgid ""
 "                </table>\n"
 "            "
 msgstr ""
+
+#. module: account_online_synchronization
+#: code:addons/account_online_synchronization/models/account_online.py:0
+#, python-format
+msgid ""
+"If you've already opened a ticket for this issue, don't report it again: a "
+"support agent will contact you shortly."
+msgstr ""
+"Kui oled avanud pileti seoses probleemiga, ära tee rohkem midagi. "
+"Kasutajatoe spetsialist võtab sinuga peagi ühendust. "
+
+#. module: account_online_synchronization
+#: code:addons/account_online_synchronization/models/account_online.py:0
+#, python-format
+msgid "Check the documentation."
+msgstr "Kontrolli dokumentatsiooni."
 
 #. module: account_online_synchronization
 #: model:ir.model.fields,field_description:account_online_synchronization.field_account_online_link__access_token

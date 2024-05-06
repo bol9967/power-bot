@@ -3,8 +3,8 @@
 from lxml.etree import fromstring
 from datetime import datetime, date, timedelta
 from lxml import etree
-from zeep import Client, Plugin
-from zeep.wsdl.utils import etree_to_string
+from odoo.tools.zeep import Client, Plugin
+from odoo.tools.zeep.wsdl.utils import etree_to_string
 
 from odoo import _
 from odoo import release
@@ -191,7 +191,8 @@ class DHLProvider():
         shipment_details.InsuredAmount = float_repr(sum(pkg.total_cost for pkg in packages) * picking.carrier_id.shipping_insurance / 100, precision_digits=2)
         if picking.carrier_id.dhl_dutiable:
             shipment_details.IsDutiable = "Y"
-        shipment_details.CurrencyCode = packages[0].currency_id.name
+        currency = picking.group_id.sale_id.currency_id or picking.company_id.currency_id
+        shipment_details.CurrencyCode = currency.name
         return shipment_details
 
     def _set_label_image_format(self, label_image_format):
@@ -208,17 +209,17 @@ class DHLProvider():
         return return_service
 
     def _process_shipment(self, shipment_request):
-        ShipmentRequest  = self.client.get_element('ns0:ShipmentRequest')
+        ShipmentRequest  = self.client._Client__obj.get_element('ns0:ShipmentRequest')
         document = etree.Element('root')
         ShipmentRequest.render(document, shipment_request)
         request_to_send = etree_to_string(list(document)[0])
         headers = {'Content-Type': 'text/xml'}
-        response = self.client.transport.post(self.url, request_to_send, headers=headers)
+        response = self.client._Client__obj.transport.post(self.url, request_to_send, headers=headers)
         if self.debug_logger:
             self.debug_logger(request_to_send, 'dhl_shipment_request')
             self.debug_logger(response.content, 'dhl_shipment_response')
         response_element_xml = fromstring(response.content)
-        Response = self.client.get_element(response_element_xml.tag)
+        Response = self.client._Client__obj.get_element(response_element_xml.tag)
         response_zeep = Response.type.parse_xmlelement(response_element_xml)
         dict_response = {'tracking_number': 0.0,
                          'price': 0.0,
@@ -234,12 +235,12 @@ class DHLProvider():
         return response_zeep
 
     def _process_rating(self, rating_request):
-        DCTRequest  = self.client.get_element('ns0:DCTRequest')
+        DCTRequest  = self.client._Client__obj.get_element('ns0:DCTRequest')
         document = etree.Element('root')
         DCTRequest.render(document, rating_request)
         request_to_send = etree_to_string(list(document)[0])
         headers = {'Content-Type': 'text/xml'}
-        response = self.client.transport.post(self.url, request_to_send, headers=headers)
+        response = self.client._Client__obj.transport.post(self.url, request_to_send, headers=headers)
         if self.debug_logger:
             self.debug_logger(request_to_send, 'dhl_rating_request')
             self.debug_logger(response.content, 'dhl_rating_response')
@@ -329,4 +330,6 @@ class DHLProvider():
             export_declaration.ExportReason = 'RETURN'
 
         export_declaration.ExportLineItem = export_lines
+        if picking.sale_id.client_order_ref:
+            export_declaration.ReceiverReference = picking.sale_id.client_order_ref
         return export_declaration

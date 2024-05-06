@@ -65,7 +65,21 @@ class AccountMove(models.Model):
                 raise UserError(_("You cannot reset this closing entry to draft, as it would delete carryover values impacting the tax report of a "
                                   "locked period. To do this, you first need to modify you tax return lock date."))
 
+            if self._has_subsequent_posted_closing_moves():
+                raise UserError(_("You cannot reset this closing entry to draft, as another closing entry has been posted at a later date."))
+
             carryover_values.unlink()
+
+    def _has_subsequent_posted_closing_moves(self):
+        self.ensure_one()
+        closing_domains = [
+            ('company_id', '=', self.company_id.id),
+            ('tax_closing_end_date', '!=', False),
+            ('state', '=', 'posted'),
+            ('date', '>', self.date),
+            ('fiscal_position_id', '=', self.fiscal_position_id.id)
+        ]
+        return bool(self.env['account.move'].search_count(closing_domains, limit=1))
 
     def action_open_tax_report(self):
         action = self.env["ir.actions.actions"]._for_xml_id("account_reports.action_account_report_gt")
@@ -110,7 +124,7 @@ class AccountMove(models.Model):
             company_ids = report.get_report_company_ids(options)
             if sender_company == move.company_id:
                 # In branch/tax unit setups, first post all the unposted moves of the other companies when posting the main company.
-                tax_closing_action = self.env['account.tax.report.handler'].action_periodic_vat_entries(options)
+                tax_closing_action = report.dispatch_report_action(options, 'action_periodic_vat_entries', on_sections_source=report.use_sections)
                 depending_closings = self.env['account.move'].with_context(allowed_company_ids=company_ids).search([
                     *(tax_closing_action.get('domain') or [('id', '=', tax_closing_action['res_id'])]),
                     ('id', '!=', move.id),

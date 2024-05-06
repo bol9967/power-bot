@@ -3,8 +3,9 @@
 # 	* website_sale_renting
 # 
 # Translators:
-# Fernanda Alvarez, 2023
 # Wil Odoo, 2024
+# Patricia Gutiérrez Capetillo <pagc@odoo.com>, 2024
+# Fernanda Alvarez, 2024
 # 
 msgid ""
 msgstr ""
@@ -12,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-26 16:12+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Wil Odoo, 2024\n"
+"Last-Translator: Fernanda Alvarez, 2024\n"
 "Language-Team: Spanish (Latin America) (https://app.transifex.com/odoo/teams/41243/es_419/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,7 +33,7 @@ msgid ""
 msgstr ""
 "\n"
 "                El nuevo periodo no es válido para algunos productos que se encuentran en su carrito.\n"
-"                Los cambios que haga en el período de alquiler no se toman en cuenta.\n"
+"                Los cambios que haga en el periodo de alquiler no se toman en cuenta.\n"
 "            "
 
 #. module: website_sale_renting
@@ -360,8 +361,8 @@ msgid ""
 "Some of your rental products cannot be rented during the selected period and"
 " your cart must be updated. We're sorry for the inconvenience."
 msgstr ""
-"Lo sentimos, algunos de los productos que seleccionó no se pueden alquilar "
-"durante el periodo que seleccionó. Actualice su carrito."
+"Lo sentimos, algunos de los productos no se pueden alquilar durante el "
+"periodo que seleccionó. Actualice su carrito."
 
 #. module: website_sale_renting
 #: model:ir.model.fields,field_description:website_sale_renting.field_res_company__renting_forbidden_sun

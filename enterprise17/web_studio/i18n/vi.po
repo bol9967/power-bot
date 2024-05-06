@@ -4,7 +4,8 @@
 # 
 # Translators:
 # Wil Odoo, 2023
-# Thi Huong Nguyen, 2023
+# Martin Trigaux, 2024
+# Thi Huong Nguyen, 2024
 # 
 msgid ""
 msgstr ""
@@ -12,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-26 16:09+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Thi Huong Nguyen, 2023\n"
+"Last-Translator: Thi Huong Nguyen, 2024\n"
 "Language-Team: Vietnamese (https://app.transifex.com/odoo/teams/41243/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -866,7 +867,7 @@ msgstr "Đóng"
 #: code:addons/web_studio/static/src/studio_service.js:0
 #, python-format
 msgid "Cohort"
-msgstr "Cohort"
+msgstr "Tổ hợp"
 
 #. module: web_studio
 #. odoo-javascript
@@ -1096,7 +1097,7 @@ msgstr "Tiền tệ"
 #: code:addons/web_studio/static/src/client_action/report_editor/report_editor_wysiwyg/report_editor_wysiwyg.xml:0
 #, python-format
 msgid "Current model:"
-msgstr ""
+msgstr "Mô hình hiện tại:"
 
 #. module: web_studio
 #. odoo-python
@@ -1425,7 +1426,7 @@ msgstr "Nhân bản"
 #: code:addons/web_studio/static/src/client_action/report_editor/report_editor_wysiwyg/report_editor_wysiwyg.js:0
 #, python-format
 msgid "Dynamic Table"
-msgstr ""
+msgstr "Bảng động"
 
 #. module: web_studio
 #. odoo-python
@@ -1562,6 +1563,21 @@ msgstr "Mục"
 #, python-format
 msgid "Error"
 msgstr "Lỗi"
+
+#. module: web_studio
+#. odoo-javascript
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#, python-format
+msgid "Error message:"
+msgstr "Thông báo lỗi:"
+
+#. module: web_studio
+#. odoo-javascript
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#, python-format
+msgid "Error name:"
+msgstr "Tên lỗi:"
 
 #. module: web_studio
 #. odoo-javascript
@@ -1935,6 +1951,13 @@ msgstr "ID"
 
 #. module: web_studio
 #. odoo-javascript
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#, python-format
+msgid "IDs"
+msgstr "ID"
+
+#. module: web_studio
+#. odoo-javascript
 #: code:addons/web_studio/static/src/client_action/view_editor/editors/form/form_editor_sidebar/properties/button_properties/new_button_box_dialog.xml:0
 #, python-format
 msgid "Icon"
@@ -2017,14 +2040,14 @@ msgstr "Chèn một trường"
 #: code:addons/web_studio/static/src/client_action/report_editor/report_editor_wysiwyg/report_editor_wysiwyg.js:0
 #, python-format
 msgid "Insert a field..."
-msgstr ""
+msgstr "Chèn một trường..."
 
 #. module: web_studio
 #. odoo-javascript
 #: code:addons/web_studio/static/src/client_action/report_editor/report_editor_wysiwyg/report_editor_wysiwyg.js:0
 #, python-format
 msgid "Insert a table based on a relational field."
-msgstr ""
+msgstr "Chèn bảng dựa trên trường quan hệ."
 
 #. module: web_studio
 #. odoo-javascript
@@ -2277,6 +2300,7 @@ msgstr "Chế độ"
 #. module: web_studio
 #. odoo-javascript
 #: code:addons/web_studio/static/src/client_action/menu_creator/menu_creator.xml:0
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
 #: model:ir.model.fields,field_description:web_studio.field_studio_approval_rule__model_id
 #: model_terms:ir.ui.view,arch_db:web_studio.studio_approval_entry_search_view
 #: model_terms:ir.ui.view,arch_db:web_studio.studio_approval_rule_search_view
@@ -2401,8 +2425,17 @@ msgid "My entries"
 msgstr "Mục của tôi"
 
 #. module: web_studio
+#. odoo-javascript
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#, python-format
+msgid "N/A"
+msgstr "N/A"
+
+#. module: web_studio
+#. odoo-javascript
 #. odoo-python
 #: code:addons/web_studio/models/ir_model.py:0
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
 #: model:ir.model.fields,field_description:web_studio.field_studio_approval_entry__name
 #: model:ir.model.fields,field_description:web_studio.field_studio_approval_rule__name
 #, python-format
@@ -2428,7 +2461,7 @@ msgstr "Mới %s"
 #: code:addons/web_studio/static/src/client_action/studio_home_menu/studio_home_menu.js:0
 #, python-format
 msgid "New App"
-msgstr ""
+msgstr "Ứng dụng mới"
 
 #. module: web_studio
 #. odoo-python
@@ -2573,6 +2606,13 @@ msgstr "Odoo Studio"
 
 #. module: web_studio
 #. odoo-javascript
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#, python-format
+msgid "On view (ir.ui.view):"
+msgstr "Trên chế độ xem (ir.ui.view):"
+
+#. module: web_studio
+#. odoo-javascript
 #: code:addons/web_studio/static/src/client_action/view_editor/view_structures/view_structures.js:0
 #, python-format
 msgid "One2Many"
@@ -2640,6 +2680,13 @@ msgstr "Định dạng trang giấy"
 #, python-format
 msgid "Parent Menu"
 msgstr "Menu cha"
+
+#. module: web_studio
+#. odoo-javascript
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#, python-format
+msgid "Parent View (inherit_id)"
+msgstr "Chế độ xem tổng (inherit_id)"
 
 #. module: web_studio
 #. odoo-python
@@ -3249,6 +3296,13 @@ msgstr "Hiển thị các thành phần ẩn"
 
 #. module: web_studio
 #. odoo-javascript
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#, python-format
+msgid "Show Traceback"
+msgstr "Hiển thị truy xuất"
+
+#. module: web_studio
+#. odoo-javascript
 #: code:addons/web_studio/static/src/client_action/view_editor/interactive_editor/properties/field_properties/field_properties.js:0
 #, python-format
 msgid "Show by default"
@@ -3586,6 +3640,20 @@ msgstr "Trường liên quan của một nút phải có liên kết many2one v�
 
 #. module: web_studio
 #. odoo-javascript
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#, python-format
+msgid ""
+"The report could not be loaded as some error occured. Usually it means that "
+"some view inherits from another but targets a node that doesn't exist. It "
+"might be due to the mutations of the base views during the upgrade process."
+msgstr ""
+"Không thể tải báo cáo vì đã xảy ra một số lỗi. Thông thường, điều đó có "
+"nghĩa là một số chế độ xem kế thừa từ một chế độ xem khác nhưng nhắm mục "
+"tiêu đến một nút không tồn tại. Nguyên nhân có thể là do sự biến đổi của các"
+" chế độ xem cơ sở trong quá trình nâng cấp."
+
+#. module: web_studio
+#. odoo-javascript
 #: code:addons/web_studio/static/src/client_action/report_editor/report_editor_model.js:0
 #, python-format
 msgid "The report is in error. Only editing the XML sources is permitted"
@@ -3850,6 +3918,13 @@ msgstr "Giá trị của danh sách"
 #, python-format
 msgid "View"
 msgstr "Chế độ xem"
+
+#. module: web_studio
+#. odoo-javascript
+#: code:addons/web_studio/static/src/client_action/report_editor/report_editor.xml:0
+#, python-format
+msgid "View in Error:"
+msgstr "Chế độ xem bị lỗi:"
 
 #. module: web_studio
 #. odoo-javascript

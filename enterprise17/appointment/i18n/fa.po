@@ -4,19 +4,18 @@
 # 
 # Translators:
 # Hamid Darabi, 2023
-# F Hariri <fhari1234@gmail.com>, 2023
 # Yousef Shadmanesh <y.shadmanesh@gmail.com>, 2023
-# Sepehr Khoshnood <sepehr.kho@gmail.com>, 2023
 # سید محمد آذربرا <mohammadazarbara98@gmail.com>, 2023
 # Faraz Sadri Alamdari <ifarazir@gmail.com>, 2023
 # Mohsen Mohammadi <iammohsen.123@gmail.com>, 2023
 # Mohammad Tahmasebi <hit.tah75@gmail.com>, 2023
 # Sahar Daraye <sahar.daraye.1369@gmail.com>, 2023
-# fardin mardani, 2023
-# Hanna Kheradroosta, 2023
-# Martin Trigaux, 2023
-# Abbas Ebadian, 2024
+# fardin mardani <fmardani0@gmail.com>, 2023
 # Hamed Mohammadi <hamed@dehongi.com>, 2024
+# F Hariri <fhari1234@gmail.com>, 2024
+# Hanna Kheradroosta, 2024
+# Mostafa Barmshory <mostafa.barmshory@gmail.com>, 2024
+# Martin Trigaux, 2024
 # 
 msgid ""
 msgstr ""
@@ -24,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-26 16:10+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Hamed Mohammadi <hamed@dehongi.com>, 2024\n"
+"Last-Translator: Martin Trigaux, 2024\n"
 "Language-Team: Persian (https://app.transifex.com/odoo/teams/41243/fa/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -37,7 +36,7 @@ msgstr ""
 #: code:addons/appointment/models/appointment_type.py:0
 #, python-format
 msgid " (copy)"
-msgstr "(کپی)"
+msgstr " (کپی)"
 
 #. module: appointment
 #. odoo-python
@@ -645,7 +644,7 @@ msgstr "توکن دسترسی"
 #: code:addons/appointment/static/src/views/kanban/kanban_record.xml:0
 #, python-format
 msgid "Action"
-msgstr "عمل"
+msgstr "اقدام"
 
 #. module: appointment
 #: model:ir.model.fields,field_description:appointment.field_appointment_type__message_needaction
@@ -806,7 +805,7 @@ msgstr ""
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_form
 msgid "Answers"
-msgstr "پاسخ ها"
+msgstr "پاسخ‌ها"
 
 #. module: appointment
 #. odoo-javascript
@@ -1051,7 +1050,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:appointment.portal_my_home_appointment
 #: model_terms:ir.ui.view,arch_db:appointment.portal_my_home_menu_appointment
 msgid "Appointments"
-msgstr "قرار ملاقات ها"
+msgstr "قرار ملاقات‌ها"
 
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.portal_my_appointments
@@ -1171,7 +1170,7 @@ msgstr ""
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_tree_booking
 msgid "Booked by"
-msgstr ""
+msgstr "رزرو شده توسط"
 
 #. module: appointment
 #: model:ir.model.fields,field_description:appointment.field_appointment_booking_line__calendar_event_id
@@ -1348,7 +1347,7 @@ msgstr "ایمیل تایید"
 #. module: appointment
 #: model:ir.model.fields,field_description:appointment.field_appointment_type__message_confirmation
 msgid "Confirmation Message"
-msgstr ""
+msgstr "پیغام تایید"
 
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_validated
@@ -1382,7 +1381,7 @@ msgstr "مخاطب"
 #: code:addons/appointment/models/calendar_event.py:0
 #, python-format
 msgid "Contact Details:"
-msgstr ""
+msgstr "جزییات مخاطب:"
 
 #. module: appointment
 #: model:ir.model.fields,help:appointment.field_appointment_type__message_partner_ids
@@ -1570,6 +1569,7 @@ msgstr ""
 #: code:addons/appointment/static/src/views/appointment_calendar/appointment_calendar_controller.xml:0
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_invite_view_form_insert_link
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_validated
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
 #, python-format
 msgid "Discard"
 msgstr "رها کردن"
@@ -2165,6 +2165,11 @@ msgid "Monday"
 msgstr "دوشنبه"
 
 #. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "More Options"
+msgstr ""
+
+#. module: appointment
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_question__question_type__text
 msgid "Multi-line text"
 msgstr ""
@@ -2266,12 +2271,12 @@ msgstr "تعداد خطاها"
 #. module: appointment
 #: model:ir.model.fields,help:appointment.field_appointment_type__message_needaction_counter
 msgid "Number of messages requiring action"
-msgstr "تعداد پیام هایی که نیاز به اقدام دارند"
+msgstr "تعداد پیام‌هایی که نیاز به اقدام دارند"
 
 #. module: appointment
 #: model:ir.model.fields,help:appointment.field_appointment_type__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr "تعداد پیامهای با خطای تحویل"
+msgstr "تعداد پیام‌های با خطای تحویل"
 
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_info
@@ -2286,7 +2291,7 @@ msgstr ""
 #. module: appointment
 #: model:ir.model,name:appointment.model_onboarding_onboarding
 msgid "Onboarding"
-msgstr ""
+msgstr "معارفه سازمانی"
 
 #. module: appointment
 #: model:onboarding.onboarding.step,step_image_alt:appointment.appointment_onboarding_configure_calendar_provider_step
@@ -2306,7 +2311,7 @@ msgstr ""
 #. module: appointment
 #: model:ir.model,name:appointment.model_onboarding_onboarding_step
 msgid "Onboarding Step"
-msgstr ""
+msgstr "مراحل معارفه سازمانی"
 
 #. module: appointment
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_slot__slot_type__unique
@@ -2481,7 +2486,7 @@ msgstr "نوع سوال"
 #: model:ir.model.fields,field_description:appointment.field_appointment_type__question_ids
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_form
 msgid "Questions"
-msgstr "پرسش ها"
+msgstr "پرسش‌ها"
 
 #. module: appointment
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_question__question_type__radio
@@ -2516,6 +2521,11 @@ msgstr ""
 #: model:ir.ui.menu,name:appointment.menu_appointment_reminders
 msgid "Reminders"
 msgstr "یادآورها"
+
+#. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "Remove"
+msgstr "حذف"
 
 #. module: appointment
 #: model:ir.ui.menu,name:appointment.menu_schedule_report
@@ -2553,12 +2563,14 @@ msgstr ""
 #. module: appointment
 #: model:ir.actions.act_window,name:appointment.appointment_resource_action
 #: model:ir.model.fields,field_description:appointment.field_appointment_invite__resource_ids
+#: model:ir.model.fields,field_description:appointment.field_calendar_event__resource_ids
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_type__schedule_based_on__resources
 #: model:ir.ui.menu,name:appointment.menu_appointment_resource
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_form
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree_invitation
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_validated
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
 #: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_gantt_booking_resource
 msgid "Resources"
 msgstr "منابع"
@@ -2619,6 +2631,11 @@ msgstr "خطای تحویل پیامک"
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_slot__weekday__6
 msgid "Saturday"
 msgstr "شنبه"
+
+#. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "Save"
+msgstr "ذخیره"
 
 #. module: appointment
 #: model:ir.ui.menu,name:appointment.menu_appointment_schedule_resources
@@ -2769,6 +2786,13 @@ msgstr "اشتراک‌گذاری"
 #. module: appointment
 #. odoo-javascript
 #: code:addons/appointment/static/src/views/appointment_calendar/appointment_calendar_controller.xml:0
+#, python-format
+msgid "Share Appointment Link"
+msgstr ""
+
+#. module: appointment
+#. odoo-javascript
+#: code:addons/appointment/static/src/views/appointment_calendar/appointment_calendar_controller.xml:0
 #: code:addons/appointment/static/src/views/appointment_calendar/appointment_calendar_controller.xml:0
 #: code:addons/appointment/static/src/views/appointment_calendar/appointment_calendar_controller.xml:0
 #, python-format
@@ -2788,7 +2812,7 @@ msgstr "اشتراک لینک"
 #: model:ir.actions.act_window,name:appointment.appointment_invite_action
 #: model:ir.ui.menu,name:appointment.menu_appointment_invite
 msgid "Share Links"
-msgstr "اشتراک گذاری لینکها"
+msgstr "اشتراک گذاری لینک‌ها"
 
 #. module: appointment
 #: model_terms:ir.actions.act_window,help:appointment.appointment_type_action
@@ -2942,7 +2966,7 @@ msgstr "گام کامل شد!"
 #. module: appointment
 #: model:ir.model.fields,help:appointment.field_appointment_booking_line__event_stop
 msgid "Stop date of an event, without time for full days events"
-msgstr "تاریخ پایان برای یک رویداد، بدون زمان برای ریدادهای روز کامل"
+msgstr "تاریخ پایان برای یک رویداد، بدون زمان برای رویدادهای روز کامل"
 
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_tree_booking
@@ -3003,6 +3027,13 @@ msgstr ""
 #. module: appointment
 #: model:ir.model.constraint,message:appointment.constraint_appointment_slot_check_start_and_end_hour
 msgid "The end time must be later than the start time."
+msgstr ""
+
+#. module: appointment
+#. odoo-python
+#: code:addons/appointment/models/calendar_event.py:0
+#, python-format
+msgid "The event %s cannot book resources without an appointment type."
 msgstr ""
 
 #. module: appointment
@@ -3208,7 +3239,7 @@ msgstr "نوع"
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_validated
 msgid "Uncertain"
-msgstr "نا مشخص"
+msgstr "نامشخص"
 
 #. module: appointment
 #. odoo-javascript
@@ -3275,12 +3306,12 @@ msgstr ""
 #. module: appointment
 #: model:ir.model.fields,field_description:appointment.field_appointment_type__website_message_ids
 msgid "Website Messages"
-msgstr "پیام های وب سایت"
+msgstr "پیام‌های وب‌سایت"
 
 #. module: appointment
 #: model:ir.model.fields,help:appointment.field_appointment_type__website_message_ids
 msgid "Website communication history"
-msgstr "تاریخچه ارتباط با وبسایت"
+msgstr "تاریخچه ارتباط با وب‌سایت"
 
 #. module: appointment
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_slot__weekday__3
@@ -3312,7 +3343,7 @@ msgstr ""
 #. module: appointment
 #: model:ir.model.fields,field_description:appointment.field_appointment_resource__resource_calendar_id
 msgid "Working Hours"
-msgstr "ساعت های کاری"
+msgstr "ساعت‌های کاری"
 
 #. module: appointment
 #. odoo-javascript

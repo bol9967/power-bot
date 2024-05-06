@@ -1,3 +1,5 @@
+import re
+
 from odoo import models
 
 
@@ -51,12 +53,14 @@ class AccountEdiXmlUBLPE(models.AbstractModel):
     def _get_invoice_payment_terms_vals_list(self, invoice):
         # OVERRIDES account.edi.xml.ubl_21
         spot = invoice._l10n_pe_edi_get_spot()
+        if spot:
+            spot_amount = spot['amount'] if invoice.currency_id == invoice.company_id.currency_id else spot['spot_amount']
         invoice_date_due_vals_list = []
         first_time = True
         for rec_line in invoice.line_ids.filtered(lambda l: l.account_type == 'asset_receivable'):
             amount = rec_line.amount_currency
             if spot and first_time:
-                amount -= spot['spot_amount']
+                amount -= spot_amount
             first_time = False
             invoice_date_due_vals_list.append({
                 'currency_name': rec_line.currency_id.name,
@@ -67,7 +71,7 @@ class AccountEdiXmlUBLPE(models.AbstractModel):
         if not spot:
             total_after_spot = abs(invoice.amount_total)
         else:
-            total_after_spot = abs(invoice.amount_total) - spot['spot_amount']
+            total_after_spot = abs(invoice.amount_total) - spot_amount
         payment_means_id = invoice._l10n_pe_edi_get_payment_means()
         vals = []
         if spot:
@@ -204,7 +208,7 @@ class AccountEdiXmlUBLPE(models.AbstractModel):
         vals = super()._get_invoice_line_price_vals(line)
         # Line discounts are not handled well by the EDI service. That's why we skip them
         # and already subtract the discount from the line in the `PriceAmount` tag.
-        vals['price_amount'] = line.price_subtotal / line.quantity if line.quantity else 0.0
+        vals['price_amount'] = round(line.price_subtotal / line.quantity, 10) if line.quantity else 0.0
         return vals
 
     def _get_invoice_line_vals(self, line, taxes_vals, idx=None):
@@ -328,4 +332,12 @@ class AccountEdiXmlUBLPE(models.AbstractModel):
                     },
                 })
 
+        return vals
+
+    def _get_note_vals_list(self, invoice):
+        # In PE localization, as many special characters are not supported in Note node,
+        # they are replaced by an empty space.
+        vals = super()._get_note_vals_list(invoice)
+        for note_vals in vals:
+            note_vals['note'] = re.sub(r'[^\w ]+', ' ', note_vals['note']).strip()[:200]
         return vals

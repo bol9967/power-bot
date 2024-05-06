@@ -684,6 +684,38 @@ class TestInvoiceExtract(AccountTestInvoicingCommon, TestExtractMixin, MailCommo
         self.assertEqual(invoice.extract_state, 'waiting_extraction')
         self.assertEqual(invoice.extract_document_uuid, 'some_token')
 
+    def test_automatic_sending_multiple_vendor_bill_message_post(self):
+        # test that when multiple pdf attachments are posted and the option is enabled each one is split
+        # into a separate move
+        self.env.company.extract_in_invoice_digitalization_mode = 'auto_send'
+        invoice = self.env['account.move'].create({'move_type': 'in_invoice', 'extract_state': 'no_extract_requested'})
+        with file_open('base/tests/minimal.pdf', 'rb') as file:
+            pdf_bytes = file.read()
+        test_attachments = self.env['ir.attachment'].create([{
+            'name': 'Attachment 1',
+            'datas': base64.b64encode(pdf_bytes),
+            'mimetype': 'application/pdf',
+        }, {
+            'name': 'Attachment 2',
+            'datas': base64.b64encode(pdf_bytes),
+            'mimetype': 'application/pdf',
+        }])
+
+        with self._mock_iap_extract(
+            extract_response=self.parse_success_response(),
+        ):
+            invoice.with_context(from_alias=True, default_move_type='in_invoice', default_journal_id=invoice.journal_id.id).message_post(attachment_ids=test_attachments.ids)
+
+        new_invoice_id = invoice.id + 1
+        invoices = invoice
+        invoices |= self.env['account.move'].search([('id', '=', new_invoice_id)])
+
+        self.assertEqual(len(invoices), 2, "Two separate bills should have been created")
+        for inv, att in zip(invoices, test_attachments):
+            self.assertEqual(inv.extract_state, 'waiting_extraction')
+            self.assertEqual(inv.extract_document_uuid, 'some_token')
+            self.assertEqual(inv.message_main_attachment_id, att)
+
     def test_automatic_sending_customer_invoice_upload(self):
         # test that a customer invoice is automatically sent to the OCR server when uploaded and the option is enabled
         self.env.company.extract_out_invoice_digitalization_mode = 'auto_send'
@@ -706,6 +738,14 @@ class TestInvoiceExtract(AccountTestInvoicingCommon, TestExtractMixin, MailCommo
             invoice = self.env['account.move'].browse(self.env['mail.thread'].message_process('account.move', mail))
         self.assertEqual(invoice.extract_state, 'waiting_extraction')
         self.assertEqual(invoice.extract_document_uuid, 'some_token')
+
+    def test_no_automatic_sending_customer_invoice_email_alias(self):
+        # test that a customer invoice isn't automatically sent to the OCR server when sent via email alias and the option is disabled
+        self.env.company.extract_out_invoice_digitalization_mode = 'manual_send'
+        mail = self._get_email_for_journal_alias()
+        with self._mock_iap_extract(self.parse_success_response()):
+            invoice = self.env['account.move'].browse(self.env['mail.thread'].message_process('account.move', mail))
+        self.assertEqual(invoice.extract_state, 'no_extract_requested')
 
     def test_automatic_sending_customer_invoice_email_alias_pdf_filter(self):
         # test that alias_auto_extract_pdfs_only option successfully prevent non pdf attachments to be sent to OCR

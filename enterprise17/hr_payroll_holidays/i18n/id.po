@@ -4,7 +4,7 @@
 # 
 # Translators:
 # Wil Odoo, 2023
-# Abe Manyo, 2023
+# Abe Manyo, 2024
 # 
 msgid ""
 msgstr ""
@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 22:20+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Abe Manyo, 2023\n"
+"Last-Translator: Abe Manyo, 2024\n"
 "Language-Team: Indonesian (https://app.transifex.com/odoo/teams/41243/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -204,6 +204,13 @@ msgstr "Cuti"
 #. odoo-python
 #: code:addons/hr_payroll_holidays/models/hr_payslip.py:0
 #, python-format
+msgid "Time Off Not Related To An Allocation"
+msgstr " Cuti Tidak Terkait Alokasi"
+
+#. module: hr_payroll_holidays
+#. odoo-python
+#: code:addons/hr_payroll_holidays/models/hr_payslip.py:0
+#, python-format
 msgid "Time Off To Defer"
 msgstr "Cuti Untuk Ditunda"
 
@@ -252,6 +259,15 @@ msgstr "Cuti yang Divalidasi untuk Ditunda"
 #, python-format
 msgid "You have some"
 msgstr "Anda memiliki beberapa"
+
+#. module: hr_payroll_holidays
+#. odoo-javascript
+#: code:addons/hr_payroll_holidays/static/src/views/hooks.js:0
+#, python-format
+msgid "You have some <button>time off</button> to defer to the next month."
+msgstr ""
+"Anda memiliki beberapa hari <button>cuti</button> untuk didefer ke ulan "
+"berikutnya."
 
 #. module: hr_payroll_holidays
 #. odoo-javascript

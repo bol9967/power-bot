@@ -50,7 +50,10 @@ class PartnerLedgerCustomHandler(models.AbstractModel):
             }
             for column_group_key in options['column_groups']
         }
-        for partner, results in self._query_partners(options):
+
+        partners_results = self._query_partners(options)
+
+        for partner, results in partners_results:
             partner_values = defaultdict(dict)
             for column_group_key in options['column_groups']:
                 partner_sum = results.get(column_group_key, {})
@@ -138,7 +141,7 @@ class PartnerLedgerCustomHandler(models.AbstractModel):
                 partner_ids_to_expand.append(None)
 
         if partner_prefix_domains:
-            partner_ids_to_expand += self.env['res.partner'].search(expression.OR(partner_prefix_domains)).ids
+            partner_ids_to_expand += self.env['res.partner'].with_context(active_test=False).search(expression.OR(partner_prefix_domains)).ids
 
         return {
             'initial_balances': self._get_initial_balance_values(partner_ids_to_expand, options) if partner_ids_to_expand else {},
@@ -221,7 +224,7 @@ class PartnerLedgerCustomHandler(models.AbstractModel):
         # - the amls affecting the initial balance.
         if groupby_partners:
             # Note a search is done instead of a browse to preserve the table ordering.
-            partners = self.env['res.partner'].with_context(active_test=False).search([('id', 'in', list(groupby_partners.keys()))])
+            partners = self.env['res.partner'].with_context(active_test=False).search_fetch([('id', 'in', list(groupby_partners.keys()))], ["id", "name", "trust", "company_registry", "vat"])
         else:
             partners = []
 
@@ -477,7 +480,8 @@ class PartnerLedgerCustomHandler(models.AbstractModel):
                     journal.code                                                                     AS journal_code,
                     {journal_name}                                                                   AS journal_name,
                     %s                                                                               AS column_group_key,
-                    'directly_linked_aml'                                                            AS key
+                    'directly_linked_aml'                                                            AS key,
+                    0                                                                                AS partial_id
                 FROM {tables}
                 JOIN account_move ON account_move.id = account_move_line.move_id
                 LEFT JOIN {ct_query} ON currency_table.company_id = account_move_line.company_id
@@ -520,7 +524,8 @@ class PartnerLedgerCustomHandler(models.AbstractModel):
                     journal.code                                                                        AS journal_code,
                     {journal_name}                                                                      AS journal_name,
                     %s                                                                                  AS column_group_key,
-                    'indirectly_linked_aml'                                                             AS key
+                    'indirectly_linked_aml'                                                             AS key,
+                    partial.id                                                                          AS partial_id
                 FROM {tables}
                     LEFT JOIN {ct_query} ON currency_table.company_id = account_move_line.company_id,
                     account_partial_reconcile partial,
@@ -653,7 +658,7 @@ class PartnerLedgerCustomHandler(models.AbstractModel):
                 columns.append(report._build_column_dict(col_value, column, options=options, currency=currency))
 
         return {
-            'id': report._get_generic_line_id('account.move.line', aml_query_result['id'], parent_line_id=partner_line_id),
+            'id': report._get_generic_line_id('account.move.line', aml_query_result['id'], parent_line_id=partner_line_id, markup=aml_query_result['partial_id']),
             'parent_id': partner_line_id,
             'name': self._format_aml_name(aml_query_result['name'], aml_query_result['ref'], aml_query_result['move_name']),
             'columns': columns,

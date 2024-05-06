@@ -22,12 +22,13 @@ TOKEN_TYPE = "Bearer"
 class UPSRequest:
 
     def __init__(self, carrier):
+        super_carrier = carrier.sudo()
         self.logger = carrier.log_xml
         self.base_url = PROD_BASE_URL if carrier.prod_environment else TEST_BASE_URL
-        self.access_token = carrier.ups_access_token
-        self.client_id = carrier.ups_client_id
-        self.client_secret = carrier.ups_client_secret
-        self.shipper_number = carrier.ups_shipper_number
+        self.access_token = super_carrier.ups_access_token
+        self.client_id = super_carrier.ups_client_id
+        self.client_secret = super_carrier.ups_client_secret
+        self.shipper_number = super_carrier.ups_shipper_number
         self.carrier = carrier
         self.session = requests.Session()
 
@@ -51,7 +52,7 @@ class UPSRequest:
         res = _request_call(headers)
         if res.status_code == 401 and auth is None:
             self.access_token = self._get_new_access_token()
-            self.carrier.ups_access_token = self.access_token
+            self.carrier.sudo().ups_access_token = self.access_token
             res = _request_call(None)
 
         return res
@@ -65,11 +66,11 @@ class UPSRequest:
         return ','.join(err_msgs)
 
     def _process_alerts(self, response):
-        messages = []
         alerts = response.get('Alert', [])
-        for alert in alerts:
-            messages.append(alert['Description'])
-        return '\n'.join(messages)
+        if isinstance(alerts, list):
+            messages = [alert['Description'] for alert in alerts]
+            return '\n'.join(messages)
+        return alerts['Description']
 
     def _get_new_access_token(self):
         if not self.client_id or not self.client_secret:
@@ -366,6 +367,8 @@ class UPSRequest:
         if shipment_info.get('require_invoice'):
             shipment_service_options['InternationalForms'] = self._set_invoice(shipment_info, [c for pkg in packages for c in pkg.commodities],
                                                                                ship_to, is_return)
+            shipment_service_options['InternationalForms']['PurchaseOrderNumber'] = shipment_info.get('purchase_order_number')
+            shipment_service_options['InternationalForms']['TermsOfShipment'] = shipment_info.get('terms_of_shipment')
         if saturday_delivery:
             shipment_service_options['SaturdayDeliveryIndicator'] = saturday_delivery
 
@@ -409,7 +412,7 @@ class UPSRequest:
             }
         res = self._send_request(url, 'POST', json=request)
         if res.status_code == 401:
-            return {'unauthorized': 1}
+            raise ValidationError(_("Invalid Authentication Information: Please check your credentials and configuration within UPS's system."))
         try:
             res_body = res.json()
         except JSONDecodeError as err:
@@ -443,7 +446,7 @@ class UPSRequest:
         url = f'/api/shipments/{API_VERSION}/void/cancel/{shipping_id}'
         res = self._send_request(url, 'DELETE')
         if res.status_code == 401:
-            return {'unauthorized': 1}
+            raise ValidationError(_("Invalid Authentication Information: Please check your credentials and configuration within UPS's system."))
         try:
             res_body = res.json()
         except JSONDecodeError as err:

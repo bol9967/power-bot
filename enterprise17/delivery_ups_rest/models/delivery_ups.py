@@ -14,10 +14,10 @@ class ProviderUPS(models.Model):
         ('ups_rest', "UPS")
     ], ondelete={'ups_rest': lambda recs: recs.write({'delivery_type': 'fixed', 'fixed_price': 0})})
 
-    ups_shipper_number = fields.Char(string='UPS Account Number')
-    ups_client_id = fields.Char(string='UPS Client ID')
-    ups_client_secret = fields.Char(string='UPS Client Secret')
-    ups_access_token = fields.Char(string='UPS Access Token')
+    ups_shipper_number = fields.Char(string='UPS Account Number', groups="base.group_system")
+    ups_client_id = fields.Char(string='UPS Client ID', groups="base.group_system")
+    ups_client_secret = fields.Char(string='UPS Client Secret', groups="base.group_system")
+    ups_access_token = fields.Char(string='UPS Access Token', groups="base.group_system")
     ups_default_packaging_id = fields.Many2one('stock.package.type', string='UPS Package Type')
     ups_default_service_type = fields.Selection([
         ('03', 'UPS Ground'),
@@ -120,14 +120,20 @@ class ProviderUPS(models.Model):
     def _prepare_shipping_data(self, picking):
         packages = self._get_packages_from_picking(picking, self.ups_default_packaging_id)
 
+        terms_of_shipment = picking.company_id.incoterm_id
+        if picking.sale_id and picking.sale_id.incoterm:
+            terms_of_shipment = picking.sale_id.incoterm
+
         shipment_info = {
             'require_invoice': picking._should_generate_commercial_invoice(),
             'invoice_date': fields.Date.today().strftime('%Y%m%d'),
-            'description': picking.origin,
+            'description': picking.origin or picking.name,
             'total_qty': sum(sml.quantity for sml in picking.move_line_ids),
             'ilt_monetary_value': '%d' % sum(sml.sale_price for sml in picking.move_line_ids),
             'itl_currency_code': self.env.company.currency_id.name,
             'phone': picking.partner_id.mobile or picking.partner_id.phone or picking.sale_id.partner_id.mobile or picking.sale_id.partner_id.phone,
+            'terms_of_shipment': terms_of_shipment.code if terms_of_shipment else None,
+            'purchase_order_number': picking.sale_id.name if picking.sale_id else None,
         }
         if picking.sale_id and picking.sale_id.carrier_id != picking.carrier_id:
             ups_service_type = picking.carrier_id.ups_default_service_type or self.ups_default_service_type
@@ -158,8 +164,8 @@ class ProviderUPS(models.Model):
                 raise UserError(check_value)
 
             result = ups._send_shipping(
-                shipment_info, packages, self, picking.company_id.partner_id, picking.picking_type_id.warehouse_id.partner_id,
-                picking.partner_id, ups_service_type, picking.carrier_id.ups_duty_payment,
+                shipment_info=shipment_info, packages=packages, carrier=self, shipper=picking.company_id.partner_id, ship_from=picking.picking_type_id.warehouse_id.partner_id,
+                ship_to=picking.partner_id, service_type=ups_service_type, duty_payment=picking.carrier_id.ups_duty_payment,
                 saturday_delivery=picking.carrier_id.ups_saturday_delivery, cod_info=cod_info,
                 label_file_type=self.ups_label_file_type, ups_carrier_account=ups_carrier_account)
 
@@ -214,8 +220,8 @@ class ProviderUPS(models.Model):
             raise UserError(check_value)
 
         result = ups._send_shipping(
-            shipment_info, packages, self, picking.company_id.partner_id, picking.picking_type_id.warehouse_id.partner_id,
-            picking.partner_id, ups_service_type, 'RECIPIENT', saturday_delivery=picking.carrier_id.ups_saturday_delivery,
+            shipment_info=shipment_info, packages=packages, carrier=self, shipper=picking.partner_id, ship_from=picking.partner_id,
+            ship_to=picking.picking_type_id.warehouse_id.partner_id, service_type=ups_service_type, duty_payment='RECIPIENT', saturday_delivery=picking.carrier_id.ups_saturday_delivery,
             cod_info=cod_info, label_file_type=self.ups_label_file_type, ups_carrier_account=ups_carrier_account, is_return=True)
 
         order = picking.sale_id

@@ -155,7 +155,7 @@ msgstr "Estado del alias evaluado en el último mensaje recibido."
 #. module: quality
 #: model:ir.model.fields,field_description:quality.field_quality_alert_team__alias_model_id
 msgid "Aliased Model"
-msgstr "Modelo con seudónimo"
+msgstr "Modelo con alias"
 
 #. module: quality
 #: model_terms:ir.ui.view,arch_db:quality.quality_point_view_form
@@ -263,7 +263,7 @@ msgstr "Fecha de creación"
 #. module: quality
 #: model:ir.model.fields,field_description:quality.field_quality_alert_team__alias_bounced_content
 msgid "Custom Bounced Message"
-msgstr "Mensaje rebotado personalizado"
+msgstr "Mensaje devuelto personalizado"
 
 #. module: quality
 #: model:ir.model.fields,field_description:quality.field_quality_alert__date_assign
@@ -320,7 +320,7 @@ msgstr "Hecho"
 #. module: quality
 #: model:ir.model.fields,field_description:quality.field_quality_alert_team__alias_email
 msgid "Email Alias"
-msgstr "Pseudónimo de correo"
+msgstr "Alias de correo electrónico"
 
 #. module: quality
 #: model:ir.model.fields,field_description:quality.field_quality_alert__email_cc
@@ -335,7 +335,7 @@ msgstr "Fallido"
 #. module: quality
 #: model:ir.model.fields,field_description:quality.field_quality_alert_stage__folded
 msgid "Folded"
-msgstr "Replegado"
+msgstr "Plegado"
 
 #. module: quality
 #: model:ir.model.fields,field_description:quality.field_quality_alert__message_follower_ids
@@ -400,8 +400,8 @@ msgid ""
 "ID of the parent record holding the alias (example: project holding the task"
 " creation alias)"
 msgstr ""
-"ID del registro padre que tiene el seudónimo. (ejemplo: el proyecto que "
-"contiene el seudónimo para la creación de tareas)"
+"ID del registro padre que tiene el alias. (ejemplo: el proyecto que contiene"
+" el alias para la creación de tareas)"
 
 #. module: quality
 #: model:ir.model.fields,field_description:quality.field_quality_alert__activity_exception_icon
@@ -489,7 +489,7 @@ msgstr "Última actualización el"
 #. module: quality
 #: model_terms:ir.ui.view,arch_db:quality.quality_alert_view_search
 msgid "Late Activities"
-msgstr "Actividades tardías"
+msgstr "Actividades retrasadas"
 
 #. module: quality
 #: model:ir.model.fields,field_description:quality.field_quality_alert_team__alias_incoming_local
@@ -681,7 +681,7 @@ msgstr "Modelo principal"
 #. module: quality
 #: model:ir.model.fields,field_description:quality.field_quality_alert_team__alias_parent_thread_id
 msgid "Parent Record Thread ID"
-msgstr "ID del hilo del registro principal"
+msgstr "ID del hilo del registro padre"
 
 #. module: quality
 #: model:ir.model.fields,help:quality.field_quality_alert_team__alias_parent_model_id
@@ -931,7 +931,7 @@ msgstr "Etiquetas"
 #: code:addons/quality/static/src/tablet_image_field/tablet_image_field.xml:0
 #, python-format
 msgid "Take a Picture"
-msgstr "Hacer foto"
+msgstr "Tomar una foto"
 
 #. module: quality
 #: model:ir.model.fields,field_description:quality.field_quality_alert__team_id
@@ -965,7 +965,7 @@ msgid ""
 " email that does not reply to an existing record will cause the creation of "
 "a new record of this model (e.g. a Project Task)"
 msgstr ""
-"El modelo (Tipo de documento de Odoo) al que corresponde este seudónimo. "
+"El modelo (Tipo de documento de Odoo) al que corresponde este alias. "
 "Cualquier correo entrante que no sea respuesta a un registro existente, "
 "causará la creación de un nuevo registro de este modelo (por ejemplo, una "
 "tarea de proyecto)."

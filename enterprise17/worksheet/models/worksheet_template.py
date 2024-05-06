@@ -68,9 +68,14 @@ class WorksheetTemplate(models.Model):
                 for model, name in self._get_models_to_check_dict()[res_model]:
                     records = self.env[model].search([('worksheet_template_id', 'in', templates.ids)])
                     for record in records:
-                        company_names = ', '.join(update_company_ids.mapped('name'))
                         if record.company_id not in record.worksheet_template_id.company_ids:
-                            raise UserError(_("Unfortunately, you cannot unlink this worksheet template from %s because the template is still connected to tasks within the company.", company_names))
+                            if update_company_ids:
+                                company_names = ', '.join(update_company_ids.mapped('name'))
+                                raise UserError(_("Unfortunately, you cannot unlink this worksheet template from %s because the template is still connected to tasks within the company.", company_names))
+                            else:
+                                company_names = ', '.join(record.worksheet_template_id.company_ids.mapped('name'))
+                                raise UserError(_("You can't restrict this worksheet template to '%s' because it's still connected to tasks in '%s' (and potentially other companies). Please either unlink those tasks from this worksheet template, "
+                                                  "move them to a project for the right company, or keep this worksheet template open to all companies.", company_names, record.company_id.name))
         return res
 
     def unlink(self):
@@ -389,7 +394,7 @@ class WorksheetTemplate(models.Model):
                     field_node.attrib['t-field'] = field_name
                 # generate a description
                 description = etree.Element('div', {'t-att-class': "('col-5' if report_type == 'pdf' else 'col-lg-5 col-12') + ' font-weight-bold'"})
-                description.text = field_info and field_info.get('string')
+                description.text = field_node.attrib.pop('string', field_info and field_info.get('string'))
                 # insert all that in a container
                 container = etree.Element('div', {'class': 'row mb-3', 'style': 'page-break-inside: avoid'})
                 container.append(description)

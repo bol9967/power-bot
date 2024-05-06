@@ -936,7 +936,7 @@ Are you sure you want to remove the selection values of those records?""", len(r
             xml_node.insert(0, xml_node_field)
 
             xml_node.attrib['type'] = 'action'
-            xml_node.attrib['name'] = str(button_action.id)
+            xml_node.attrib['name'] = str(button_action.xml_id)
         else:
             xml_node.text = node.get('text')
         xpath_node.insert(0, xml_node)
@@ -956,9 +956,13 @@ Are you sure you want to remove the selection values of those records?""", len(r
         method = is_method and btn_name
         action = not is_method and int(btn_name)
         rule_domain = request.env['studio.approval.rule']._get_rule_domain(model, method, action)
-        has_rules = request.env['studio.approval.rule'].search_count(rule_domain)
-        if not has_rules:
+        existing_rules = request.env['studio.approval.rule'].search(rule_domain)
+        enabling_rules = operation.get("enable")
+        if enabling_rules and not existing_rules:
             request.env['studio.approval.rule'].create_rule(model, method, action, btn_string)
+        if not enabling_rules and existing_rules:
+            existing_rules.write({"active": False})
+
         matching_buttons = base_arch.findall(".//button[@type='%s'][@name='%s']" % (btn_type, btn_name))
         for idx, btn in enumerate(matching_buttons):
             # note that these xpath are not the sexiest, but they will be cleaned
@@ -968,7 +972,7 @@ Are you sure you want to remove the selection values of those records?""", len(r
             'position': 'attributes'
             })
             attribute_node = etree.Element('attribute', name='studio_approval')
-            attribute_node.text = str(operation.get('enable'))
+            attribute_node.text = str(enabling_rules)
             # NOTE: this will leave some extended views with `studio_approval=False`
             # which is handled client side to do nothing
             xpath_node.insert(0, attribute_node)
@@ -1125,7 +1129,9 @@ Are you sure you want to remove the selection values of those records?""", len(r
         params = {'string': label}
         if button_type is not None and button_type == 'action':
             actionId = operation["actionId"]
-            params['name'] = str(actionId)
+            abstract_action = request.env["ir.actions.actions"].browse(actionId)
+            action = request.env[abstract_action.type].browse(actionId)
+            params['name'] = action.xml_id or str(actionId)
             params['type'] = button_type
         elif button_type is not None and button_type == 'object':
             methodId = operation["methodId"]

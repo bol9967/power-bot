@@ -263,8 +263,8 @@ class HrContractSalary(http.Controller):
         contract = request.env['hr.contract'].sudo().browse(contract_id)
         return request.render("hr_contract_salary.salary_package_thank_you", {
             'responsible_name': contract.hr_responsible_id.partner_id.name or contract.job_id.user_id.partner_id.name,
-            'responsible_email': contract.hr_responsible_id.partner_id.email or contract.job_id.user_id.partner_id.email,
-            'responsible_phone': contract.hr_responsible_id.partner_id.phone or contract.job_id.user_id.partner_id.phone,
+            'responsible_email': contract.hr_responsible_id.work_email or contract.job_id.user_id.partner_id.email,
+            'responsible_phone': contract.hr_responsible_id.work_phone or contract.job_id.user_id.partner_id.phone,
         })
 
     def _get_personal_infos_countries(self, contract, personal_info):
@@ -430,8 +430,8 @@ class HrContractSalary(http.Controller):
         contract_vals = {
             'active': False,
             'name': contract.name if contract.state == 'draft' else "Package Simulation",
-            'job_id': contract.job_id.id or employee.job_id.id,
-            'department_id': contract.department_id.id or employee.department_id.id,
+            'job_id': offer.employee_job_id.id or contract.job_id.id or employee.job_id.id,
+            'department_id': offer.department_id.id or contract.department_id.id or employee.department_id.id,
             'company_id': contract.company_id.id,
             'currency_id': contract.company_id.currency_id.id,
             'employee_id': employee.id,
@@ -497,9 +497,14 @@ class HrContractSalary(http.Controller):
         if not employee_infos['job_title']:
             employee_infos['job_title'] = job.name
 
+        if employee.department_id.parent_path:
+            employee_department = employee.department_id.id if str(employee_infos['department_id']) in employee.department_id.parent_path.split('/') else employee_infos['department_id']
+        else:
+            employee_department = employee_infos['department_id']
+
         employee_vals = {'job_title': employee_infos['job_title'],
                          'job_id': employee_infos['employee_job_id'],
-                         'department_id': employee_infos['department_id']}
+                         'department_id': employee_department}
         work_contact_vals = {}
         bank_account_vals = {}
         attachment_create_vals = []
@@ -537,7 +542,8 @@ class HrContractSalary(http.Controller):
                 del work_contact_vals['name']
             partner = employee.work_contact_id
             # We shouldn't modify the partner email like this
-            work_contact_vals.pop('email', None)
+            if employee.work_contact_id.email:
+                work_contact_vals.pop('email', None)
             partner.write(work_contact_vals)
         else:
             work_contact_vals['active'] = False
@@ -664,7 +670,7 @@ class HrContractSalary(http.Controller):
         result = {}
         contract = self._check_access_rights(contract_id)
 
-        new_contract = self.create_new_contract(contract, offer_id, benefits)[0]
+        new_contract = self.create_new_contract(contract, offer_id, benefits, no_write=True)[0]
         final_yearly_costs = float(benefits['contract']['final_yearly_costs'] or 0.0)
         new_gross = new_contract._get_gross_from_employer_costs(final_yearly_costs)
         new_contract.write({

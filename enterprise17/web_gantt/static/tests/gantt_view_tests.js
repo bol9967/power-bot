@@ -5,6 +5,7 @@ import {
     click,
     editInput,
     getFixture,
+    getNodesTextContent,
     makeDeferred,
     nextTick,
     patchDate,
@@ -86,7 +87,7 @@ QUnit.module("Views > GanttView", {
                         name: { string: "Name", type: "char" },
                         start: { string: "Start Date", type: "datetime" },
                         stop: { string: "Stop Date", type: "datetime" },
-                        time: { string: "Time", type: "float" },
+                        allocated_hours: { string: "Allocated Hours", type: "float" },
                         stage: {
                             string: "Stage",
                             type: "selection",
@@ -2230,6 +2231,27 @@ QUnit.test("resize a pill (2)", async (assert) => {
 
     assert.containsNone(document.body, ".modal");
     assert.verifySteps([JSON.stringify([[2], { stop: "2018-12-23 06:29:59" }])]);
+});
+
+QUnit.test("resize a pill: quickly enter the neighbour pill when resize start", async (assert) => {
+    await makeView({
+        type: "gantt",
+        resModel: "tasks",
+        serverData,
+        arch: '<gantt date_start="start" date_stop="stop" />',
+        domain: [["id", "in", [4, 7]]],
+    });
+    assert.containsN(target, SELECTORS.pill, 2);
+
+    await triggerEvent(getPillWrapper("Task 4"), null, "pointerenter");
+    assert.containsN(getPillWrapper("Task 4"), SELECTORS.resizeHandle, 2);
+
+    // Here we simulate a resize start on Task 4 and quickly enter Task 7
+    // The resize handle should not be added to Task 7
+    await triggerEvent(getPillWrapper("Task 4"), SELECTORS.resizeEndHandle, "pointerdown");
+    await triggerEvent(getPillWrapper("Task 7"), null, "pointerenter");
+    assert.containsN(getPillWrapper("Task 4"), SELECTORS.resizeHandle, 2);
+    assert.containsNone(getPillWrapper("Task 7"), SELECTORS.resizeHandle);
 });
 
 QUnit.test("create a task maintains the domain", async (assert) => {
@@ -6515,6 +6537,60 @@ QUnit.test(
     }
 );
 
+QUnit.test(
+    "The date and task should appear even if the pill is planned on 2 days but displayed in one day by the gantt view",
+    async (assert) => {
+        patchDate(2024, 0, 1, 8, 0, 0);
+        patchWithCleanup(luxon.Settings, {
+            defaultZone: new luxon.IANAZone("UTC"),
+        });
+        serverData.models.tasks.records.push(
+            {
+                id: 9,
+                name: "Task 9",
+                allocated_hours: 4,
+                start: "2024-01-01 16:00:00",
+                stop: "2024-01-02 01:00:00",
+            },
+            {
+                id: 10,
+                name: "Task 10",
+                allocated_hours: 4,
+                start: "2024-01-02 16:00:00",
+                stop: "2024-01-03 02:00:00",
+            },
+            {
+                // will be displayed in 2 days
+                id: 11,
+                name: "Task 11",
+                allocated_hours: 4,
+                start: "2024-01-03 16:00:00",
+                stop: "2024-01-04 03:00:00",
+            }
+        );
+        await makeView({
+            type: "gantt",
+            resModel: "tasks",
+            serverData,
+            arch: `<gantt date_start="start"
+                          date_stop="stop"
+                          pill_label="True"
+                          default_scale="week"
+                          scales="week"
+                          precision="{'week': 'day:full'}"
+                    >
+                    <field name="allocated_hours"/>
+                </gantt>`,
+        });
+        assert.containsN(target, ".o_gantt_pill", 3, "should have 3 pills in the gantt view");
+        assert.deepEqual(getNodesTextContent(target.querySelectorAll(".o_gantt_pill_title")), [
+            "4:00 PM - 1:00 AM (4h) - Task 9",
+            "4:00 PM - 2:00 AM (4h) - Task 10",
+            "Task 11",
+        ]);
+    }
+);
+
 // MANUAL TESTING
 
 QUnit.skip("[FOR MANUAL TESTING] large amount of records (ungrouped)", async (assert) => {
@@ -6609,4 +6685,121 @@ QUnit.skip("[FOR MANUAL TESTING] large amount of records (two level grouped)", a
         groupBy: ["user_id", "stage"],
     });
     console.timeEnd("makeView");
+});
+
+QUnit.test("group tasks by task_properties", async (assert) => {
+    assert.expect(1);
+    serverData.models.tasks.fields.task_properties = {
+        string: "Properties",
+        type: "properties",
+    };
+    serverData.models.tasks.records = [
+        {
+            id: 1,
+            name: "Blop",
+            start: "2018-12-14 08:00:00",
+            stop: "2018-12-24 08:00:00",
+            user_id: 100,
+            project_id: 1,
+            task_properties: {
+                name: "bd6404492c244cff",
+                type: "char",
+                value: "test value 1",
+            },
+        },
+        {
+            id: 2,
+            name: "Yop",
+            start: "2018-12-02 08:00:00",
+            stop: "2018-12-12 08:00:00",
+            user_id: 101,
+            project_id: 1,
+            task_properties: {
+                name: "bd6404492c244cff",
+                type: "char",
+                value: "test value 1",
+            },
+        },
+    ];
+    await makeView({
+        type: "gantt",
+        resModel: "tasks",
+        serverData,
+        arch: '<gantt date_start="start" date_stop="stop" />',
+        groupBy: ["task_properties.bd6404492c244cff"],
+    });
+    const { rows } = getGridContent();
+    assert.deepEqual(
+        rows,
+        [
+            {
+                pills: [
+                    {
+                        title: "Yop",
+                        colSpan: "02 -> 12 (1/2)",
+                        level: 0,
+                    },
+                    {
+                        title: "Blop",
+                        colSpan: "14 -> 24 (1/2)",
+                        level: 0,
+                    },
+                ],
+            },
+        ],
+        "Rows should contain two records as we do not group by fields.properties"
+    );
+});
+
+QUnit.test("group tasks by datetime", async (assert) => {
+    assert.expect(1);
+    serverData.models.tasks.fields.my_date = {
+        string: "My date",
+        type: "datetime",
+    };
+    serverData.models.tasks.records = [
+        {
+            id: 1,
+            name: "Blop",
+            start: "2018-12-14 08:00:00",
+            stop: "2018-12-24 08:00:00",
+            user_id: 100,
+            project_id: 1,
+        },
+        {
+            id: 2,
+            name: "Yop",
+            start: "2018-12-02 08:00:00",
+            stop: "2018-12-12 08:00:00",
+            user_id: 101,
+            project_id: 1,
+        },
+    ];
+    await makeView({
+        type: "gantt",
+        resModel: "tasks",
+        serverData,
+        arch: '<gantt date_start="start" date_stop="stop" />',
+        groupBy: ["my_date:month"],
+    });
+    const { rows } = getGridContent();
+    assert.deepEqual(
+        rows,
+        [
+            {
+                pills: [
+                    {
+                        title: "Yop",
+                        colSpan: "02 -> 12 (1/2)",
+                        level: 0,
+                    },
+                    {
+                        title: "Blop",
+                        colSpan: "14 -> 24 (1/2)",
+                        level: 0,
+                    },
+                ],
+            },
+        ],
+    );
 });

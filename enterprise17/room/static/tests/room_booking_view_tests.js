@@ -50,7 +50,7 @@ const assertRoomStatus = (assert, target, remainingTime, nbBookings) => {
             "background-image: linear-gradient(#FF0000DD, #FF0000DD), url('/room/room_test/background')",
         );
         // Check that the "Booked" icon is shown
-        assert.containsOnce(target, "i.fa-times-circle.fa-3x");
+        assert.containsOnce(target, "i.fa-calendar-times-o.fa-3x");
     } else {
         assert.containsNone(target, ".o_room_remaining_time");
         // Check that the room uses the available background as there is no ongoing booking
@@ -71,7 +71,7 @@ const assertRoomStatus = (assert, target, remainingTime, nbBookings) => {
  * @returns {Promise}
  */
 const clickQuickBook = async (target) => {
-    click(target, ".btn-light i.fa-plus-circle");
+    click(target, ".btn-dark i.fa-rocket");
     await nextTick();
 };
 
@@ -539,5 +539,19 @@ QUnit.module("Room Booking View", (hooks) => {
         assertDisplayedTime(assert, target, "2023-06-19 12:00:00");
         // It shouldn't be in the sidebar anymore
         assertRoomStatus(assert, target, false, 0);
+    });
+
+    // If multiple tabs are opened, some undesired behaviors may happen. Therefore, we
+    // check that a warning message is shown when it is the case.
+    QUnit.test("Room Booking View - Warn if multiple tabs", async (assert) => {
+        const mockRPC = (route, args) => {
+            if (route === "/room/room_test/get_existing_bookings") {
+                return [];
+            }
+        };
+        let { target } = await mountRoomBookingView(mockRPC);
+        assert.containsNone(target, ".alert-warning:contains('multiple tabs opened')");
+        ({ target } = await mountRoomBookingView(mockRPC));
+        assert.containsOnce(target, ".alert-warning:contains('multiple tabs opened')");
     });
 });

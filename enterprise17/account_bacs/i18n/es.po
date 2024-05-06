@@ -133,7 +133,7 @@ msgid ""
 "<span>will notify you (insert number of) working days in advance of your "
 "account being debited or as otherwise agreed. If you request</span>"
 msgstr ""
-"<span>le notificará con (inserte el número de) días laborales antes de que "
+"<span>le notificará con (inserte el número de) días laborables antes de que "
 "se le cobre a su cuenta o según lo acordado. Si lo solicita</span>"
 
 #. module: account_bacs
@@ -340,7 +340,7 @@ msgstr ""
 #. module: account_bacs
 #: model:ir.model,name:account_bacs.model_account_batch_payment
 msgid "Batch Payment"
-msgstr "Pagos por lotes"
+msgstr "Pago por lotes"
 
 #. module: account_bacs
 #: model_terms:ir.ui.view,arch_db:account_bacs.ddi_form
@@ -745,7 +745,7 @@ msgid ""
 msgstr ""
 "Una vez que se realiza una factura\n"
 "                    para un cliente que tiene una instrucción de domiciliación bancaria activa en Odoo en la fecha de factura,\n"
-"                    su validación activará su pago automáticamente y solo tendrá\n"
+"                    su validación activará automáticamente su pago y solo tendrá\n"
 "                    que generar un archivo de domiciliación bancaria BACS que incluya esta operación\n"
 "                    y enviarla a su banco para recibir su pago."
 
@@ -785,15 +785,15 @@ msgstr "Solo los mandatos en estado de borrador se pueden cancelar."
 msgid ""
 "Only mandates in draft state can be deleted from database when cancelled."
 msgstr ""
-"Solo pueden eliminarse de la base de datos las ordenes en estado de borrador"
+"Solo pueden eliminarse de la base de datos las órdenes en estado de borrador"
 " que se cancelan."
 
 #. module: account_bacs
 #: model_terms:ir.ui.view,arch_db:account_bacs.sdd_account_payment_form
 msgid "Oops! No valid BACS Direct Debit Instruction for this customer."
 msgstr ""
-"Lo sentimos, no hay instrucciones de domiciliación bancaria BACS válidas "
-"para este cliente."
+"!Uy! Lo sentimos, no hay instrucciones de domiciliación bancaria BACS "
+"válidas para este cliente."
 
 #. module: account_bacs
 #: model_terms:ir.ui.view,arch_db:account_bacs.sdd_account_payment_form

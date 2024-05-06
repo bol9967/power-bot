@@ -70,19 +70,19 @@ SPANISH_PROVINCES_REPORT_CODES = {
 MOD_347_CUSTOM_ENGINES_DOMAINS = {
     '_report_custom_engine_threshold_insurance_bought': [
         ('move_id.l10n_es_reports_mod347_invoice_type', '=', 'insurance'),
-        ('move_id.move_type', 'in', ('in_invoice', 'in_refund')),
+        ('move_id.move_type', 'in', ('in_invoice', 'in_refund', 'in_receipt')),
         ('account_type', '=', 'liability_payable'),
     ],
 
     '_report_custom_engine_threshold_regular_bought': [
         ('move_id.l10n_es_reports_mod347_invoice_type', '=', 'regular'),
-        ('move_id.move_type', 'in', ('in_invoice', 'in_refund')),
+        ('move_id.move_type', 'in', ('in_invoice', 'in_refund', 'in_receipt')),
         ('account_type', '=', 'liability_payable'),
     ],
 
     '_report_custom_engine_threshold_regular_sold': [
         ('move_id.l10n_es_reports_mod347_invoice_type', '=', 'regular'),
-        ('move_id.move_type', 'in', ('out_invoice', 'out_refund')),
+        ('move_id.move_type', 'in', ('out_invoice', 'out_refund', 'out_receipt')),
         ('account_type', '=', 'asset_receivable'),
     ],
 
@@ -876,16 +876,17 @@ class SpanishMod347TaxReportCustomHandler(models.AbstractModel):
             JOIN {ct_query} ON currency_table.company_id = account_move_line.company_id
             WHERE {where_clause}
             GROUP BY account_move_line.partner_id
-            HAVING SUM(currency_table.rate * account_move_line.balance * (CASE WHEN account_move_line__move_id.move_type IN ('in_invoice', 'in_refund') THEN -1 ELSE 1 END)) <= %s
+            HAVING SUM(currency_table.rate * account_move_line.balance * (CASE WHEN account_move_line__move_id.move_type IN ('in_invoice', 'in_refund', 'in_receipt') THEN -1 ELSE 1 END)) <= %s
         """
 
         self._cr.execute(partners_to_exclude_query, partners_to_exclude_params)
         partner_ids_to_exclude = [partner_id for (partner_id,) in self._cr.fetchall()]
 
-        # Then, compute the domain, ensuring we esclude the partners who don't reach the threshold
-        new_domain = domain + [('partner_id', 'not in', partner_ids_to_exclude)]
-        domain_formulas_dict = {str(new_domain): expressions}
-        domain_result = report._compute_formula_batch_with_engine_domain(options, date_scope, domain_formulas_dict, current_groupby, next_groupby,
+        # Then, add a forced domain because it could be too long later when ast.literal_eval will be applied on it
+        forced_domain = [*options.get('forced_domain', []), ('partner_id', 'not in', partner_ids_to_exclude)]
+        domain_options = {**options, 'forced_domain': forced_domain}
+        domain_formulas_dict = {str(domain): expressions}
+        domain_result = report._compute_formula_batch_with_engine_domain(domain_options, date_scope, domain_formulas_dict, current_groupby, next_groupby,
                                                                          offset=0, limit=None)
         return next(result for result in domain_result.values())
 

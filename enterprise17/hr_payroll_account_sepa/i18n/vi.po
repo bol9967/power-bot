@@ -4,6 +4,7 @@
 # 
 # Translators:
 # Wil Odoo, 2023
+# Thi Huong Nguyen, 2024
 # 
 msgid ""
 msgstr ""
@@ -11,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 22:21+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Wil Odoo, 2023\n"
+"Last-Translator: Thi Huong Nguyen, 2024\n"
 "Language-Team: Vietnamese (https://app.transifex.com/odoo/teams/41243/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -71,14 +72,14 @@ msgstr "Nhân viên"
 #: code:addons/hr_payroll_account_sepa/models/hr_payslip.py:0
 #, python-format
 msgid "Employees With Invalid Bank Accounts"
-msgstr ""
+msgstr "Nhân viên có tài khoản ngân hàng không hợp lệ"
 
 #. module: hr_payroll_account_sepa
 #. odoo-python
 #: code:addons/hr_payroll_account_sepa/models/hr_payslip.py:0
 #, python-format
 msgid "Employees with untrusted Bank Account numbers"
-msgstr ""
+msgstr "Nhân viên có số tài khoản ngân hàng không đáng tin cậy"
 
 #. module: hr_payroll_account_sepa
 #: model:ir.model.fields,help:hr_payroll_account_sepa.field_hr_payslip__sepa_export
@@ -120,12 +121,12 @@ msgstr "Ngày tạo"
 #. module: hr_payroll_account_sepa
 #: model:ir.model,name:hr_payroll_account_sepa.model_hr_payslip_run_sepa_wizard
 msgid "HR Payslip Run SEPA Wizard"
-msgstr ""
+msgstr "HR Payslip Run SEPA Wizard"
 
 #. module: hr_payroll_account_sepa
 #: model:ir.model,name:hr_payroll_account_sepa.model_hr_payslip_sepa_wizard
 msgid "HR Payslip SEPA Wizard"
-msgstr ""
+msgstr "HR Payslip SEPA Wizard"
 
 #. module: hr_payroll_account_sepa
 #: model:ir.model.fields,field_description:hr_payroll_account_sepa.field_hr_payslip_run_sepa_wizard__id
@@ -196,14 +197,14 @@ msgstr "Một số nhân viên (%s) không có tài khoản ngân hàng."
 #: code:addons/hr_payroll_account_sepa/models/hr_payslip.py:0
 #, python-format
 msgid "Some employees (%s) don't have a valid name on the work contact."
-msgstr ""
+msgstr "Một số nhân viên (%s) không có tên hợp lệ trong liên hệ công việc."
 
 #. module: hr_payroll_account_sepa
 #. odoo-python
 #: code:addons/hr_payroll_account_sepa/models/hr_payslip.py:0
 #, python-format
 msgid "Some employees (%s) don't have a work contact."
-msgstr ""
+msgstr "Một số nhân viên (%s) không có liên hệ công việc."
 
 #. module: hr_payroll_account_sepa
 #. odoo-python
@@ -213,6 +214,8 @@ msgid ""
 "The following employees have invalid bank accounts and could not be trusted:\n"
 "%s"
 msgstr ""
+"Các nhân viên sau có tài khoản ngân hàng không hợp lệ và không đáng tin cậy:\n"
+"%s"
 
 #. module: hr_payroll_account_sepa
 #. odoo-python
@@ -228,17 +231,17 @@ msgstr ""
 #. module: hr_payroll_account_sepa
 #: model:ir.actions.server,name:hr_payroll_account_sepa.trust_employee_bank
 msgid "Trust Bank Account"
-msgstr ""
+msgstr "Tài khoản ngân hàng tin cậy"
 
 #. module: hr_payroll_account_sepa
 #: model:ir.model.fields,field_description:hr_payroll_account_sepa.field_hr_payslip__sepa_uetr
 msgid "UETR"
-msgstr ""
+msgstr "UETR"
 
 #. module: hr_payroll_account_sepa
 #: model:ir.model.fields,help:hr_payroll_account_sepa.field_hr_payslip__sepa_uetr
 msgid "Unique end-to-end transaction reference"
-msgstr ""
+msgstr "Tham chiếu giao dịch đầu cuối duy nhất"
 
 #. module: hr_payroll_account_sepa
 #. odoo-python
@@ -249,6 +252,8 @@ msgid ""
 "Untrusted bank account for the following employees:\n"
 "%s"
 msgstr ""
+"Tài khoản ngân hàng không đáng tin cậy cho các nhân viên sau:\n"
+"%s"
 
 #. module: hr_payroll_account_sepa
 #. odoo-python

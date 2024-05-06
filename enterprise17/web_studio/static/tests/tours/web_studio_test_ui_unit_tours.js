@@ -327,6 +327,44 @@ registry.category("web_tour.tours").add("web_studio_field_with_group", {
     ],
 });
 
+registry.category("web_tour.tours").add("web_studio_set_tree_node_conditional_invisibility", {
+    test: true,
+    sequence: 260,
+    steps: () => [
+        {
+            trigger: "a[data-menu-xmlid='web_studio.studio_test_partner_menu']",
+        },
+        {
+            trigger: ".o_web_studio_navbar_item button",
+            extra_trigger: ".o_list_view",
+        },
+        {
+            trigger: ".o_web_studio_list_view_editor th[data-name='title']",
+        },
+        {
+            trigger: ".o_web_studio_sidebar_checkbox:nth-child(1) .o_web_studio_attrs",
+        },
+        {
+            trigger: ".o_model_field_selector_value",
+        },
+        {
+            trigger: ".o_model_field_selector_popover_item_name:contains('Display Name')",
+            in_modal: false,
+        },
+        {
+            trigger: ".o_tree_editor_condition input.o_input",
+            run: "text Robert",
+        },
+        {
+            trigger: ".modal-footer .btn-primary",
+        },
+        {
+            trigger: ".o_web_studio_list_view_editor th[data-name='title']",
+            isCheck: true,
+        },
+    ],
+});
+
 registry.category("web_tour.tours").add("web_studio_elements_with_groups_form", {
     test: true,
     sequence: 260,
@@ -1181,4 +1219,56 @@ registry.category("web_tour.tours").add("web_studio.test_button_rainbow_effect",
             isCheck: true,
         },
     ],
+});
+
+registry.category("web_tour.tours").add("web_studio.test_res_users_fake_fields", {
+    test: true,
+    steps: () => [
+        {
+            trigger: ".o_web_studio_existing_fields_header"
+        },
+        {
+            trigger: ".o_web_studio_existing_fields",
+            run() {
+                const elements = [...document.querySelectorAll(".o_web_studio_component")];
+                const fieldStrings = elements.map(el => el.innerText.split("\n")[0]);
+                assertEqual(fieldStrings.includes("Administration"), false);
+                assertEqual(fieldStrings.includes("Multi Companies"), false);
+            }
+        }
+    ]
+});
+
+registry.category("web_tour.tours").add("web_studio_test_reload_after_restoring_default_view", {
+    test: true,
+    steps: () => [
+        {
+            trigger: "a[data-menu-xmlid='web_studio.studio_test_partner_menu']",
+        },
+        {
+            extra_trigger: ".o_form_view",
+            trigger: ".o_web_studio_navbar_item button",
+        },
+        {
+            trigger: ".o_web_studio_form_view_editor .o_field_widget[name='name']",
+        },
+        {
+            trigger: ".o_web_studio_sidebar input[name='string']",
+            run: "text new name",
+        },
+        {
+            trigger: ".o_web_studio_sidebar .o_web_studio_view",
+        },
+        {
+            trigger: ".o_web_studio_restore"
+        },
+        {
+            trigger: ".modal-footer .btn-primary",
+        },
+        {
+            extra_trigger: ".o_web_studio_undo:not(.o_web_studio_active)",
+            trigger: ".o_web_studio_form_view_editor .o_field_widget[name='name'] span:contains('Name')",
+            isCheck: true,
+        },
+    ]
 });

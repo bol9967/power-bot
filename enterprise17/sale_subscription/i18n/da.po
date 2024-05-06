@@ -7,16 +7,16 @@
 # Hans Henrik Gabelgaard <hhg@gabelgaard.org>, 2023
 # Ejner Sønniksen <ejner@vkdata.dk>, 2023
 # Mads Søndergaard, 2023
-# lhmflexerp <lhm@flexerp.dk>, 2023
 # Mads Søndergaard, 2023
 # Martin Trigaux, 2024
+# lhmflexerp <lhm@flexerp.dk>, 2024
 # Sanne Kristensen <sanne@vkdata.dk>, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-24 20:55+0000\n"
+"POT-Creation-Date: 2024-02-22 15:46+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
 "Last-Translator: Sanne Kristensen <sanne@vkdata.dk>, 2024\n"
 "Language-Team: Danish (https://app.transifex.com/odoo/teams/41243/da/)\n"
@@ -291,12 +291,12 @@ msgstr ""
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.recurring_details
 msgid "<span class=\"text-start\">Non Recurring</span>:"
-msgstr ""
+msgstr "<span class=\"text-start\">Ikke gentagende abonnement</span>:"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.recurring_details
 msgid "<span class=\"text-start\">Recurring</span>:"
-msgstr ""
+msgstr "<span class=\"text-start\">Abonnement</span>:"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_order_view_form
@@ -326,7 +326,7 @@ msgstr "<strong> og </strong>"
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.report_saleorder_document
 msgid "<strong>Recurring Plan:</strong>"
-msgstr ""
+msgstr "<strong>Abonnementsplan:</strong>"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_close_reason_view_form
@@ -735,10 +735,26 @@ msgid "Add a new plan"
 msgstr "Tilføj en ny plan"
 
 #. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid "Add a new rule"
+msgstr ""
+
+#. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.product_pricelist_view
 #: model_terms:ir.ui.view,arch_db:sale_subscription.product_template_view_form_recurring
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_plan_view_form
 msgid "Add a price rule"
+msgstr ""
+
+#. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid ""
+"Add a recurring plan for this product, or create a new one with the desired "
+"recurrence (e.g., Monthly)"
 msgstr ""
 
 #. module: sale_subscription
@@ -792,7 +808,7 @@ msgstr "Analysekonto"
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_log_report__recurring_yearly
 msgid "Annual Recurring Revenue"
-msgstr ""
+msgstr "Årlig omsætning på abonnementer"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.subscription_portal_content
@@ -830,13 +846,6 @@ msgstr "Uddelegér til"
 #. module: sale_subscription
 #: model:ir.model.fields.selection,name:sale_subscription.selection__payment_transaction__subscription_action__assign_token
 msgid "Assign Token"
-msgstr ""
-
-#. module: sale_subscription
-#. odoo-javascript
-#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
-#, python-format
-msgid "Assign a new partner to the contract"
 msgstr ""
 
 #. module: sale_subscription
@@ -991,7 +1000,7 @@ msgstr ""
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_close_reason__retention_button_text
 msgid "Button Text"
-msgstr ""
+msgstr "Knaptekst"
 
 #. module: sale_subscription
 #: model:ir.model.fields,help:sale_subscription.field_sale_order__percentage_satisfaction
@@ -1011,7 +1020,7 @@ msgstr "Kampagne"
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.product_template_search_view_inherit_sale_subscription
 msgid "Can be Recurring"
-msgstr ""
+msgstr "Kan være et abonnement"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_change_customer_view_form
@@ -1073,6 +1082,13 @@ msgid "Choose a product name.<br/><i>(e.g. eLearning Access)</i>"
 msgstr "Vælg et produkt navn. <br/><i>(f.eks. eLærings adgang)</i>"
 
 #. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid "Choose the invoice duration for your subscription"
+msgstr ""
+
+#. module: sale_subscription
 #: model:ir.model.fields.selection,name:sale_subscription.selection__sale_order_log__event_type__2_churn
 #: model:ir.model.fields.selection,name:sale_subscription.selection__sale_order_log_report__event_type__2_churn
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_order_log_report_search
@@ -1095,9 +1111,8 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
 #, python-format
-msgid "Click here to add some products or services to your quotation."
+msgid "Click here to add some products or services"
 msgstr ""
-"Klik her for at tilføje nogle produkter eller tjenester til dit tilbud."
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__user_closable
@@ -1750,7 +1765,7 @@ msgstr "Har besked"
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__has_recurring_line
 msgid "Has Recurring Line"
-msgstr ""
+msgstr "Har abonnementslinje"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__health
@@ -1763,8 +1778,7 @@ msgstr "Sundhed"
 #. module: sale_subscription
 #: model:ir.module.category,description:sale_subscription.module_category_subscription_management
 msgid "Helps you handle subscriptions and recurring invoicing."
-msgstr ""
-"Hjælper dig med at håndtere abonnementer og tilbagevendende fakturering."
+msgstr "Hjælper dig med at håndtere abonnementer og gentagende fakturering."
 
 #. module: sale_subscription
 #. odoo-python
@@ -1963,7 +1977,7 @@ msgstr ""
 #. module: sale_subscription
 #: model:ir.model,name:sale_subscription.model_account_move
 msgid "Journal Entry"
-msgstr "Postering"
+msgstr "Journalbilag"
 
 #. module: sale_subscription
 #: model:ir.model,name:sale_subscription.model_account_move_line
@@ -2063,7 +2077,14 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
 #, python-format
-msgid "Let's configure the product price"
+msgid "Let's add price for selected recurrence"
+msgstr ""
+
+#. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid "Let's choose the customer for your subscription"
 msgstr ""
 
 #. module: sale_subscription
@@ -2275,7 +2296,7 @@ msgstr "Månedlig"
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__recurring_monthly
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_subscription_report__recurring_monthly
 msgid "Monthly Recurring"
-msgstr ""
+msgstr "Månedlige abonnementer"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_account_move_line__subscription_mrr
@@ -2418,13 +2439,13 @@ msgstr ""
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_view_tree
 msgid "Non Recurring"
-msgstr ""
+msgstr "Ikke gentagende"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_report_search
 #: model_terms:ir.ui.view,arch_db:sale_subscription.view_order_product_search_inherit
 msgid "Non-recurring"
-msgstr ""
+msgstr "Ikke-gentagende"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_template_view_form
@@ -2434,7 +2455,7 @@ msgstr "Ingen"
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.view_sales_order_filter_subscription
 msgid "Not Recurring"
-msgstr ""
+msgstr "Ikke gentagende"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__activity_note
@@ -2583,7 +2604,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_report_search
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_view_search
 msgid "Paused"
-msgstr ""
+msgstr "På pause"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.subscription_portal_content
@@ -2913,12 +2934,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:sale_subscription.view_order_product_search_inherit
 #: model_terms:ir.ui.view,arch_db:sale_subscription.view_sales_order_filter_subscription
 msgid "Recurring"
-msgstr "Tilbagevendende"
+msgstr "Abonnement"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__recurring_details
 msgid "Recurring Details"
-msgstr ""
+msgstr "Abonnementsdetaljer"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__plan_id
@@ -2930,45 +2951,47 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_plan_view_search
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_view_search
 msgid "Recurring Plan"
-msgstr "Gentagende Plan"
+msgstr "Abonnementsplan"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_order_portal_content_inherit
 #: model_terms:ir.ui.view,arch_db:sale_subscription.subscription_portal_content
 msgid "Recurring Plan:"
-msgstr ""
+msgstr "Abonnementsplan:"
 
 #. module: sale_subscription
 #: model:ir.actions.act_window,name:sale_subscription.sale_subscription_plan_action
 #: model:ir.ui.menu,name:sale_subscription.menu_sale_subscription_plans
 msgid "Recurring Plans"
-msgstr "Gentagende Planer"
+msgstr "Abonnementsplaner"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_subscription_pricing__price
 msgid "Recurring Price"
-msgstr "Gentagne pris"
+msgstr "Abonnements pris"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.product_pricelist_view
 #: model_terms:ir.ui.view,arch_db:sale_subscription.product_template_view_form_recurring
 msgid "Recurring Prices"
-msgstr ""
+msgstr "Abonnementspriser"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_product_pricelist__product_subscription_pricing_ids
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_subscription_plan__product_subscription_pricing_ids
 msgid "Recurring Pricing"
-msgstr ""
+msgstr "Abonnementsprissætning"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_subscription_report__recurring_total
 msgid "Recurring Revenue"
-msgstr "Gentagende Indtægt"
+msgstr "Abonnementsomsætning"
 
 #. module: sale_subscription
 #. odoo-python
 #: code:addons/sale_subscription/models/sale_order.py:0
+#: code:addons/sale_subscription/models/sale_subscription_plan.py:0
+#: model:ir.model.constraint,message:sale_subscription.constraint_sale_subscription_plan_check_for_valid_billing_period_value
 #, python-format
 msgid ""
 "Recurring period must be a positive number. Please ensure the input is a "
@@ -2983,6 +3006,8 @@ msgid ""
 "Recurring products are discounted according to the prorated period from %s "
 "to %s"
 msgstr ""
+"Abonnementsprodukter er nedsat efter den forholdsmæssige periode fra %s til "
+"%s"
 
 #. module: sale_subscription
 #. odoo-python
@@ -3239,7 +3264,7 @@ msgstr ""
 #: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
 #, python-format
 msgid "Select a recurring product"
-msgstr ""
+msgstr "Vælg et abonnementsprodukt"
 
 #. module: sale_subscription
 #: model:ir.model.fields,help:sale_subscription.field_sale_subscription_pricing__product_template_id
@@ -3704,12 +3729,12 @@ msgstr "Abonnementer er ikke tildelt en kundechef."
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_report_analysis_view_tree
 msgid "Sum of Monthly Recurring"
-msgstr ""
+msgstr "Sum af månedlige abonnementer"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_report_analysis_view_tree
 msgid "Sum of Yearly Recurring Revenue"
-msgstr ""
+msgstr "Sum af årlig abonnementsomsætning"
 
 #. module: sale_subscription
 #: model:base.automation,name:sale_subscription.subscription_alert_percent_revenue_base_automation
@@ -4028,7 +4053,7 @@ msgstr "I alt"
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__non_recurring_total
 msgid "Total Non Recurring Revenue"
-msgstr ""
+msgstr "Samlet ikke-gentagende omsætning"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_order_portal_content_inherit
@@ -4038,7 +4063,7 @@ msgstr "Total antal/sum"
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__recurring_total
 msgid "Total Recurring"
-msgstr ""
+msgstr "Abonnementer total"
 
 #. module: sale_subscription
 #: model:ir.model.fields.selection,name:sale_subscription.selection__sale_order_log__event_type__3_transfer
@@ -4250,8 +4275,8 @@ msgstr "Volumen"
 #: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
 #, python-format
 msgid ""
-"Want recurring billing via subscription management? Get started by clicking "
-"here"
+"Want a recurring billing through subscription management? Get started by "
+"clicking here"
 msgstr ""
 
 #. module: sale_subscription
@@ -4335,7 +4360,7 @@ msgstr "Årligt"
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_subscription_report__recurring_yearly
 msgid "Yearly Recurring"
-msgstr ""
+msgstr "Årlige abonnementer"
 
 #. module: sale_subscription
 #: model:ir.model.fields.selection,name:sale_subscription.selection__sale_order_template__duration_unit__year
@@ -4534,13 +4559,6 @@ msgid ""
 msgstr ""
 "Her finder du abonnementerne som skal fornyes (slutdato er tæt på eller "
 "udløbet)"
-
-#. module: sale_subscription
-#. odoo-javascript
-#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
-#, python-format
-msgid "Your contract is recurrent"
-msgstr ""
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.payment_method_form

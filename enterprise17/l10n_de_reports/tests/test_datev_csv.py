@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import fields
+from odoo import Command, fields
 from odoo.tests import tagged
 from odoo.tools import pycompat
 import zipfile
@@ -522,3 +522,113 @@ class TestDatevCSV(AccountTestInvoicingCommon):
         reader = pycompat.csv_reader(csv, delimiter=';', quotechar='"', quoting=2)
         data = [line for line in reader]
         self.assertEqual(7, len(data), "csv should have 5 (+2 header) lines")
+
+    def test_datev_vat_export(self):
+        report = self.env.ref('account_reports.general_ledger_report')
+        options = report.get_options()
+        options['date'].update({
+            'date_from': '2020-01-01',
+            'date_to': '2020-12-31',
+        })
+
+        partners_list = [
+            {'name': 'partner1', 'vat': 'BE0897223670'},
+            {'name': 'partner2'},
+            {'name': 'partner3', 'vat': 'US12345671'},
+            {'name': 'partner4', 'vat': ''},
+        ]
+        partners = self.env['res.partner'].create(partners_list)
+
+        move = self.env['account.move'].create([{
+                'move_type': 'out_invoice',
+                'invoice_date': fields.Date.to_date('2020-12-01'),
+                'date': fields.Date.to_date('2020-12-01'),
+                'partner_id': partner.id,
+                'invoice_line_ids': [
+                    Command.create({
+                        'name': 'Invoice Line',
+                        'price_unit': 100,
+                        'account_id': self.account_3400.id,
+                        'tax_ids': [Command.set(self.tax_19.ids)],
+                    }),
+                ]
+        } for partner in partners])
+        move.action_post()
+
+        with zipfile.ZipFile(BytesIO(self.env[report.custom_handler_model_name].l10n_de_datev_export_to_zip(options)['file_content']), 'r') as zf, \
+                zf.open('EXTF_customer_accounts.csv') as csv_file:
+            reader = pycompat.csv_reader(csv_file, delimiter=';', quotechar='"', quoting=2)
+            # first 2 rows are just headers and needn't be validated
+            # first 2 columns are 'account' and 'name' and they are irrelevant to this test
+            data = [row[2:10] for row in list(reader)[2:]]
+            self.assertEqual(
+                data,
+                [
+                    ["partner1", "", "", "", "1", "", "", "BE0897223670"],
+                    ["partner2", "", "", "", "1", "", "", ""],
+                    ["partner3", "", "", "", "1", "", "", "US12345671"],
+                    ["partner4", "", "", "", "1", "", "", ""],
+                ],
+            )
+
+    def test_datev_out_invoice_payment_epd_rounding(self):
+        ''' Test epd rounding error correction is applied also when exporting
+        in datev, in order to avoid a mismatch between stored and exported data
+        '''
+        report = self.env.ref('account_reports.general_ledger_report')
+        options = report.get_options()
+        options['date'].update({
+            'date_from': '2020-01-01',
+            'date_to': '2020-12-31',
+        })
+
+        self.early_pay_2_percents_10_days = self.env['account.payment.term'].create({
+            'name': '2% discount if paid within 10 days',
+            'company_id': self.company_data['company'].id,
+            'early_discount': True,
+            'discount_percentage': 2,
+            'discount_days': 10,
+            'line_ids': [Command.create({
+                'value': 'percent',
+                'value_amount': 100,
+                'nb_days': 30,
+            })]
+        })
+
+        move = self.env['account.move'].create([{
+            'move_type': 'out_invoice',
+            'partner_id': self.env['res.partner'].create({'name': 'Res Partner 12'}).id,
+            'invoice_date': fields.Date.to_date('2020-12-01'),
+            'invoice_payment_term_id': self.early_pay_2_percents_10_days.id,
+            'invoice_line_ids': [
+                Command.create({
+                    'quantity': 1.0,
+                    'price_unit': 761.76,
+                    'tax_ids': [Command.set(self.tax_19.ids)],
+                }),
+                Command.create({
+                    'quantity': 1.0,
+                    'price_unit': 100,
+                    'tax_ids': [Command.set(self.tax_7.ids)],
+                }),
+                Command.create({
+                    'quantity': 1.0,
+                    'price_unit': 200,
+                    'tax_ids': [],
+                }),
+            ]}])
+
+        move.action_post()
+
+        pay = self.env['account.payment.register'].with_context(active_model='account.move', active_ids=move.ids).create({
+            'payment_date': fields.Date.to_date('2020-12-03'),
+        })._create_payments()
+
+        debit_account_code = str(self.env.company.account_journal_payment_debit_account_id.code).ljust(8, '0')
+
+        moves = move + pay.move_id
+        csv = self.env[report.custom_handler_model_name]._l10n_de_datev_get_csv(options, moves)
+        reader = pycompat.csv_reader(BytesIO(csv), delimiter=';', quotechar='"', quoting=2)
+        data = [[x[0], x[1], x[2], x[6], x[7], x[8], x[9], x[10], x[13]] for x in reader][2:]
+        self.assertIn(['18,14', 's', 'EUR', '21300000', debit_account_code, self.tax_19.l10n_de_datev_code, '312', pay.name, pay.line_ids[2].name], data)
+        self.assertIn(['2,13', 's', 'EUR', '21300000', debit_account_code, self.tax_7.l10n_de_datev_code, '312', pay.name, pay.line_ids[2].name], data)

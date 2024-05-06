@@ -3,15 +3,15 @@
 # 	* hr_referral
 # 
 # Translators:
-# Ryoko Tsuda <ryoko@quartile.co>, 2023
-# Wil Odoo, 2024
+# Wil Odoo, 2023
+# Ryoko Tsuda <ryoko@quartile.co>, 2024
 # Junko Augias, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-05 13:45+0000\n"
+"POT-Creation-Date: 2024-03-05 15:02+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
 "Last-Translator: Junko Augias, 2024\n"
 "Language-Team: Japanese (https://app.transifex.com/odoo/teams/41243/ja/)\n"
@@ -481,12 +481,12 @@ msgstr "従業員"
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_report__employee_referral_hired
 msgid "Employee Referral Hired"
-msgstr "採用された紹介従業員"
+msgstr "採用された従業員紹介"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_report__employee_referral_refused
 msgid "Employee Referral Refused"
-msgstr "従業員紹介が却下されました"
+msgstr "却下された従業員紹介"
 
 #. module: hr_referral
 #: model:ir.model,name:hr_referral.model_hr_referral_report
@@ -633,8 +633,8 @@ msgid ""
 "Hello,<br><br>There are some amazing job offers in my company! Have a look, "
 "they  can be interesting for you<br><a href=\"%s\">See Job Offers</a>"
 msgstr ""
-"お世話になります。<br><br>弊社にお勧めのジョブオファーがいくつかあります。もし、ご興味を持たれましたら、ご参照ください。<br><a "
-"href=\"%s\">ジョブオファーを参照</a>"
+"お世話になります。<br><br>お勧めの採用情報が弊社にいくつかあります。もし、ご興味を持たれましたら、ご参照ください。<br><a "
+"href=\"%s\">採用情報を参照</a>"
 
 #. module: hr_referral
 #. odoo-python
@@ -644,8 +644,8 @@ msgid ""
 "Hello,<br><br>There is an amazing job offer for %s in my company! It will be"
 " a fit for you<br><a href=\"%s\">See Job Offer</a>"
 msgstr ""
-"お世話になります。<br><br> 弊社に%s にお勧めのジョブオファーがあります。あなたに適任の仕事です。<br><a "
-"href=\"%s\">ジョブオファーを参照</a>"
+"お世話になります。<br><br> 弊社に%s にお勧めの採用情報があります。あなたに適任の仕事です。<br><a "
+"href=\"%s\">採用情報を参照</a>"
 
 #. module: hr_referral
 #: model:ir.model.fields.selection,name:hr_referral.selection__hr_applicant__referral_state__hired
@@ -983,8 +983,13 @@ msgstr "処理中"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_job_employee_referral_kanban
-msgid "Open"
-msgstr "開く"
+msgid "Open Position"
+msgstr "募集職種"
+
+#. module: hr_referral
+#: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_job_employee_referral_kanban
+msgid "Open Positions"
+msgstr "募集職種"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_reward_kanban
@@ -1046,14 +1051,8 @@ msgstr "使用するポイント"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_friend__position
-#: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_job_employee_referral_kanban
 msgid "Position"
 msgstr "ポジション"
-
-#. module: hr_referral
-#: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_job_employee_referral_kanban
-msgid "Positions"
-msgstr "職位"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_reward_kanban
@@ -1064,11 +1063,6 @@ msgstr "プロダクト"
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_reward__name
 msgid "Product Name"
 msgstr "プロダクト名"
-
-#. module: hr_referral
-#: model:ir.model.fields,field_description:hr_referral.field_hr_referral_reward__rating_ids
-msgid "Ratings"
-msgstr "評価"
 
 #. module: hr_referral
 #: model_terms:ir.actions.act_window,help:hr_referral.action_hr_applicant_employee_referral
@@ -1137,6 +1131,13 @@ msgstr "紹介メール送信"
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_report__referral_state
 msgid "Referral State"
 msgstr "紹介ステータス"
+
+#. module: hr_referral
+#. odoo-python
+#: code:addons/hr_referral/wizard/hr_referral_link_to_share.py:0
+#, python-format
+msgid "Referral: %(job_url)s"
+msgstr "紹介: %(job_url)s"
 
 #. module: hr_referral
 #. odoo-python
@@ -1244,7 +1245,7 @@ msgstr "送信"
 #. module: hr_referral
 #: model:ir.actions.act_window,name:hr_referral.hr_referral_send_mail_action
 msgid "Send Job Offer by Mail"
-msgstr "ジョブオファーをメールで送付"
+msgstr "採用情報をメールで送付"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.hr_referral_send_mail_view_form

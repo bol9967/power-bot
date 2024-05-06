@@ -379,6 +379,8 @@ class TestCFDIPosOrder(TestMxEdiPosCommon):
                 'customer': self.partner_mx,
                 'uid': '0001',
             })
+        self.assertFalse(order.l10n_mx_edi_cfdi_to_public)  # a MX partner is set on the order
+        order.l10n_mx_edi_cfdi_to_public = True  # needed to create a global invoice for this order
 
         with self.with_mocked_pac_sign_success():
             self.env['l10n_mx_edi.global_invoice.create'] \
@@ -455,9 +457,7 @@ class TestCFDIPosOrder(TestMxEdiPosCommon):
 
         # Sat.
         with self.with_mocked_sat_call(lambda _x: 'valid'):
-            self.env['l10n_mx_edi.document']._fetch_and_update_sat_status(
-                extra_domain=[('id', 'in', order.l10n_mx_edi_document_ids.ids)]
-            )
+            order.l10n_mx_edi_cfdi_try_sat()
         invoice_doc_values['sat_state'] = 'valid'
         ginvoice_doc_values['sat_state'] = 'valid'
         self.assertRecordValues(order.l10n_mx_edi_document_ids.sorted(), [
@@ -504,12 +504,46 @@ class TestCFDIPosOrder(TestMxEdiPosCommon):
 
         # Sat.
         with self.with_mocked_sat_call(lambda _x: 'cancelled'):
-            self.env['l10n_mx_edi.document']._fetch_and_update_sat_status(
-                extra_domain=[('id', 'in', order.l10n_mx_edi_document_ids.ids)]
-            )
+            order.l10n_mx_edi_cfdi_try_sat()
         invoice_cancel_doc_values['sat_state'] = 'cancelled'
+        invoice_doc_values['sat_state'] = 'cancelled'
+        ginvoice_doc_values['sat_state'] = 'cancelled'
         self.assertRecordValues(order.l10n_mx_edi_document_ids.sorted(), [
             invoice_cancel_doc_values,
             invoice_doc_values,
             ginvoice_doc_values,
         ])
+
+    @freeze_time('2017-01-01')
+    def test_invoiced_order_mx_customer(self):
+        with self.create_and_invoice_order() as order:
+            order.partner_id = self.partner_mx
+            self.assertFalse(order.l10n_mx_edi_cfdi_to_public)
+        self._assert_invoice_cfdi(order.account_move, 'test_invoiced_order_mx_customer')
+
+    @freeze_time('2017-01-01')
+    def test_invoiced_order_foreign_customer(self):
+        with self.create_and_invoice_order() as order:
+            order.partner_id = self.partner_us
+            self.assertFalse(order.l10n_mx_edi_cfdi_to_public)
+        self._assert_invoice_cfdi(order.account_move, 'test_invoiced_order_foreign_customer')
+
+    @freeze_time('2017-01-01')
+    def test_invoiced_order_customer_with_no_country(self):
+        with self.create_and_invoice_order() as order:
+            self.partner_us.country_id = None
+            order.partner_id = self.partner_us
+            self.assertTrue(order.l10n_mx_edi_cfdi_to_public)
+        self._assert_invoice_cfdi(order.account_move, 'test_invoiced_order_customer_with_no_country')
+
+    def test_refund_order_mx(self):
+        """ Test a pos order completely refunded by the negative lines. """
+        with self.with_pos_session():
+            order = self._create_order({
+                'pos_order_lines_ui_args': [
+                    (self.product, 1.0),
+                ],
+                'payments': [(self.bank_pm1, 1160)],
+            })
+            refund = self.env['pos.order'].browse(order.refund()['res_id'])
+            self.assertEqual(refund.refunded_order_ids, order)

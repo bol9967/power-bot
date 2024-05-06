@@ -84,6 +84,19 @@ msgstr "#Is Favoriet"
 #. module: knowledge
 #. odoo-python
 #: code:addons/knowledge/models/knowledge_article.py:0
+#, python-format
+msgid ""
+"\"%(article_item_name)s\" is an Article Item from \"%(article_name)s\" and "
+"cannot be restored on its own. Contact the owner of \"%(article_name)s\" to "
+"have it restored instead."
+msgstr ""
+"\"%(article_item_name)s\" is een artikelitem van \"%(article_name)s\" en kan"
+" niet op zichzelf worden hersteld. Neem contact op met de eigenaar van "
+"\"%(article_name)s\" om het te laten herstellen."
+
+#. module: knowledge
+#. odoo-python
+#: code:addons/knowledge/models/knowledge_article.py:0
 #: code:addons/knowledge/models/knowledge_article.py:0
 #: code:addons/knowledge/models/knowledge_article.py:0
 #, python-format
@@ -2381,6 +2394,7 @@ msgstr "Eigenschappen van artikelitem"
 #. odoo-javascript
 #: code:addons/knowledge/static/src/components/knowledge_article_html_field/knowledge_article_html_field.js:0
 #: code:addons/knowledge/static/src/components/knowledge_article_html_field/knowledge_article_html_field.js:0
+#: code:addons/knowledge/static/src/components/knowledge_article_html_field/knowledge_article_html_field.js:0
 #: model:ir.actions.act_window,name:knowledge.knowledge_article_action_item_calendar
 #: model:ir.actions.act_window,name:knowledge.knowledge_article_item_action
 #: model:ir.actions.act_window,name:knowledge.knowledge_article_item_action_stages
@@ -3376,7 +3390,7 @@ msgstr "Dupliceren"
 #. module: knowledge
 #: model_terms:ir.ui.view,arch_db:knowledge.knowledge_article_mail_invite
 msgid "EDIT"
-msgstr "BEWERK"
+msgstr "BEWERKEN"
 
 #. module: knowledge
 #. odoo-javascript
@@ -4479,7 +4493,7 @@ msgstr "Laad een sjabloon"
 #: code:addons/knowledge/static/src/components/topbar/topbar.xml:0
 #, python-format
 msgid "Lock Content"
-msgstr "Inhoud blokkeren"
+msgstr "Inhoud vergrendelen"
 
 #. module: knowledge
 #: model:ir.model.fields,field_description:knowledge.field_knowledge_article__is_locked
@@ -4990,6 +5004,13 @@ msgid "Ongoing"
 msgstr "Lopend"
 
 #. module: knowledge
+#. odoo-javascript
+#: code:addons/knowledge/static/src/components/behaviors/view_link_behavior/view_link_behavior.js:0
+#, python-format
+msgid "Only Internal Users can access this view."
+msgstr "Alleen interne gebruikers hebben toegang tot deze weergave."
+
+#. module: knowledge
 #. odoo-python
 #: code:addons/knowledge/models/knowledge_article.py:0
 #: code:addons/knowledge/models/knowledge_article.py:0
@@ -5494,7 +5515,7 @@ msgstr "Beantwoorden"
 #: code:addons/knowledge/static/src/components/knowledge_cover/knowledge_cover.xml:0
 #, python-format
 msgid "Reposition"
-msgstr "Verplaatse"
+msgstr "Verplaatsen"
 
 #. module: knowledge
 #. odoo-javascript
@@ -6051,7 +6072,7 @@ msgstr "Sjabloon"
 #. module: knowledge
 #: model:ir.model.fields,field_description:knowledge.field_knowledge_article__template_body
 msgid "Template Body"
-msgstr "Sjabloonlichaam"
+msgstr "Inhoud sjabloon"
 
 #. module: knowledge
 #: model:ir.actions.act_window,name:knowledge.knowledge_article_template_category_action

@@ -11,7 +11,6 @@
 # Christelle Wehbe <libanon_cristelle@hotmail.com>, 2023
 # Björn Hayer, 2023
 # Robin Calvin, 2023
-# Jakob Krabbe <jakob.krabbe@vertel.se>, 2023
 # Mikael Åkerberg <mikael.akerberg@mariaakerberg.com>, 2023
 # Daniel Löfgren, 2023
 # Martin Wilderoth <martin.wilderoth@linserv.se>, 2023
@@ -25,14 +24,16 @@
 # Lasse L, 2023
 # Martin Trigaux, 2024
 # Anders Wallenquist <anders.wallenquist@vertel.se>, 2024
+# Jakob Krabbe <jakob.krabbe@vertel.se>, 2024
+# Larissa Manderfeld, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-24 20:55+0000\n"
+"POT-Creation-Date: 2024-02-22 15:46+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Anders Wallenquist <anders.wallenquist@vertel.se>, 2024\n"
+"Last-Translator: Larissa Manderfeld, 2024\n"
 "Language-Team: Swedish (https://app.transifex.com/odoo/teams/41243/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -723,7 +724,7 @@ msgstr "Aktivitet"
 #. module: sale_subscription
 #: model:ir.ui.menu,name:sale_subscription.mail_activity_plan_menu_config_subscription
 msgid "Activity Plans"
-msgstr ""
+msgstr "Verksamhetsplaner"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__activity_type_id
@@ -753,10 +754,26 @@ msgid "Add a new plan"
 msgstr "Lägg till en ny plan"
 
 #. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid "Add a new rule"
+msgstr ""
+
+#. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.product_pricelist_view
 #: model_terms:ir.ui.view,arch_db:sale_subscription.product_template_view_form_recurring
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_plan_view_form
 msgid "Add a price rule"
+msgstr ""
+
+#. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid ""
+"Add a recurring plan for this product, or create a new one with the desired "
+"recurrence (e.g., Monthly)"
 msgstr ""
 
 #. module: sale_subscription
@@ -851,13 +868,6 @@ msgid "Assign Token"
 msgstr ""
 
 #. module: sale_subscription
-#. odoo-javascript
-#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
-#, python-format
-msgid "Assign a new partner to the contract"
-msgstr "Tilldela en ny partner till kontraktet"
-
-#. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__message_attachment_count
 msgid "Attachment Count"
 msgstr "Antal Bilagor"
@@ -950,19 +960,19 @@ msgstr ""
 #: model:ir.model,name:sale_subscription.model_base_automation
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__automation_id
 msgid "Automation Rule"
-msgstr ""
+msgstr "Regel för automatisering"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__name
 msgid "Automation Rule Name"
-msgstr ""
+msgstr "Namn på automatiseringsregel"
 
 #. module: sale_subscription
 #: model:ir.actions.act_window,name:sale_subscription.sale_subscription_alert_action
 #: model:ir.ui.menu,name:sale_subscription.menu_sale_subscription_alert
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_alert_view_tree
 msgid "Automation Rules"
-msgstr ""
+msgstr "Regler för automatisering"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__rating_avg
@@ -1098,6 +1108,13 @@ msgid "Choose a product name.<br/><i>(e.g. eLearning Access)</i>"
 msgstr ""
 
 #. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid "Choose the invoice duration for your subscription"
+msgstr ""
+
+#. module: sale_subscription
 #: model:ir.model.fields.selection,name:sale_subscription.selection__sale_order_log__event_type__2_churn
 #: model:ir.model.fields.selection,name:sale_subscription.selection__sale_order_log_report__event_type__2_churn
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_order_log_report_search
@@ -1120,9 +1137,8 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
 #, python-format
-msgid "Click here to add some products or services to your quotation."
+msgid "Click here to add some products or services"
 msgstr ""
-"Klicka här för att lägga till några produkter eller tjänster i din offert."
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__user_closable
@@ -1151,7 +1167,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_close_reason_view_tree
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_close_reason_wizard_view_form
 msgid "Close Reasons"
-msgstr ""
+msgstr "Nära skäl"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.subscription_portal_sidebar
@@ -1417,12 +1433,12 @@ msgstr "Kundreferens"
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_subscription_report__state_id
 msgid "Customer State"
-msgstr ""
+msgstr "Kundstatus"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_subscription_report__partner_zip
 msgid "Customer ZIP"
-msgstr ""
+msgstr "Kund ZIP"
 
 #. module: sale_subscription
 #: model:ir.model.fields,help:sale_subscription.field_sale_order__user_closable
@@ -1490,6 +1506,9 @@ msgid ""
 "delay before the trigger date, like sending a reminder 15 minutes before a "
 "meeting."
 msgstr ""
+"Fördröjning efter utlösningsdatumet. Du kan ange ett negativt tal om du "
+"behöver en fördröjning före utlösningsdatumet, till exempel om du vill "
+"skicka en påminnelse 15 minuter före ett möte."
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__trg_date_range
@@ -1651,7 +1670,7 @@ msgstr ""
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.subscription_portal_content
 msgid "Expiration Date:"
-msgstr ""
+msgstr "Utgångsdatum:"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_view_search
@@ -1768,7 +1787,7 @@ msgstr "Lyckligt ansikte"
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__model_is_mail_thread
 msgid "Has Mail Thread"
-msgstr ""
+msgstr "Har posttråd"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__has_message
@@ -1845,6 +1864,7 @@ msgid ""
 "If present, this condition must be satisfied before executing the automation"
 " rule."
 msgstr ""
+"Om detta villkor finns måste det uppfyllas innan automatiseringsregeln körs."
 
 #. module: sale_subscription
 #: model:ir.model.fields,help:sale_subscription.field_sale_order_alert__filter_pre_domain
@@ -2084,7 +2104,14 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
 #, python-format
-msgid "Let's configure the product price"
+msgid "Let's add price for selected recurrence"
+msgstr ""
+
+#. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid "Let's choose the customer for your subscription"
 msgstr ""
 
 #. module: sale_subscription
@@ -2097,7 +2124,7 @@ msgstr ""
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__log_webhook_calls
 msgid "Log Calls"
-msgstr ""
+msgstr "Logga samtal"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_log_report__log_currency_id
@@ -2279,7 +2306,7 @@ msgstr "Modellnamn"
 #. module: sale_subscription
 #: model:ir.model.fields,help:sale_subscription.field_sale_order_alert__model_id
 msgid "Model on which the automation rule runs."
-msgstr ""
+msgstr "Modell på vilken automatiseringsregeln körs."
 
 #. module: sale_subscription
 #: model:ir.model.fields.selection,name:sale_subscription.selection__sale_order_alert__trigger_condition__on_create_or_write
@@ -2919,7 +2946,7 @@ msgstr "Anledning"
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__record_getter
 msgid "Record Getter"
-msgstr ""
+msgstr "Hämta poster"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__is_subscription
@@ -2985,6 +3012,8 @@ msgstr "Återkommande intäkt"
 #. module: sale_subscription
 #. odoo-python
 #: code:addons/sale_subscription/models/sale_order.py:0
+#: code:addons/sale_subscription/models/sale_subscription_plan.py:0
+#: model:ir.model.constraint,message:sale_subscription.constraint_sale_subscription_plan_check_for_valid_billing_period_value
 #, python-format
 msgid ""
 "Recurring period must be a positive number. Please ensure the input is a "
@@ -3022,7 +3051,7 @@ msgstr "Nekad"
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_subscription_report__order_reference
 msgid "Related Order"
-msgstr ""
+msgstr "Relaterade order"
 
 #. module: sale_subscription
 #. odoo-python
@@ -3382,6 +3411,8 @@ msgid ""
 "Some triggers need a reference to a selection field. This field is used to "
 "store it."
 msgstr ""
+"Vissa triggers behöver en referens till ett urvalsfält. Detta fält används "
+"för att lagra det."
 
 #. module: sale_subscription
 #: model:ir.model.fields,help:sale_subscription.field_sale_order_alert__trg_field_ref
@@ -3389,6 +3420,8 @@ msgid ""
 "Some triggers need a reference to another field. This field is used to store"
 " it."
 msgstr ""
+"Vissa triggers behöver en referens till ett annat fält. Detta fält används "
+"för att lagra den."
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_subscription_report__source_id
@@ -3533,7 +3566,7 @@ msgstr "Antal prenumerationer"
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.subscription_portal_content
 msgid "Subscription Information"
-msgstr ""
+msgstr "Information om prenumeration"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.view_sale_order_log_growth_tree
@@ -3782,6 +3815,8 @@ msgid ""
 "The automation rule will be triggered if and only if one of these fields is "
 "updated.If empty, all fields are watched."
 msgstr ""
+"Automatiseringsregeln utlöses om och endast om ett av dessa fält uppdateras."
+" Om de är tomma övervakas alla fält."
 
 #. module: sale_subscription
 #. odoo-python
@@ -3947,6 +3982,8 @@ msgid ""
 "This code will be run to find on which record the automation rule should be "
 "run."
 msgstr ""
+"Denna kod kommer att användas för att avgöra på vilken post "
+"automatiseringsregeln ska köras."
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_close_reason_view_form
@@ -4064,12 +4101,12 @@ msgstr "Utlösningsdatum"
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__trg_selection_field_id
 msgid "Trigger Field"
-msgstr ""
+msgstr "Utlösningsfält"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__trg_field_ref_model_name
 msgid "Trigger Field Model"
-msgstr ""
+msgstr "Modell för utlösningsfält"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__trigger_field_ids
@@ -4089,12 +4126,12 @@ msgstr ""
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__trg_field_ref
 msgid "Trigger Reference"
-msgstr ""
+msgstr "Referens för utlösare"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__trg_field_ref_display_name
 msgid "Trigger Reference Display Name"
-msgstr ""
+msgstr "Referens för utlösare Displaynamn"
 
 #. module: sale_subscription
 #: model_terms:ir.actions.act_window,help:sale_subscription.sale_subscription_alert_action
@@ -4249,8 +4286,8 @@ msgstr "Volym"
 #: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
 #, python-format
 msgid ""
-"Want recurring billing via subscription management? Get started by clicking "
-"here"
+"Want a recurring billing through subscription management? Get started by "
+"clicking here"
 msgstr ""
 
 #. module: sale_subscription
@@ -4285,7 +4322,7 @@ msgstr ""
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order_alert__webhook_uuid
 msgid "Webhook UUID"
-msgstr ""
+msgstr "UUID för webhook"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__website_message_ids
@@ -4308,6 +4345,8 @@ msgid ""
 "When calculating a day-based timed condition, it is possibleto use a "
 "calendar to compute the date based on working days."
 msgstr ""
+"Vid beräkning av ett dagbaserat tidsvillkor är det möjligt att använda en "
+"kalender för att beräkna datumet baserat på arbetsdagar."
 
 #. module: sale_subscription
 #: model:ir.model.fields,help:sale_subscription.field_sale_order_alert__trg_date_id
@@ -4535,13 +4574,6 @@ msgid ""
 msgstr ""
 
 #. module: sale_subscription
-#. odoo-javascript
-#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
-#, python-format
-msgid "Your contract is recurrent"
-msgstr ""
-
-#. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.payment_method_form
 msgid "Your payment details will be saved for automatic renewals."
 msgstr ""
@@ -4716,7 +4748,7 @@ msgstr ""
 #. module: sale_subscription
 #: model:mail.template,subject:sale_subscription.mail_template_subscription_rating
 msgid "{{ object.company_id.name }}: Service Rating Request"
-msgstr "{{ objekt.företag_id.namn }}: Begäran om bedömning av tjänst"
+msgstr "{{ object.company_id.name }}: Begäran om bedömning av tjänst"
 
 #. module: sale_subscription
 #: model:sms.template,body:sale_subscription.sms_template_data_payment_reminder
@@ -4726,7 +4758,7 @@ msgid ""
 " suspended on {{ object.next_invoice_date }} unless the payment succeeds in "
 "the meantime."
 msgstr ""
-"{{ objekt.företag_id.namn }}: Vi kunde inte behandla en betalning för din "
+"{{ object.company_id.name }}: Vi kunde inte behandla en betalning för din "
 "prenumeration. Din prenumeration {{ object.name }} är fortfarande giltig men"
 " kommer att avbrytas den {{ object.next_invoice_date }} om inte betalningen "
 "lyckas under tiden."
@@ -4738,6 +4770,6 @@ msgid ""
 " attention. If you have some concerns about it, please contact {{ "
 "object.user_id.name }}, your contact person."
 msgstr ""
-"{{ objekt.företag_id.namn }}: Din prenumeration {{ object.name }} behöver "
+"{{ object.company_id.name }}: Din prenumeration {{ object.name }} behöver "
 "din uppmärksamhet. Om du har några frågor om det, vänligen kontakta {{ "
 "object.user_id.name }}, din kontaktperson."

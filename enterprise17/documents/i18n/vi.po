@@ -3,8 +3,8 @@
 # 	* documents
 # 
 # Translators:
-# Thi Huong Nguyen, 2023
 # Wil Odoo, 2023
+# Thi Huong Nguyen, 2024
 # 
 msgid ""
 msgstr ""
@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-05 13:45+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Wil Odoo, 2023\n"
+"Last-Translator: Thi Huong Nguyen, 2024\n"
 "Language-Team: Vietnamese (https://app.transifex.com/odoo/teams/41243/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,6 +26,13 @@ msgstr ""
 #, python-format
 msgid " + Add a tag"
 msgstr " + Thêm một thẻ"
+
+#. module: documents
+#. odoo-javascript
+#: code:addons/documents/static/src/owl/components/pdf_manager/pdf_manager.js:0
+#, python-format
+msgid "%s (remaining pages)"
+msgstr "%s (trang còn lại)"
 
 #. module: documents
 #. odoo-javascript
@@ -93,7 +100,7 @@ msgstr "2023"
 #. module: documents
 #: model:documents.tag,name:documents.documents_finance_fiscal_year_2018
 msgid "2024"
-msgstr ""
+msgstr "2024"
 
 #. module: documents
 #: model_terms:digest.tip,tip_description:documents.digest_tip_documents_0
@@ -115,6 +122,13 @@ msgid ""
 msgstr ""
 "<br/>\n"
 "                    chia sẻ nội dung với bạn"
+
+#. module: documents
+#. odoo-javascript
+#: code:addons/documents/static/src/js/tours/documents.js:0
+#, python-format
+msgid "<b>Select</b> this page to continue."
+msgstr "<b>Chọn</b> trang này để tiếp tục."
 
 #. module: documents
 #: model_terms:ir.ui.view,arch_db:documents.public_page_layout
@@ -932,6 +946,12 @@ msgid "Archived"
 msgstr "Đã lưu trữ"
 
 #. module: documents
+#: model_terms:ir.ui.view,arch_db:documents.document_view_form
+#: model_terms:ir.ui.view,arch_db:documents.folder_view_search
+msgid "Moved to trash"
+msgstr "Đã chuyển vào thùng rác"
+
+#. module: documents
 #: model_terms:ir.ui.view,arch_db:documents.folder_view_search
 msgid "Archived Workspace"
 msgstr "Không gian làm việc đã lưu trữ"
@@ -1167,6 +1187,13 @@ msgstr "Đóng"
 #, python-format
 msgid "Close split tools"
 msgstr "Đóng công cụ phân tách"
+
+#. module: documents
+#. openerp-web
+#: code:addons/documents/static/src/js/tours/documents.js:0
+#, python-format
+msgid "Click the cross to <b>exit preview</b>."
+msgstr "Nhấp vào dấu x để <b>thoát chế độ xem trước</b>."
 
 #. module: documents
 #: model:ir.model.fields,field_description:documents.field_documents_document__company_id
@@ -1438,7 +1465,7 @@ msgstr "Chủ sở hữu tài liệu"
 #. module: documents
 #: model:ir.actions.act_window,name:documents.mail_activity_plan_action_document
 msgid "Document Plans"
-msgstr ""
+msgstr "Kế hoạch tài liệu"
 
 #. module: documents
 #: model:ir.model,name:documents.model_documents_request_wizard
@@ -2175,7 +2202,7 @@ msgstr "Đăng xuất"
 #. module: documents
 #: model:documents.workflow.rule,name:documents.documents_rule_internal_mad
 msgid "Mark As Draft"
-msgstr "Mark As Draft"
+msgstr "Đánh dấu là nháp"
 
 #. module: documents
 #: model:ir.model.fields,field_description:documents.field_documents_workflow_rule__remove_activities
@@ -2264,6 +2291,7 @@ msgstr "Move to Workspace"
 #: code:addons/documents/static/src/views/inspector/documents_inspector.xml:0
 #: code:addons/documents/static/src/views/list/folder_list_controller.js:0
 #: model_terms:ir.ui.view,arch_db:documents.folder_deletion_form
+#: model_terms:ir.ui.view,arch_db:documents.document_view_form
 #, python-format
 msgid "Move to trash"
 msgstr "Chuyển vào thùng rác"
@@ -2781,6 +2809,12 @@ msgid "Restore"
 msgstr "Khôi phục"
 
 #. module: documents
+#: code:addons/documents/models/folder.py:0
+#, python-format
+msgid "Restricted Folder"
+msgstr "Thư mục bị hạn chế"
+
+#. module: documents
 #: model:ir.model.fields,field_description:documents.field_documents_document__message_has_sms_error
 #: model:ir.model.fields,field_description:documents.field_documents_share__message_has_sms_error
 msgid "SMS Delivery error"
@@ -2881,7 +2915,7 @@ msgstr "Trình tự"
 #. module: documents
 #: model:documents.workflow.rule,name:documents.documents_rule_finance_2018contracts
 msgid "Set As 2024 Contracts"
-msgstr ""
+msgstr "Đặt làm Hợp đồng năm 2024"
 
 #. module: documents
 #: model:ir.model.fields,field_description:documents.field_documents_workflow_rule__partner_id

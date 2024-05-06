@@ -3,8 +3,8 @@
 # 	* knowledge
 # 
 # Translators:
-# Thi Huong Nguyen, 2023
 # Wil Odoo, 2023
+# Thi Huong Nguyen, 2024
 # 
 msgid ""
 msgstr ""
@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-26 16:09+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Wil Odoo, 2023\n"
+"Last-Translator: Thi Huong Nguyen, 2024\n"
 "Language-Team: Vietnamese (https://app.transifex.com/odoo/teams/41243/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -77,6 +77,19 @@ msgstr "# nhân viên:"
 #: model:ir.model.fields,field_description:knowledge.field_knowledge_article__favorite_count
 msgid "#Is Favorite"
 msgstr "#Là yêu thích"
+
+#. module: knowledge
+#. odoo-python
+#: code:addons/knowledge/models/knowledge_article.py:0
+#, python-format
+msgid ""
+"\"%(article_item_name)s\" is an Article Item from \"%(article_name)s\" and "
+"cannot be restored on its own. Contact the owner of \"%(article_name)s\" to "
+"have it restored instead."
+msgstr ""
+"\"%(article_item_name)s\" là một Hạng mục bài viết từ \"%(article_name)s\" "
+"và không thể tự khôi phục được. Hãy liên hệ với chủ sở hữu của "
+"\"%(article_name)s\" để khôi phục nó."
 
 #. module: knowledge
 #. odoo-python
@@ -1392,6 +1405,8 @@ msgid ""
 "<span style=\"font-size: 14px;\">Not sure how to do it? Check the video "
 "below 👇</span>"
 msgstr ""
+"<span style=\"font-size: 14px;\">Bạn không rõ cách làm? Hãy xem video dưới "
+"đây 👇</span>"
 
 #. module: knowledge
 #: model_terms:ir.ui.view,arch_db:knowledge.knowledge_article_user_onboarding
@@ -2489,6 +2504,7 @@ msgstr "Thuộc tính hạng mục bài viết"
 
 #. module: knowledge
 #. odoo-javascript
+#: code:addons/knowledge/static/src/components/knowledge_article_html_field/knowledge_article_html_field.js:0
 #: code:addons/knowledge/static/src/components/knowledge_article_html_field/knowledge_article_html_field.js:0
 #: code:addons/knowledge/static/src/components/knowledge_article_html_field/knowledge_article_html_field.js:0
 #: model:ir.actions.act_window,name:knowledge.knowledge_article_action_item_calendar
@@ -3720,7 +3736,7 @@ msgstr "Giới tính: Nữ"
 #: code:addons/knowledge/static/src/components/knowledge_article_html_field/knowledge_article_html_field.xml:0
 #, python-format
 msgid "Generate an Article with AI"
-msgstr ""
+msgstr "Tạo một bài viết bằng AI"
 
 #. module: knowledge
 #: model_terms:ir.ui.view,arch_db:knowledge.knowledge_article_favorite_view_search
@@ -3813,7 +3829,7 @@ msgid ""
 msgstr ""
 "Đây là những logo mà bạn có thể thoải mái sử dụng.\n"
 "                <br>\n"
-"                Chúng cũng có thể được chia sẻ với khách hàng, cánh nhà báo, và các đơn vị bán lại."
+"                Chúng cũng có thể được chia sẻ với khách hàng, các đơn vị báo chí, đơn vị bán lại."
 
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_product_catalog
@@ -4641,7 +4657,7 @@ msgstr ""
 #. module: knowledge
 #: model:knowledge.article,template_description:knowledge.knowledge_article_template_sprint_calendar
 msgid "Manage your team schedule for the upcoming sprint."
-msgstr ""
+msgstr "Quản lý lịch làm việc của bộ phận cho cuộc chạy nước rút sắp tới."
 
 #. module: knowledge
 #. odoo-python
@@ -5101,6 +5117,13 @@ msgstr "Onboarding.pdf"
 #, python-format
 msgid "Ongoing"
 msgstr "Đang diễn ra"
+
+#. module: knowledge
+#. odoo-javascript
+#: code:addons/knowledge/static/src/components/behaviors/view_link_behavior/view_link_behavior.js:0
+#, python-format
+msgid "Only Internal Users can access this view."
+msgstr "Chỉ Người dùng nội bộ mới có thể truy cập chế độ xem này."
 
 #. module: knowledge
 #. odoo-python
@@ -6286,6 +6309,7 @@ msgid ""
 "The destination placement of %(article_name)s is ambiguous, you should "
 "specify the category."
 msgstr ""
+"Vị trí đích của %(article_name)s không rõ ràng, bạn cần xác định danh mục."
 
 #. module: knowledge
 #. odoo-javascript
@@ -6849,7 +6873,7 @@ msgstr "Viết"
 #: code:addons/knowledge/static/src/js/knowledge_wysiwyg.js:0
 #, python-format
 msgid "Write an article about"
-msgstr ""
+msgstr "Viết một bài viết về"
 
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_brand_assets
@@ -6951,6 +6975,9 @@ msgid ""
 "You can't move %(article_name)s under %(item_name)s, as %(item_name)s is an "
 "Article Item. Convert %(item_name)s into an Article first."
 msgstr ""
+"Bạn không thể di chuyển %(article_name)s dưới %(item_name)s, vì "
+"%(item_name)s là một Hạng mục bài viết. Trước tiên hãy chuyển %(item_name)s "
+"thành một Bài viết."
 
 #. module: knowledge
 #. odoo-javascript

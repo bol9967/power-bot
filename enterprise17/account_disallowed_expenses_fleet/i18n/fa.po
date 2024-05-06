@@ -8,6 +8,7 @@
 # Yousef Shadmanesh <y.shadmanesh@gmail.com>, 2023
 # Hanna Kheradroosta, 2023
 # Hamed Mohammadi <hamed@dehongi.com>, 2023
+# Mostafa Barmshory <mostafa.barmshory@gmail.com>, 2024
 # 
 msgid ""
 msgstr ""
@@ -15,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 22:20+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Hamed Mohammadi <hamed@dehongi.com>, 2023\n"
+"Last-Translator: Mostafa Barmshory <mostafa.barmshory@gmail.com>, 2024\n"
 "Language-Team: Persian (https://app.transifex.com/odoo/teams/41243/fa/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,7 +29,7 @@ msgstr ""
 #: code:addons/account_disallowed_expenses_fleet/report/account_disallowed_expenses_report.py:0
 #, python-format
 msgid "Accounts missing a disallowed expense category"
-msgstr ""
+msgstr "حساب‌هایی که فاقد یک دسته هزینه هستند"
 
 #. module: account_disallowed_expenses_fleet
 #: model:ir.model.fields,field_description:account_disallowed_expenses_fleet.field_fleet_disallowed_expenses_rate__company_id
@@ -48,23 +49,23 @@ msgstr "ایجادشده در"
 #. module: account_disallowed_expenses_fleet
 #: model:ir.model,name:account_disallowed_expenses_fleet.model_account_deferred_report_handler
 msgid "Deferred Expense Report Custom Handler"
-msgstr ""
+msgstr "کنترل‌کننده‌ی اختصاصی گزارش هزینه‌ی معوقه"
 
 #. module: account_disallowed_expenses_fleet
 #: model:ir.model,name:account_disallowed_expenses_fleet.model_account_disallowed_expenses_category
 msgid "Disallowed Expenses Category"
-msgstr ""
+msgstr "دسته هزینه‌های مردود شده"
 
 #. module: account_disallowed_expenses_fleet
 #: model:ir.model,name:account_disallowed_expenses_fleet.model_account_disallowed_expenses_fleet_report_handler
 msgid "Disallowed Expenses Fleet Custom Handler"
-msgstr ""
+msgstr "کنترل‌کننده‌ی اختصاصی هزینه‌های مردود شده‌ی ناوگان "
 
 #. module: account_disallowed_expenses_fleet
 #: model:ir.model.fields,field_description:account_disallowed_expenses_fleet.field_fleet_vehicle__rate_ids
 #: model_terms:ir.ui.view,arch_db:account_disallowed_expenses_fleet.fleet_vehicle_view_form
 msgid "Disallowed Expenses Rate"
-msgstr ""
+msgstr "نرخ هزینه‌های مردود شده"
 
 #. module: account_disallowed_expenses_fleet
 #: model:ir.model.fields,field_description:account_disallowed_expenses_fleet.field_fleet_disallowed_expenses_rate__display_name
@@ -83,6 +84,8 @@ msgstr "شناسه"
 msgid ""
 "It looks like Journal Items concerning vehicles are missing. Please check if"
 msgstr ""
+" آیتم‌های دفتر روزنامه‌‌‎ی مرتبط با وسائل نقلیه وجو.د ندارند. لطفاً آن را "
+"بررسی کنید"
 
 #. module: account_disallowed_expenses_fleet
 #: model:ir.model,name:account_disallowed_expenses_fleet.model_account_move_line
@@ -102,12 +105,12 @@ msgstr "آخرین بروز رسانی در"
 #. module: account_disallowed_expenses_fleet
 #: model:ir.model,name:account_disallowed_expenses_fleet.model_bank_rec_widget_line
 msgid "Line of the bank reconciliation widget"
-msgstr ""
+msgstr "سطر مربوط به نرم‌افزار تطبیق بانکی"
 
 #. module: account_disallowed_expenses_fleet
 #: model:ir.model.fields,field_description:account_disallowed_expenses_fleet.field_account_disallowed_expenses_category__car_category
 msgid "Make Vehicle Required"
-msgstr ""
+msgstr "تبدیل وضعیت وسیله‌ی نقلیه به موردنیاز"
 
 #. module: account_disallowed_expenses_fleet
 #: model:ir.model.fields,field_description:account_disallowed_expenses_fleet.field_fleet_disallowed_expenses_rate__date_from
@@ -117,7 +120,7 @@ msgstr "تاریخ آغاز"
 #. module: account_disallowed_expenses_fleet
 #: model:ir.model.fields,help:account_disallowed_expenses_fleet.field_account_disallowed_expenses_category__car_category
 msgid "The vehicle becomes mandatory while booking any account move."
-msgstr ""
+msgstr "وجود وسیله‌ی نقلیه حین ثبت هر گونه سند حسابداری، اجباری است."
 
 #. module: account_disallowed_expenses_fleet
 #: model:ir.model,name:account_disallowed_expenses_fleet.model_fleet_vehicle
@@ -128,25 +131,25 @@ msgstr "خودرو"
 #. module: account_disallowed_expenses_fleet
 #: model:ir.model,name:account_disallowed_expenses_fleet.model_fleet_disallowed_expenses_rate
 msgid "Vehicle Disallowed Expenses Rate"
-msgstr ""
+msgstr "نرخ هزینه‌های مردود شده‌ی وسیله‌ی نقلیه"
 
 #. module: account_disallowed_expenses_fleet
 #. odoo-javascript
 #: code:addons/account_disallowed_expenses_fleet/static/src/components/disallowed_expenses_report/filter_extra_options.xml:0
 #, python-format
 msgid "Vehicle Split"
-msgstr ""
+msgstr "تقسیم‌بندی وسائل نقلیه"
 
 #. module: account_disallowed_expenses_fleet
 #. odoo-javascript
 #: code:addons/account_disallowed_expenses_fleet/static/src/components/disallowed_expenses_report/warnings.xml:0
 #, python-format
 msgid "need a Disallowed Expense Category."
-msgstr ""
+msgstr "یک دسته هزینه‌ی مردود شده موردنیاز است. "
 
 #. module: account_disallowed_expenses_fleet
 #. odoo-javascript
 #: code:addons/account_disallowed_expenses_fleet/static/src/components/disallowed_expenses_report/warnings.xml:0
 #, python-format
 msgid "these accounts"
-msgstr ""
+msgstr "این حساب‌ها"

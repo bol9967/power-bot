@@ -154,6 +154,7 @@ msgid ""
 "One parameter is missing to use this method. You should give a start and end"
 " dates."
 msgstr ""
+"Za uporabo te metode manjka podatek. Navesti morate začetni in končni datum."
 
 #. module: project_enterprise
 #. odoo-python
@@ -210,7 +211,7 @@ msgstr "Prekrivanje načrtovanja"
 #: code:addons/project_enterprise/static/src/views/project_task_map/project_task_map_model.js:0
 #, python-format
 msgid "Private"
-msgstr ""
+msgstr "Zasebno"
 
 #. module: project_enterprise
 #: model:ir.model,name:project_enterprise.model_project_project
@@ -237,6 +238,8 @@ msgid ""
 "Some tasks weren't planned because the closest available starting date was "
 "too far ahead in the future"
 msgstr ""
+"Nekatera opravila niso bila načrtovana, ker je najbližji razpoložljivi datum"
+" začetka predaleč v prihodnosti."
 
 #. module: project_enterprise
 #: model:ir.model.fields,field_description:project_enterprise.field_project_task__planned_date_begin

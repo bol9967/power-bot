@@ -461,6 +461,61 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         self.assertEqual(receipt_picking.move_line_ids.product_id.mapped('id'), [self.product1.id, self.product2.id])
         self.assertEqual(receipt_picking.move_line_ids.mapped('quantity'), [2, 1])
 
+    def test_delivery_source_location(self):
+        """ Ensures a location who isn't the picking's source location or one of its sublocations
+        can't be scanned as the source while processing a delivery."""
+        self.clean_access_rights()
+        grp_multi_loc = self.env.ref('stock.group_stock_multi_locations')
+        self.env.user.write({'groups_id': [(4, grp_multi_loc.id, 0)]})
+        # Creates a new location at the same level than WH/Stock.
+        sibling_loc = self.env['stock.location'].create({
+            'name': "Second Stock",
+            'location_id': self.stock_location.location_id.id,
+            'barcode': 'WH-SECOND-STOCK',
+        })
+        # Adds some quantities in stock and creates a delivery using them.
+        self.env['stock.quant']._update_available_quantity(self.product1, self.stock_location, 4)
+        delivery_from_stock = self.env['stock.picking'].create({
+            'name': 'delivery_from_stock',
+            'location_id': self.stock_location.id,
+            'location_dest_id': self.customer_location.id,
+            'picking_type_id': self.picking_type_out.id,
+        })
+        self.env['stock.move'].create({
+            'name': 'product1 x4 (WH/Stock)',
+            'location_id': delivery_from_stock.location_id.id,
+            'location_dest_id': delivery_from_stock.location_dest_id.id,
+            'product_id': self.product1.id,
+            'product_uom': self.uom_unit.id,
+            'product_uom_qty': 4,
+            'picking_id': delivery_from_stock.id,
+        })
+        delivery_from_stock.action_confirm()
+        delivery_from_stock.action_assign()
+        # Adds some quantities in 2nd stock and creates a delivery using them.
+        self.env['stock.quant']._update_available_quantity(self.product1, sibling_loc, 4)
+        delivery_from_stock_2 = self.env['stock.picking'].create({
+            'name': 'delivery_from_second_stock',
+            'location_id': sibling_loc.id,
+            'location_dest_id': self.customer_location.id,
+            'picking_type_id': self.picking_type_out.id,
+        })
+        self.env['stock.move'].create({
+            'name': 'product1 x4 (WH/Second Stock)',
+            'location_id': delivery_from_stock_2.location_id.id,
+            'location_dest_id': delivery_from_stock_2.location_dest_id.id,
+            'product_id': self.product1.id,
+            'product_uom': self.uom_unit.id,
+            'product_uom_qty': 4,
+            'picking_id': delivery_from_stock_2.id,
+        })
+        delivery_from_stock_2.action_confirm()
+        delivery_from_stock_2.action_assign()
+
+        action = self.env["ir.actions.actions"]._for_xml_id("stock_barcode.stock_barcode_action_main_menu")
+        url = f'/web#action={action["id"]}'
+        self.start_tour(url, 'test_delivery_source_location', login='admin', timeout=180)
+
     def test_delivery_lot_with_multi_companies(self):
         """ This test ensures that scanning a lot or serial number who exists for
         multiple companies will fetch only the one who belongs to the active company.
@@ -470,6 +525,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         company_a = self.env['res.company'].create({'name': 'Company "Ah !" (le meme TMTC)'})
         company_b = self.env['res.company'].create({'name': 'Company Bae 😏😘'})
         self.env.user.write({
+            'groups_id': [(4, self.env.ref('stock.group_production_lot').id)],
             'company_ids': [(4, company_a.id), (4, company_b.id)],
             'company_id': company_b.id,
         })
@@ -590,6 +646,72 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         self.assertEqual(move_line_2.lot_id, sn4)
         self.assertEqual(move_line_2.package_id, package2)
         self.assertEqual(move_line_2.owner_id, partner)
+
+    def test_delivery_lot_with_package_delivery_step(self):
+        """
+        Test that we unpack from the right package in case of having
+        multiple packages (or package and no package) for the same lot
+        in multi-locations configuration.
+        """
+        self.clean_access_rights()
+        grp_lot = self.env.ref('stock.group_production_lot')
+        grp_pack = self.env.ref('stock.group_tracking_lot')
+        grp_multi_loc = self.env.ref('stock.group_stock_multi_locations')
+
+        self.env.user.write({'groups_id': [(4, grp_lot.id, 0)]})
+        self.env.user.write({'groups_id': [(4, grp_pack.id, 0)]})
+        self.env.user.write({'groups_id': [(4, grp_multi_loc.id, 0)]})
+
+        sn = self.env['stock.lot'].create({'name': 'sn', 'product_id': self.productlot1.id, 'company_id': self.env.company.id})
+        package1 = self.env['stock.quant.package'].create({'name': 'pack_sn'})
+        package2 = self.env['stock.quant.package'].create({'name': 'pack_sn_2'})
+        self.env['stock.quant'].create([
+            {
+                'product_id': self.productlot1.id,
+                'inventory_quantity': 1,
+                'lot_id': sn.id,
+                'location_id': self.shelf1.id,
+                'package_id': package1.id,
+            }, {
+                'product_id': self.productlot1.id,
+                'inventory_quantity': 1,
+                'lot_id': sn.id,
+                'location_id': self.shelf2.id,
+            },
+            {
+                'product_id': self.productlot1.id,
+                'inventory_quantity': 1,
+                'lot_id': sn.id,
+                'location_id': self.shelf2.id,
+                'package_id': package2.id,
+            }
+        ]).action_apply_inventory()
+
+        # Creates and confirms the delivery.
+        delivery_picking = self.env['stock.picking'].create({
+            'location_id': self.shelf2.id,
+            'location_dest_id': self.customer_location.id,
+            'picking_type_id': self.picking_type_out.id,
+        })
+        move = self.env['stock.move'].create({
+            'name': self.productlot1.name,
+            'product_id': self.productlot1.id,
+            'product_uom_qty': 1,
+            'product_uom': self.productlot1.uom_id.id,
+            'picking_id': delivery_picking.id,
+            'location_id': self.shelf2.id,
+            'location_dest_id': self.customer_location.id,
+        })
+        delivery_picking.action_confirm()
+        delivery_picking.action_assign()
+
+        # Runs the tour.
+        url = self._get_client_action_url(delivery_picking.id)
+        self.start_tour(url, 'test_delivery_lot_with_package_delivery_step', login='admin', timeout=180)
+        self.assertEqual(delivery_picking.state, "done")
+        self.assertRecordValues(move.move_line_ids, [
+            {'lot_id': sn.id, 'product_id': self.productlot1.id, 'qty_done': 1, 'package_id': package2.id, 'result_package_id': False},
+        ])
 
     def test_delivery_reserved_1(self):
         self.clean_access_rights()
@@ -1324,7 +1446,7 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         # Creates a delivery transfer for this package.
         picking_form = Form(self.env['stock.picking'])
         picking_form.picking_type_id = self.picking_type_out
-        picking_form.location_id = self.shelf1
+        picking_form.location_id = self.stock_location
         with picking_form.move_ids_without_package.new() as move:
             move.product_id = self.product1
             move.product_uom_qty = 1
@@ -1455,6 +1577,15 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         self.env['stock.quant']._update_available_quantity(self.productlot1, self.shelf1, 2, lot_id=lot1)
         self.env['stock.quant']._update_available_quantity(self.productserial1, self.shelf2, 1, lot_id=lot2)
         self.env['stock.quant']._update_available_quantity(self.product1, self.shelf2, 4, package_id=pack1)
+
+        # Creates a second pack with some qty in a location the delivery shouldn't have access.
+        pack2 = self.env['stock.quant.package'].create({'name': 'SUSPACK'})
+        other_loc = self.env['stock.location'].create({
+            'name': "Second Stock",
+            'location_id': self.stock_location.location_id.id,
+            'barcode': 'WH-SECOND-STOCK',
+        })
+        self.env['stock.quant']._update_available_quantity(self.product1, other_loc, 4, package_id=pack2)
 
         delivery_picking = self.env['stock.picking'].create({
             'location_id': self.stock_location.id,
@@ -1975,6 +2106,35 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         self.start_tour(url, 'test_picking_type_mandatory_scan_complete_flux_delivery', login='admin', timeout=180)
         self.assertEqual(picking_delivery.state, 'done')
 
+    def test_procurement_backorder(self):
+        self.clean_access_rights()
+        product_a, _product_b = self.env['product.product'].create([{
+            'name': p_name,
+            'type': 'product',
+            'barcode': p_name,
+        } for p_name in ['PA', 'PB']])
+
+        customer = self.env["res.partner"].create({"name": "Customer"})
+        proc_group = self.env["procurement.group"].create({"partner_id": customer.id})
+
+        procurement = self.env["procurement.group"].Procurement(
+            product_a, 1, product_a.uom_id,
+            self.env.ref('stock.stock_location_customers'),
+            product_a.name,
+            "/",
+            self.env.company,
+            {
+                "warehouse_id": self.env['stock.warehouse'].search([], limit=1),
+                "group_id": proc_group,
+            }
+        )
+        self.env["procurement.group"].run([procurement])
+
+        move = self.env['stock.move'].search([('product_id', '=', product_a.id)], limit=1)
+        url = self._get_client_action_url(move.picking_id.id)
+        self.start_tour(url, 'test_procurement_backorder', login='admin', timeout=99)
+        self.assertEqual(len(proc_group.stock_move_ids), 2)
+
     def test_receipt_delete_button(self):
         """ Scan products that not part of a receipt. Check that products not part of original receipt
         can be deleted, but the products that are part of the original receipt cannot be deleted.
@@ -2239,6 +2399,81 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
             {'quantity': 1, 'picked': True, 'location_id': self.shelf1.id},
         ])
 
+    def test_split_line_on_destination_scan(self):
+        """ Ensures a non-complete line is split when a destination is scanned. """
+        self.clean_access_rights()
+        self.env.user.write({'groups_id': [(4, self.env.ref('stock.group_stock_multi_locations').id, 0)]})
+        # Creates a receipt for 4x product1 and confirm it.
+        receipt = self.env['stock.picking'].create({
+            'location_dest_id': self.picking_type_in.default_location_dest_id.id,
+            'location_id': self.supplier_location.id,
+            'name': "receipt test_split_line_on_destination_scan",
+            'picking_type_id': self.picking_type_in.id,
+        })
+        self.env['stock.move'].create({
+            'location_dest_id': receipt.location_dest_id.id,
+            'location_id': receipt.location_id.id,
+            'name': "product1 x4",
+            'picking_id': receipt.id,
+            'product_id': self.product1.id,
+            'product_uom_qty': 4,
+        })
+        # Process the receipt in a tour, then checks its move lines values.
+        receipt.action_confirm()
+        url = self._get_client_action_url(receipt.id)
+        self.start_tour(url, 'test_split_line_on_destination_scan', login='admin')
+        self.assertRecordValues(receipt.move_line_ids, [
+            {'qty_done': 2, 'location_dest_id': receipt.location_dest_id.id},
+            {'qty_done': 2, 'location_dest_id': self.shelf1.id},
+        ])
+
+    def test_split_line_on_exit_for_receipt(self):
+        """ Ensures that exit an unfinished operation will split the uncompleted move lines to have
+        one move line with all picked quantity and one move line with the remaining quantity."""
+        self.clean_access_rights()
+        # Enables package to check the split after a put in pack.
+        group_pack = self.env.ref('stock.group_tracking_lot')
+        self.env.user.write({'groups_id': [(4, group_pack.id, 0)]})
+        # Set packages' sequence to 1000 to find it easily during the tour.
+        package_sequence = self.env['ir.sequence'].search([('code', '=', 'stock.quant.package')], limit=1)
+        package_sequence.write({'number_next_actual': 1000})
+
+        # Creates a receipt for 4x product1 and 4x product2.
+        receipt = self.env['stock.picking'].create({
+            'name': "receipt_split_line_on_exit",
+            'location_id': self.supplier_location.id,
+            'location_dest_id': self.stock_location.id,
+            'picking_type_id': self.picking_type_in.id,
+        })
+        self.env['stock.move'].create({
+            'location_dest_id': receipt.location_dest_id.id,
+            'location_id': receipt.location_id.id,
+            'name': "product1 x4",
+            'picking_id': receipt.id,
+            'product_id': self.product1.id,
+            'product_uom_qty': 4,
+        })
+        self.env['stock.move'].create({
+            'location_dest_id': receipt.location_dest_id.id,
+            'location_id': receipt.location_id.id,
+            'name': "product2 x4",
+            'picking_id': receipt.id,
+            'product_id': self.product2.id,
+            'product_uom_qty': 4,
+        })
+        receipt.action_confirm()
+
+        action_id = self.env.ref('stock_barcode.stock_barcode_action_main_menu')
+        url = f"/web#action={action_id.id}"
+        self.start_tour(url, 'test_split_line_on_exit_for_receipt', login='admin')
+        # Checks receipt moves values.
+        self.assertRecordValues(receipt.move_ids, [
+            {'product_id': self.product1.id, 'quantity': 3, 'picked': True},
+            {'product_id': self.product2.id, 'quantity': 1, 'picked': True},
+            {'product_id': self.product1.id, 'quantity': 1, 'picked': False},
+            {'product_id': self.product2.id, 'quantity': 3, 'picked': False},
+        ])
+
     def test_editing_done_picking(self):
         """ Create and validate a picking then try editing it."""
         self.clean_access_rights()
@@ -2256,7 +2491,65 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         url = self._get_client_action_url(receipt.id)
         self.start_tour(url, 'test_editing_done_picking', login='admin', timeout=180)
 
-    #=== GS1 TESTS ===#
+    def test_sml_sort_order_by_product_category(self):
+        """Test the lines are correctly sorted in the Barcode App regarding
+        their product's category.
+        """
+        self.clean_access_rights()
+        # Creates two categories and some products using them.
+        product_categoryB = self.env["product.category"].create({"name": "TestB"})
+        product_categoryA = self.env["product.category"].create({"name": "TestA"})
+        productA = self.env["product.product"].create(
+            {"name": "Product A", "categ_id": product_categoryB.id, "type": "product"}
+        )
+        productB = self.env["product.product"].create(
+            {"name": "Product B", "categ_id": product_categoryA.id, "type": "product"}
+        )
+        productC = self.env["product.product"].create(
+            {"name": "Product C", "categ_id": product_categoryB.id, "type": "product"}
+        )
+        # Creates a receipt with three move lines (one for each product).
+        receipt = self.env["stock.picking"].create(
+            {
+                "location_id": self.stock_location.id,
+                "location_dest_id": self.stock_location.id,
+                "picking_type_id": self.picking_type_in.id,
+            }
+        )
+        self.env["stock.move.line"].create(
+            [
+                {
+                    "product_id": productA.id,
+                    "product_uom_id": productA.uom_id.id,
+                    "location_id": self.stock_location.id,
+                    "location_dest_id": self.stock_location.id,
+                    "qty_done": 1,
+                    "picking_id": receipt.id,
+                },
+                {
+                    "product_id": productB.id,
+                    "product_uom_id": productB.uom_id.id,
+                    "location_id": self.stock_location.id,
+                    "location_dest_id": self.stock_location.id,
+                    "qty_done": 1,
+                    "picking_id": receipt.id,
+                },
+                {
+                    "product_id": productC.id,
+                    "product_uom_id": productC.uom_id.id,
+                    "location_id": self.stock_location.id,
+                    "location_dest_id": self.stock_location.id,
+                    "qty_done": 1,
+                    "picking_id": receipt.id,
+                },
+            ]
+        )
+        url = self._get_client_action_url(receipt.id)
+        self.start_tour(
+            url, "test_sml_sort_order_by_product_category", login="admin", timeout=180
+        )
+
+    # === GS1 TESTS ===#
     def test_gs1_delivery_ambiguous_serial_number(self):
         """
         Have a delivery for a product tracked by SN then scan a SN who exists for
@@ -2435,7 +2728,11 @@ class TestPickingBarcodeClientAction(TestBarcodeClientAction):
         this record can still be found anyway while using the GS1 nomenclature."""
         self.clean_access_rights()
         group_package = self.env.ref('stock.group_tracking_lot')
-        self.env.user.write({'groups_id': [(4, group_package.id, 0)]})
+        group_lot = self.env.ref('stock.group_production_lot')
+        self.env.user.write({'groups_id': [
+            (4, group_package.id, 0),
+            (4, group_lot.id, 0),
+        ]})
         self.env.company.nomenclature_id = self.env.ref('barcodes_gs1_nomenclature.default_gs1_nomenclature')
         # Creates two products and a package with misleading barcode.
         self.env['product.product'].create({

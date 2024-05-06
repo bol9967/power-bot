@@ -322,8 +322,8 @@ class L10nEcWizardAccountWithhold(models.TransientModel):
                 errors.append(_("You must set a Country for Partner: %s", invoice.commercial_partner_id.name))
             if MAP_INVOICE_TYPE_PARTNER_TYPE[invoice.move_type] != MAP_INVOICE_TYPE_PARTNER_TYPE[invoices[0].move_type]:
                 errors.append(_("Can't mix supplier and customer documents in the same withhold"))
-            if len(invoices) > 1 and invoice.move_type == 'in_invoice':
-                # We only allow one supplier withhold over one single supplier invoice
+            if (len(invoices) > 1 or invoice.l10n_ec_withhold_ids.filtered(lambda w: w.state == 'posted')) and invoice.move_type == 'in_invoice':
+                # We only allow one posted supplier withhold over one single supplier invoice
                 errors.append(_("Multiple invoices are only supported in customer withholds"))
             if not invoice.l10n_ec_show_add_withhold:
                 errors.append(_("The selected document type does not support withholds."))
@@ -482,10 +482,11 @@ class L10nEcWizardAccountWithholdLine(models.TransientModel):
                         and r != line
                     )
                     if previous_related_lines and len(self) == 1:
-                        # When we have just a line it means the user is adding or modifying a withholding line in the widget
-                        # Odoo onchanges creates a new object to replace line with it, following line removes the new object (last element in the list)
-                        previous_related_lines = previous_related_lines - previous_related_lines[-1]
-                    previous_base = sum(previous_related_lines.mapped('base'))
+                        # When user edits a withhold line in the widget, the onchanges creates a new object to
+                        # replace line with it, so we temporary have a duplicate with the same base
+                        previous_base = sum(previous_related_lines.mapped('base')) - line.base
+                    else:
+                        previous_base = 0
                     if l10n_ec_type in ('withhold_vat_sale', 'withhold_vat_purchase'):
                         base = amount_vat - previous_base
                     else:

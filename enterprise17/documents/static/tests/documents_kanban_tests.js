@@ -3,21 +3,16 @@
 import { startServer } from "@bus/../tests/helpers/mock_python_environment";
 
 import { fileUploadService } from "@web/core/file_upload/file_upload_service";
-import { multiTabService } from "@bus/multi_tab_service";
-import { busParametersService } from "@bus/bus_parameters_service";
-import { busService } from "@bus/services/bus_service";
 import { DocumentsKanbanRenderer } from "@documents/views/kanban/documents_kanban_renderer";
-import { documentService } from "@documents/core/document_service";
-import { storeService } from "@mail/core/common/store_service";
-import { attachmentService } from "@mail/core/common/attachment_service";
-import { voiceMessageService } from "@mail/discuss/voice_message/common/voice_message_service";
 import {
     createDocumentsView as originalCreateDocumentsView,
     createDocumentsViewWithMessaging,
     getEnrichedSearchArch,
+    loadServices,
 } from "./documents_test_utils";
 import { registry } from "@web/core/registry";
 import { getOrigin } from "@web/core/utils/urls";
+import * as dsHelpers from "@web/../tests/core/domain_selector_tests";
 import { setupViewRegistries } from "@web/../tests/views/helpers";
 import { makeFakeUserService } from "@web/../tests/helpers/mock_services";
 
@@ -72,28 +67,7 @@ QUnit.module("documents", {}, function () {
         "documents_kanban_tests.js",
         {
             async beforeEach() {
-                const REQUIRED_SERVICES = {
-                    documents_pdf_thumbnail: {
-                        start() {
-                            return {
-                                enqueueRecords: () => {},
-                            };
-                        },
-                    },
-                    "document.document": documentService,
-                    "mail.attachment": attachmentService,
-                    "mail.store": storeService,
-                    "discuss.voice_message": voiceMessageService,
-                    multi_tab: multiTabService,
-                    bus_service: busService,
-                    "bus.parameters": busParametersService,
-                    file_upload: fileUploadService,
-                };
-                for (const [serviceName, service] of Object.entries(REQUIRED_SERVICES)) {
-                    if (!serviceRegistry.contains(serviceName)) {
-                        serviceRegistry.add(serviceName, service);
-                    }
-                }
+                loadServices();
                 patchWithCleanup(browser, {
                     navigator: {
                         ...browser.navigator,
@@ -2077,7 +2051,7 @@ QUnit.module("documents", {}, function () {
              * Open the preview without selecting the record, and edit its values.
              */
             QUnit.test("document inspector: edit without selecting", async function (assert) {
-                assert.expect(18);
+                assert.expect(19);
 
                 let waitWrite = makeDeferred();
 
@@ -2138,9 +2112,9 @@ QUnit.module("documents", {}, function () {
                     "Should have added the tag"
                 );
                 await nextTick();
-                const tag = target.querySelector(".o_tag_prefix");
-                assert.ok(tag);
-                assert.strictEqual(tag.innerText, "Priority");
+                // Re-open the preview as it is closed automatically when tags are changed
+                await click(".o_kanban_record:nth-child(4) .open_preview");
+                await contains(".o_tag_prefix", { text: "Priority" });
 
                 // remove the added tag
                 await click(".o_inspector_tag_remove");
@@ -2150,7 +2124,9 @@ QUnit.module("documents", {}, function () {
                     "Should have removed the tag"
                 );
                 await nextTick();
-                assert.notOk(target.querySelector(".o_tag_prefix"));
+                // Re-open the preview as it is closed automatically when tags are changed
+                await click(".o_kanban_record:nth-child(4) .open_preview");
+                await contains(".o_tag_prefix", { count: 0 });
             });
 
             QUnit.test(
@@ -3826,6 +3802,28 @@ QUnit.module("documents", {}, function () {
                 }
             );
 
+            QUnit.test(
+                "document selector: include archived checkbox should not be shown",
+                async function (assert) {
+                    assert.expect(3);
+
+                    await createDocumentsView({
+                        type: "kanban",
+                        resModel: "documents.document",
+                        arch: `<kanban js_class="documents_kanban"><templates><t t-name="kanban-box">
+                    <div>
+                        <field name="name"/>
+                    </div>
+                </t></templates></kanban>`,
+                    });
+
+                    await toggleSearchBarMenu(target);
+                    await click(".o_filter_menu .dropdown-item");
+                    await contains(dsHelpers.SELECTORS.condition);
+                    await contains(".form-switch label", { count: 0, text: "Include archived" });
+                }
+            );
+
             QUnit.test("documents Kanban color widget", async function (assert) {
                 assert.expect(3);
 
@@ -3948,7 +3946,7 @@ QUnit.module("documents", {}, function () {
                     );
 
                     // making sure that the documentInspector is already rendered as it is painted after the selection.
-                    await testUtils.nextTick();
+                    await nextTick();
 
                     // starts the drag on a selected record
                     const startEvent = new Event("dragstart", { bubbles: true });
@@ -4020,6 +4018,133 @@ QUnit.module("documents", {}, function () {
                     const dropEvent = new Event("drop", { bubbles: true });
                     dropEvent.dataTransfer = dataTransfer;
                     allSelector.querySelector("header").dispatchEvent(dropEvent);
+                    await nextTick();
+                }
+            );
+
+            QUnit.test(
+                "SearchPanel: preview is closed automatically when changing workspace/tag/facet",
+                async function (assert) {
+                    assert.expect(27); // 10 clicks with parent (x 2) + 7 contains (x 1)
+                    pyEnv["documents.document"].create({
+                        folder_id: pyEnv["documents.folder"].create({
+                            name: "WorkspaceYoutube",
+                            has_write_access: true,
+                        }),
+                        name: "newYoutubeVideo",
+                        type: "url",
+                        url: "https://youtu.be/Ayab6wZ_U1A",
+                    });
+                    const views = {
+                        "documents.document,false,kanban": `<kanban js_class="documents_kanban"><templates><t t-name="kanban-box">
+                            <div class="o_kanban_image">
+                                <div name="document_preview" class="o_kanban_image_wrapper" t-if="record.type.raw_value == 'url'"/>
+                            </div>
+                            <div>
+                                <field name="name"/>
+                            </div>
+                        </t></templates></kanban>`,
+                    };
+                    const { openView } = await createDocumentsViewWithMessaging({
+                        serverData: { views },
+                    });
+                    await openView({
+                        res_model: "documents.document",
+                        views: [[false, "kanban"]],
+                    });
+                    const workspaceYoutube = [
+                        ".o_search_panel_label",
+                        {
+                            parent: [
+                                ".o_search_panel_category_value",
+                                { text: "WorkspaceYoutube" },
+                            ],
+                        },
+                    ];
+                    const workspace2 = [
+                        ".o_search_panel_label",
+                        { parent: [".o_search_panel_category_value", { text: "Workspace2" }] },
+                    ];
+                    const facetStatus = [
+                        "input.form-check-input",
+                        { parent: [".o_search_panel_group_header", { text: "Status" }] },
+                    ];
+                    const tagDraft = [
+                        "input.form-check-input",
+                        { parent: [".o_search_panel_filter_value", { text: "Draft" }] },
+                    ];
+                    const newYoutubeVideoDocumentPreview = [
+                        ".oe_kanban_previewer",
+                        { parent: [".o_kanban_record", { text: "newYoutubeVideo" }] },
+                    ];
+                    const openPreview = async () => {
+                        await click(...workspaceYoutube);
+                        await click(...newYoutubeVideoDocumentPreview);
+                        await contains(".o-FileViewer");
+                    };
+
+                    // Changing workspace must close the preview
+                    await openPreview();
+                    await click(...workspace2);
+                    await contains(".o-FileViewer", { count: 0 });
+                    // Selecting a facet must close the preview
+                    await openPreview();
+                    await click(...facetStatus);
+                    await contains(".o-FileViewer", { count: 0 });
+                    await contains(".o_kanban_record", { count: 0, text: "newYoutubeVideo" });
+                    await click(...facetStatus); // Unselect the facet to make the document visible again for the next test
+                    // Selecting a tag must close the preview
+                    await openPreview();
+                    await click(...tagDraft);
+                    await contains(".o-FileViewers", { count: 0 });
+                }
+            );
+
+            QUnit.test(
+                "SearchPanel: should not invoke the write method when drag and drop within same workspace",
+                async function (assert) {
+                    assert.expect(1);
+
+                    await createDocumentsView({
+                        type: "kanban",
+                        resModel: "documents.document",
+                        arch: `
+                        <kanban js_class="documents_kanban">
+                            <templates><t t-name="kanban-box">
+                                <div draggable="true" class="oe_kanban_global_area">
+                                    <i class="fa fa-circle-thin o_record_selector"/>
+                                    <field name="name"/>
+                                </div>
+                            </t></templates>
+                        </kanban>`,
+                        mockRPC: function (route, args) {
+                            if (args.method === "write" && args.model === "documents.document") {
+                                throw new Error(
+                                    "It should not be possible to drop a record into the same/current workspace"
+                                );
+                            }
+                        },
+                    });
+
+                    const yopRecord = $(target).find(".o_kanban_record:contains(yop)")[0];
+                    const yopRecordSelector = yopRecord.querySelector(".o_record_selector");
+                    // selects the record
+                    await legacyClick(yopRecordSelector);
+                    await nextTick();
+                    assert.hasClass(yopRecord, "o_record_selected");
+
+                    // starts the drag on a selected record
+                    const startEvent = new Event("dragstart", { bubbles: true });
+                    const dataTransfer = new DataTransfer();
+                    startEvent.dataTransfer = dataTransfer;
+                    yopRecordSelector.dispatchEvent(startEvent);
+
+                    // drop on the same search panel category (folder)
+                    // it should not add another write step.
+                    const endEvent = new Event("drop", { bubbles: true });
+                    endEvent.dataTransfer = dataTransfer;
+                    target.querySelector("li header.active").dispatchEvent(endEvent);
+                    await nextTick();
                 }
             );
 

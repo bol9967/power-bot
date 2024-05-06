@@ -3,20 +3,21 @@
 # 	* pos_iot
 # 
 # Translators:
-# Anders Wallenquist <anders.wallenquist@vertel.se>, 2023
 # Mikael Åkerberg <mikael.akerberg@mariaakerberg.com>, 2023
 # Martin Trigaux, 2023
 # Chrille Hedberg <hedberg.chrille@gmail.com>, 2023
 # Kim Asplund <kim.asplund@gmail.com>, 2023
 # Lasse L, 2024
+# Anders Wallenquist <anders.wallenquist@vertel.se>, 2024
+# Daniel Osser <danielosser@gmail.com>, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-26 22:20+0000\n"
+"POT-Creation-Date: 2024-01-26 16:10+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Lasse L, 2024\n"
+"Last-Translator: Daniel Osser <danielosser@gmail.com>, 2024\n"
 "Language-Team: Swedish (https://app.transifex.com/odoo/teams/41243/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,7 +28,7 @@ msgstr ""
 #. module: pos_iot
 #: model_terms:ir.ui.view,arch_db:pos_iot.res_config_view_form_inherit_pos_iot
 msgid "Accept payments with a Worldline payment terminal"
-msgstr ""
+msgstr "Acceptera betalningar med en Worldline-kortterminal"
 
 #. module: pos_iot
 #: model_terms:ir.ui.view,arch_db:pos_iot.res_config_view_form_inherit_pos_iot
@@ -59,7 +60,7 @@ msgstr "Belopp:"
 #: model_terms:ir.ui.view,arch_db:pos_iot.pos_iot_config_view_form
 #: model_terms:ir.ui.view,arch_db:pos_iot.res_config_view_form_inherit_pos_iot
 msgid "Barcode Scanners/Card Readers"
-msgstr ""
+msgstr "Streckkodsläsare / Kortläsare"
 
 #. module: pos_iot
 #: model:ir.model.fields,help:pos_iot.field_pos_config__iface_print_via_proxy
@@ -105,7 +106,7 @@ msgstr "Inställningar"
 #: code:addons/pos_iot/static/src/app/payment.js:0
 #, python-format
 msgid "Configuration of payment terminal failed"
-msgstr ""
+msgstr "Konfiguration av kortterminal misslyckades"
 
 #. module: pos_iot
 #. odoo-javascript
@@ -113,21 +114,21 @@ msgstr ""
 #: code:addons/pos_iot/static/src/overrides/components/iot_longpolling/iot_longpolling.js:0
 #, python-format
 msgid "Connection to IoT Box failed"
-msgstr ""
+msgstr "Anslutningen till IoT Box misslyckades"
 
 #. module: pos_iot
 #. odoo-javascript
 #: code:addons/pos_iot/static/src/app/payment.js:0
 #, python-format
 msgid "Connection to terminal failed"
-msgstr ""
+msgstr "Uppkoppling till kortterminal misslyckades"
 
 #. module: pos_iot
 #. odoo-javascript
 #: code:addons/pos_iot/static/src/overrides/components/scale_screen/scale_screen.js:0
 #, python-format
 msgid "Could not connect to IoT scale"
-msgstr ""
+msgstr "Kan inte ansluta till IoT våg"
 
 #. module: pos_iot
 #: model_terms:ir.ui.view,arch_db:pos_iot.pos_iot_config_view_form
@@ -138,14 +139,14 @@ msgstr "Kundskärm"
 #. module: pos_iot
 #: model:ir.model.fields,field_description:pos_iot.field_pos_config__iface_customer_facing_display_via_proxy
 msgid "Customer Facing Display"
-msgstr ""
+msgstr "Kundskärm"
 
 #. module: pos_iot
 #: model:ir.model.fields,field_description:pos_iot.field_pos_config__iface_electronic_scale
 #: model_terms:ir.ui.view,arch_db:pos_iot.pos_iot_config_view_form
 #: model_terms:ir.ui.view,arch_db:pos_iot.res_config_view_form_inherit_pos_iot
 msgid "Electronic Scale"
-msgstr "Elektronisk Våg"
+msgstr "Elektronisk våg"
 
 #. module: pos_iot
 #. odoo-javascript
@@ -162,10 +163,19 @@ msgid ""
 "Enable barcode scanning with a remotely connected barcode scanner and card "
 "swiping with a Vantiv card reader."
 msgstr ""
+"Aktivera streckkodsläsning med en fjärransluten streckkodsläsare och "
+"kortdragning med en kortläsare från Vantiv."
 
 #. module: pos_iot
 #: model:ir.model.fields,help:pos_iot.field_pos_config__iface_electronic_scale
 msgid "Enables Electronic Scale integration."
+msgstr "Möjliggör integrering av elektronisk våg."
+
+#. module: pos_iot
+#. odoo-javascript
+#: code:addons/pos_iot/static/src/app/last_transaction_status/last_transaction_status.js:0
+#, python-format
+msgid "Failed to request last transaction status"
 msgstr ""
 
 #. module: pos_iot
@@ -239,13 +249,13 @@ msgstr "IoT-boxens hemsida"
 #. module: pos_iot
 #: model:ir.model.fields,field_description:pos_iot.field_pos_printer__device_id
 msgid "IoT Device"
-msgstr ""
+msgstr "IoT enhet"
 
 #. module: pos_iot
 #: model_terms:ir.ui.view,arch_db:pos_iot.pos_iot_config_view_form
 #: model_terms:ir.ui.view,arch_db:pos_iot.res_config_view_form_inherit_pos_iot
 msgid "IoT Devices"
-msgstr ""
+msgstr "IoT enheter"
 
 #. module: pos_iot
 #: model:ir.model.fields,field_description:pos_iot.field_pos_config__iot_device_ids
@@ -323,7 +333,7 @@ msgstr ""
 #: code:addons/pos_iot/static/src/app/payment.js:0
 #, python-format
 msgid "Please check if the IoT Box is still connected."
-msgstr ""
+msgstr "Kontrollera om IoT Box fortfarande är ansluten."
 
 #. module: pos_iot
 #. odoo-javascript
@@ -361,7 +371,7 @@ msgstr "Kassa Betalningsmetoder"
 #. module: pos_iot
 #: model:ir.model,name:pos_iot.model_pos_printer
 msgid "Point of Sale Printer"
-msgstr ""
+msgstr "Kassakvittoskrivare"
 
 #. module: pos_iot
 #: model:ir.model,name:pos_iot.model_pos_session
@@ -371,11 +381,18 @@ msgstr "Kassasession"
 #. module: pos_iot
 #: model:ir.model.fields,field_description:pos_iot.field_pos_config__iface_print_via_proxy
 msgid "Print via Proxy"
-msgstr ""
+msgstr "Skriv ut via fullmakt"
 
 #. module: pos_iot
 #: model:ir.model.fields,field_description:pos_iot.field_pos_printer__proxy_ip
 msgid "Proxy IP Address"
+msgstr ""
+
+#. module: pos_iot
+#. odoo-python
+#: code:addons/pos_iot/models/pos_printer.py:0
+#, python-format
+msgid "Proxy IP cannot be empty."
 msgstr ""
 
 #. module: pos_iot
@@ -387,12 +404,12 @@ msgstr "Kvitto Skrivare"
 #. module: pos_iot
 #: model:ir.model.fields,field_description:pos_iot.field_pos_config__iface_scan_via_proxy
 msgid "Scan via Proxy"
-msgstr ""
+msgstr "Skanna via proxy"
 
 #. module: pos_iot
 #: model:ir.model.fields,help:pos_iot.field_pos_config__iface_customer_facing_display_via_proxy
 msgid "Show checkout to customers with a remotely-connected screen."
-msgstr ""
+msgstr "Visa kassan för kunder med en fjärransluten skärm."
 
 #. module: pos_iot
 #. odoo-javascript
@@ -452,7 +469,7 @@ msgstr ""
 #. module: pos_iot
 #: model_terms:ir.ui.view,arch_db:pos_iot.res_config_view_form_inherit_pos_iot
 msgid "Worldline"
-msgstr ""
+msgstr "Världslinje"
 
 #. module: pos_iot
 #. odoo-javascript

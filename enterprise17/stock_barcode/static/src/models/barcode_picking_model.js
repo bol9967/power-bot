@@ -32,7 +32,7 @@ export default class BarcodePickingModel extends BarcodeModel {
         super.setData(...arguments);
         this._useReservation = this.initialState.lines.some(line => !line.picked);
         this.config = data.data.config || {}; // Picking type's scan restrictions configuration.
-        if (!this.displayDestinationLocation) {
+        if (!this.useScanDestinationLocation) {
             this.config.restrict_scan_dest_location = 'no';
         }
         this.lineFormViewId = data.data.line_view_id;
@@ -183,7 +183,7 @@ export default class BarcodePickingModel extends BarcodeModel {
 
     async updateLine(line, args) {
         await super.updateLine(...arguments);
-        let { location_dest_id, result_package_id } = args;
+        let { location_id, location_dest_id, result_package_id } = args;
         if (result_package_id) {
             if (typeof result_package_id === 'number') {
                 result_package_id = this.cache.getRecord('stock.quant.package', result_package_id);
@@ -193,7 +193,12 @@ export default class BarcodePickingModel extends BarcodeModel {
             }
             line.result_package_id = result_package_id;
         }
-
+        if (!location_id && this.lastScanned.sourceLocation) {
+            line.location_id = this.lastScanned.sourceLocation;
+            if (line.package_id && line.package_id.location_id != line.location_id.id) {
+                line.package_id = false;
+            }
+        }
         if (location_dest_id) {
             if (typeof location_dest_id === 'number') {
                 location_dest_id = this.cache.getRecord('stock.location', args.location_dest_id);
@@ -274,7 +279,7 @@ export default class BarcodePickingModel extends BarcodeModel {
             icon: "tags",
         };
         if ((line || this.lastScanned.packageId) && this.groups.group_stock_multi_locations) {
-            if (this.record.picking_type_code === "outgoing" && this.displaySourceLocation) {
+            if (this.record.picking_type_code === "outgoing" && this.useScanSourceLocation) {
                 barcodeInfo = {
                     message: _t("Scan more products, or scan a new source location"),
                     class: "scan_product_or_src",
@@ -319,7 +324,7 @@ export default class BarcodePickingModel extends BarcodeModel {
         }
 
         // About source location.
-        if (this.displaySourceLocation) {
+        if (this.useScanSourceLocation) {
             if (!this.lastScanned.sourceLocation && !this.pageIsDone) {
                 return infos.scanScrLoc;
             } else if (this.lastScanned.sourceLocation && this.lastScanned.destLocation == 'no' &&
@@ -511,7 +516,7 @@ export default class BarcodePickingModel extends BarcodeModel {
      * @param {int} id location's id
      */
     async changeDestinationLocation(id, selectedLine) {
-        if ((selectedLine.lines && !selectedLine.isPackageLine) || selectedLine.location_dest_id.id === id) {
+        if (selectedLine.lines && !selectedLine.isPackageLine) {
             this._clearScanData();
             return false;
         }
@@ -564,8 +569,7 @@ export default class BarcodePickingModel extends BarcodeModel {
 
     get displayDestinationLocation() {
         return this.groups.group_stock_multi_locations &&
-            ['incoming', 'internal'].includes(this.record.picking_type_code) &&
-            this.config.restrict_scan_dest_location != 'no';
+            ['incoming', 'internal'].includes(this.record.picking_type_code)
     }
 
     get displayPutInPackButton() {
@@ -577,8 +581,16 @@ export default class BarcodePickingModel extends BarcodeModel {
     }
 
     get displaySourceLocation() {
-        return super.displaySourceLocation && this.config.restrict_scan_source_location &&
+        return super.displaySourceLocation &&
             ['internal', 'outgoing'].includes(this.record.picking_type_code);
+    }
+
+    get useScanSourceLocation() {
+        return super.useScanSourceLocation && this.config.restrict_scan_source_location 
+    }
+
+    get useScanDestinationLocation() {
+        return super.useScanDestinationLocation && this.config.restrict_scan_dest_location != 'no';
     }
 
     get displayValidateButton() {
@@ -617,6 +629,10 @@ export default class BarcodePickingModel extends BarcodeModel {
 
     lineIsFaulty(line) {
         return this._useReservation && line.qty_done > line.reserved_uom_qty;
+    }
+
+    get moveIds() {
+        return this.record.move_ids;
     }
 
     get packageLines() {
@@ -719,6 +735,11 @@ export default class BarcodePickingModel extends BarcodeModel {
 
     get reloadingMoveLines() {
         return this.currentState !== undefined;
+    }
+
+    async beforeQuit() {
+        await super.beforeQuit();
+        return this.orm.call("stock.move", "split_uncompleted_moves", [this.moveIds]);
     }
 
     async save() {
@@ -858,9 +879,7 @@ export default class BarcodePickingModel extends BarcodeModel {
         }
 
         if (this.config.restrict_scan_source_location && !this._currentLocation && !this.selectedLine) { // Source Location.
-            if (location) {
-                this.location = location;
-            } else {
+            if (!location) {
                 check.title = _t("Mandatory Source Location");
                 check.message = _t(
                     "You are supposed to scan %s or another source location",
@@ -1056,7 +1075,7 @@ export default class BarcodePickingModel extends BarcodeModel {
     }
 
     _getDefaultMessageType() {
-        if (this.displaySourceLocation && !this.lastScanned.sourceLocation) {
+        if (this.useScanSourceLocation && !this.lastScanned.sourceLocation) {
             return 'scan_src';
         }
         return 'scan_product';
@@ -1191,9 +1210,14 @@ export default class BarcodePickingModel extends BarcodeModel {
     }
 
     async _processLocationSource(barcodeData){
+        // Checks the scanned location belongs to the picking's source (do nothing if not the case.)
+        if (!this._isSublocation(barcodeData.location, this._defaultLocation())) {
+            barcodeData.stopped = true;
+            const message = _t("The scanned location doesn't belong to this operation's location");
+            return this.notification(message, { type: 'danger' });
+        }
         super._processLocationSource(...arguments);
-        // check if line has qty_done, create a new line with the rest,
-        // and update the reserved qty of current line to qty_done, marked complete
+        // Splits uncompleted lines to be able to add reserved products from unreserved location.
         let currentLine = this.selectedLine || this.lastScannedLine;
         currentLine = this._getParentLine(currentLine) || currentLine;
         if (currentLine && currentLine.location_id.id !== barcodeData.location.id){
@@ -1231,6 +1255,16 @@ export default class BarcodePickingModel extends BarcodeModel {
                 this._markLineAsDirty(currentLine);
             }
         }
+    }
+
+    /**
+     * Returns true if the first given location is a sublocation of the second given location.
+     * @param {Object} childLocation
+     * @param {Object} parentLocation
+     * @returns {boolean}
+     */
+    _isSublocation(childLocation, parentLocation) {
+        return childLocation.parent_path.includes(parentLocation.parent_path);
     }
 
     async _processLocationDestination(barcodeData) {
@@ -1277,10 +1311,24 @@ export default class BarcodePickingModel extends BarcodeModel {
             // Scanned a non-existing package: make a put in pack.
             barcodeData.stopped = true;
             return await this._putInPack({ default_name: packageName });
-        } else if (!recPackage || (
-            recPackage.location_id && ![this._defaultDestLocation().id, this.location.id].includes(recPackage.location_id)
-        )) {
+        } else if (!recPackage) {
             return; // No package, package's type or package's name => Nothing to do.
+        }
+        const packLocation = recPackage.location_id
+            ? this.cache.dbIdCache['stock.location'][recPackage.location_id]
+            : false;
+        if (recPackage.location_id && !packLocation) {
+            // The package is in a location but the location was not found in the cache,
+            // surely because this location is not related to this picking.
+            return;
+        }
+        if (packLocation && packLocation.id !== this._defaultDestLocation().id && (
+            (this.config.restrict_scan_source_location && packLocation.id !== this.location.id) ||
+            (!this.config.restrict_scan_source_location && !this._isSublocation(packLocation, this.location))
+        )) {
+            // Package is not located at the destination (result package) and is not located at the
+            // scanned source location (or one of its sublocations) neither.
+            return;
         }
         // If move entire package, checks if the scanned package matches a package line.
         if (this._moveEntirePackage()) {
@@ -1334,11 +1382,11 @@ export default class BarcodePickingModel extends BarcodeModel {
             this.trigger('update');
             return;
         }
-        if (this.location && this.location.id !== recPackage.location_id) {
+
+        if (this.location && (!packLocation || !this._isSublocation(packLocation, this.location))) {
             // Package not at the source location: can't add its content.
             return;
         }
-
         // Checks if the package is already scanned.
         let alreadyExisting = 0;
         for (const line of this.pageLines) {

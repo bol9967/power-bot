@@ -91,18 +91,31 @@ class AccountMove(models.Model):
         elif document_type in self.get_sale_types():
             return company.extract_out_invoice_digitalization_mode == mode
 
-    def _needs_auto_extract(self):
+    def _needs_auto_extract(self, new_document=False, file_type=''):
         """ Returns `True` if the document should be automatically sent to the extraction server"""
         self.ensure_one()
+
+        # Check that the document meets the basic conditions for auto extraction
         if (
-            self._context.get('disable_ocr_auto_extraction') or
-            self.extract_state != "no_extract_requested" or
-            not self._check_digitalization_mode(self.company_id, self.move_type, 'auto_send') or
-            not self.is_in_extractable_state
+            self.extract_state != "no_extract_requested"
+            or not self._check_digitalization_mode(self.company_id, self.move_type, 'auto_send')
+            or not self.is_in_extractable_state
         ):
             return False
 
-        # Only auto extract for purchase moves
+        if self._context.get('from_alias'):
+            # If the document comes from the email alias, check that the file format is compatible with the journal setting
+            if not file_type and self.message_main_attachment_id:
+                file_type = self.message_main_attachment_id.mimetype.split('/')[1]
+            return (
+                not self.journal_id.alias_auto_extract_pdfs_only
+                or file_type == 'pdf'
+            )
+        elif new_document:
+            # New documents are always auto extracted
+            return True
+
+        # If it's an existing document to which an attachment is added, only auto extract it for purchase documents
         return self.is_purchase_document()
 
     def _get_ocr_module_name(self):
@@ -304,6 +317,10 @@ class AccountMove(models.Model):
         return word.word_text
 
     def _find_partner_from_previous_extracts(self):
+        """
+        Try to find the partner according to the detected layout.
+        It is expected that two invoices emitted by the same supplier will share the same detected layout.
+        """
         match_conditions = [
             ('extract_detected_layout', '=', self.extract_detected_layout),
             ('extract_partner_name', '=', self.extract_partner_name),
@@ -446,7 +463,7 @@ class AccountMove(models.Model):
             if partner_vat:
                 return partner_vat, False
 
-        if self.extract_detected_layout:
+        if self.is_purchase_document() and self.extract_detected_layout:
             partner = self._find_partner_from_previous_extracts()
             if partner:
                 return partner, False
@@ -860,13 +877,6 @@ class AccountMove(models.Model):
         # EXTENDS 'account'
         self.ensure_one()
 
-        if file_data['type'] in ('pdf', 'binary') and not self._context.get('disable_ocr_auto_extraction'):
-            if self._context.get('from_alias'):
-                if not self.journal_id.alias_auto_extract_pdfs_only or (self.message_main_attachment_id.mimetype or '').endswith('pdf'):
-                    return self._import_invoice_ocr
-            elif self._needs_auto_extract():
-                return self._import_invoice_ocr
-            elif new:
-                if self._check_digitalization_mode(self.company_id, self.move_type, 'auto_send'):
-                    return self._import_invoice_ocr
+        if file_data['type'] in ('pdf', 'binary') and self._needs_auto_extract(new_document=new, file_type=file_data['type']):
+            return self._import_invoice_ocr
         return super()._get_edi_decoder(file_data, new=new)

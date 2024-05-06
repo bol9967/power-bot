@@ -7,7 +7,6 @@
 # Daniel Löfgren, 2023
 # Fredrik Arvas <fredrik.arvas@vertel.se>, 2023
 # Martin Wilderoth <martin.wilderoth@linserv.se>, 2023
-# Jakob Krabbe <jakob.krabbe@vertel.se>, 2023
 # Lisa <lisa.oskoma@vertel.se>, 2023
 # Patrik Lermon <patrik.lermon@gmail.com>, 2023
 # Björn Hayer, 2023
@@ -24,6 +23,7 @@
 # Martin Trigaux, 2024
 # Kristoffer Grundström <lovaren@gmail.com>, 2024
 # Anders Wallenquist <anders.wallenquist@vertel.se>, 2024
+# Jakob Krabbe <jakob.krabbe@vertel.se>, 2024
 # 
 msgid ""
 msgstr ""
@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-05 13:45+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Anders Wallenquist <anders.wallenquist@vertel.se>, 2024\n"
+"Last-Translator: Jakob Krabbe <jakob.krabbe@vertel.se>, 2024\n"
 "Language-Team: Swedish (https://app.transifex.com/odoo/teams/41243/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -150,7 +150,7 @@ msgstr ""
 #. module: sign
 #: model_terms:ir.ui.view,arch_db:sign.sign_request_logs_user
 msgid "2023-08-18"
-msgstr ""
+msgstr "2023-08-18"
 
 #. module: sign
 #: model_terms:ir.ui.view,arch_db:sign.sign_request_logs_user
@@ -1839,7 +1839,7 @@ msgstr "Sena aktiviteter"
 #: model:ir.model.fields,field_description:sign.field_sign_log__latitude
 #: model:ir.model.fields,field_description:sign.field_sign_request_item__latitude
 msgid "Latitude"
-msgstr ""
+msgstr "Latitud"
 
 #. module: sign
 #. odoo-javascript
@@ -1906,7 +1906,7 @@ msgstr "Loggar"
 #: model:ir.model.fields,field_description:sign.field_sign_log__longitude
 #: model:ir.model.fields,field_description:sign.field_sign_request_item__longitude
 msgid "Longitude"
-msgstr ""
+msgstr "Longitud"
 
 #. module: sign
 #: model:ir.model.fields,field_description:sign.field_sign_request_item__mail_sent_order
@@ -1941,7 +1941,7 @@ msgstr ""
 #. module: sign
 #: model_terms:ir.ui.view,arch_db:sign.sign_request_logs_user
 msgid "Marc Demo"
-msgstr ""
+msgstr "Marc Demo"
 
 #. module: sign
 #: model:ir.model.fields,field_description:sign.field_sign_send_request__message
@@ -2515,7 +2515,7 @@ msgstr "Obligatorisk"
 #: model_terms:ir.ui.view,arch_db:sign.sign_request_view_tree
 #, python-format
 msgid "Resend"
-msgstr ""
+msgstr "Resend"
 
 #. module: sign
 #. odoo-javascript
@@ -3297,7 +3297,7 @@ msgstr "Etikettnamn"
 #. module: sign
 #: model:ir.model.constraint,message:sign.constraint_sign_template_tag_name_uniq
 msgid "Tag name already exists!"
-msgstr ""
+msgstr "Tagnamnet finns redan!"
 
 #. module: sign
 #: model:ir.actions.act_window,name:sign.sign_template_tag_action
@@ -4343,7 +4343,7 @@ msgstr ""
 #. module: sign
 #: model_terms:ir.ui.view,arch_db:sign.sign_request_logs_user
 msgid "demo@email.com"
-msgstr ""
+msgstr "demo@email.com"
 
 #. module: sign
 #. odoo-javascript
@@ -4490,7 +4490,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:sign.green_report_container
 #: model_terms:ir.ui.view,arch_db:sign.green_report_container_pdf
 msgid "shower"
-msgstr ""
+msgstr "dusch"
 
 #. module: sign
 #: model_terms:ir.ui.view,arch_db:sign.green_report_container
@@ -4501,7 +4501,7 @@ msgstr ""
 #. module: sign
 #: model_terms:ir.ui.view,arch_db:sign.sign_request_view_tree
 msgid "sign"
-msgstr ""
+msgstr "tecken"
 
 #. module: sign
 #: model:sign.item.type,tip:sign.sign_item_type_signature
@@ -4550,7 +4550,7 @@ msgstr "till:"
 #: model_terms:ir.ui.view,arch_db:sign.green_report_container
 #: model_terms:ir.ui.view,arch_db:sign.green_report_container_pdf
 msgid "tree"
-msgstr ""
+msgstr "träd"
 
 #. module: sign
 #: model_terms:ir.ui.view,arch_db:sign.green_report_container

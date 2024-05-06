@@ -5,8 +5,8 @@
 # Translators:
 # Wil Odoo, 2023
 # Iran Villalobos López, 2023
-# Fernanda Alvarez, 2023
 # Patricia Gutiérrez Capetillo <pagc@odoo.com>, 2024
+# Fernanda Alvarez, 2024
 # 
 msgid ""
 msgstr ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-26 16:09+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Patricia Gutiérrez Capetillo <pagc@odoo.com>, 2024\n"
+"Last-Translator: Fernanda Alvarez, 2024\n"
 "Language-Team: Spanish (Latin America) (https://app.transifex.com/odoo/teams/41243/es_419/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -78,7 +78,20 @@ msgstr "Número de empleados:"
 #. module: knowledge
 #: model:ir.model.fields,field_description:knowledge.field_knowledge_article__favorite_count
 msgid "#Is Favorite"
-msgstr "# Es un favorito"
+msgstr "#Es favorito"
+
+#. module: knowledge
+#. odoo-python
+#: code:addons/knowledge/models/knowledge_article.py:0
+#, python-format
+msgid ""
+"\"%(article_item_name)s\" is an Article Item from \"%(article_name)s\" and "
+"cannot be restored on its own. Contact the owner of \"%(article_name)s\" to "
+"have it restored instead."
+msgstr ""
+"\"%(article_item_name)s\" es un elemento de artículo de \"%(article_name)s\""
+" y no se puede restaurar por sí mismo. Contacte al dueño de "
+"\"%(article_name)s\" para poder restaurarlo."
 
 #. module: knowledge
 #. odoo-python
@@ -175,7 +188,7 @@ msgid ""
 msgstr ""
 "<em>\n"
 "                    <font class=\"text-600\">\n"
-"                        ¿Qué está tratando de lograr con esta campaña?\n"
+"                        ¿Qué quiere lograr con esta campaña?\n"
 "                    </font>\n"
 "                </em>"
 
@@ -190,7 +203,7 @@ msgid ""
 msgstr ""
 "<em>\n"
 "                    <font class=\"text-600\">\n"
-"                        ¿De qué está tratando de convencer a la gente involucrada?\n"
+"                        ¿De qué quiere convencer a la gente?\n"
 "                    </font>\n"
 "                </em>"
 
@@ -283,7 +296,7 @@ msgid ""
 "                </em>"
 msgstr ""
 "<em>\n"
-"                    <font class=\"text-600\">¿Cómo es que ocurrió?</font>\n"
+"                    <font class=\"text-600\">¿Cómo ocurrió?</font>\n"
 "                </em>"
 
 #. module: knowledge
@@ -305,7 +318,7 @@ msgid ""
 "                </em>"
 msgstr ""
 "<em>\n"
-"                    <font class=\"text-600\">Escriba aquí cualquier otra pregunta o duda que pueda llegar a tener.</font>\n"
+"                    <font class=\"text-600\">Escriba aquí cualquier otra pregunta o duda que pueda tener.</font>\n"
 "                </em>"
 
 #. module: knowledge
@@ -490,8 +503,8 @@ msgid ""
 "<font class=\"text-600\">Detailed Explanation of the feature, with "
 "screenshots or a GIF</font>"
 msgstr ""
-"<font class=\"text-600\">Explicación detallada de la función, incluya "
-"capturas de pantalla o un GIF</font>"
+"<font class=\"text-600\">Explicación detallada de la función en la que se "
+"incluya capturas de pantalla o un GIF</font>"
 
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_account_management
@@ -514,8 +527,8 @@ msgid ""
 "<font class=\"text-600\">How do stakeholders interact regarding "
 "offers?</font>"
 msgstr ""
-"<font class=\"text-600\">¿Cómo interactúan las partes interesadas con "
-"respecto a las ofertas?</font>"
+"<font class=\"text-600\">¿Cómo interactúan las partes interesadas con las "
+"ofertas?</font>"
 
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_account_management
@@ -527,7 +540,7 @@ msgstr "<font class=\"text-600\">¿Cómo comparan y evalúan las ofertas?</font>
 msgid ""
 "<font class=\"text-600\">I made sure any visual change is responsive</font>"
 msgstr ""
-"<font class=\"text-600\">Me aseguré de que cualquier cambio visual sea "
+"<font class=\"text-600\">Me aseguré de que cualquier cambio visual fuera "
 "responsivo</font>"
 
 #. module: knowledge
@@ -734,7 +747,7 @@ msgstr ""
 "                        <font style=\"color: rgb(255, 0, 0);\"><strong>Rojo: lo que más valoran son los resultados.</strong></font><br>\n"
 "                        <strong>\n"
 "                            <font style=\"color: rgb(239, 198, 49);\">\n"
-"                                Amarillo: lo que más valoran es la creatividad y el entusiasmo, más que los resultados.\n"
+"                                Amarillo: valoran la creatividad y el entusiasmo más que los resultados.\n"
 "                            </font>\n"
 "                        </strong>\n"
 "                    </i>"
@@ -1012,9 +1025,9 @@ msgstr ""
 "<span style=\"font-size: 14px;\">\n"
 "            Pruebe los\n"
 "            <span style=\"font-weight: bolder;\">comandos</span>\n"
-"            debajo de esta lista,\n"
+"            abajo de esta lista.\n"
 "            <span style=\"font-weight: bolder;\">\n"
-"                <font class=\"text-o-color-2\">escriba</font>\n"
+"                <font class=\"text-o-color-2\">Escriba</font>\n"
 "            </span>\n"
 "            \"<span style=\"font-weight: bolder;\">/</span>\"\n"
 "        </span>"
@@ -1289,7 +1302,7 @@ msgid ""
 "    </span>"
 msgstr ""
 "<span style=\"font-size: 14px;\">\n"
-"        ¿Desea ir\n"
+"        ¿Desea ser\n"
 "        <span style=\"font-style: italic;\">aún más</span>\n"
 "        rápido? ⚡️\n"
 "    </span>\n"
@@ -1976,8 +1989,8 @@ msgid ""
 "A must listen for all developers out there and anyone interested in "
 "Javascript!"
 msgstr ""
-"Sin duda alguna, todas las personas que se dediquen al desarrollo o que "
-"estén interesadas en Javascript deben escucharlo."
+"Todas las personas que se dediquen al desarrollo o que estén interesadas en "
+"Javascript deben escucharlo."
 
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_marketing_customer_persona_3
@@ -2354,8 +2367,8 @@ msgid ""
 "Are you sure you want to leave your private Article? As you are its last "
 "member, it will be moved to the Trash."
 msgstr ""
-"¿Está seguro de que quiere dejar su artículo como privado? Ya que es su "
-"último miembro, se moverá a la papelera."
+"¿Está seguro de que quiere dejar el artículo como privado? Tome en cuenta "
+"que usted es el último miembro, por lo que se moverá a la papelera."
 
 #. module: knowledge
 #. odoo-javascript
@@ -2498,6 +2511,7 @@ msgstr "Propiedades del elemento del artículo"
 
 #. module: knowledge
 #. odoo-javascript
+#: code:addons/knowledge/static/src/components/knowledge_article_html_field/knowledge_article_html_field.js:0
 #: code:addons/knowledge/static/src/components/knowledge_article_html_field/knowledge_article_html_field.js:0
 #: code:addons/knowledge/static/src/components/knowledge_article_html_field/knowledge_article_html_field.js:0
 #: model:ir.actions.act_window,name:knowledge.knowledge_article_action_item_calendar
@@ -2676,7 +2690,7 @@ msgid ""
 "class=\"fa fa-star\"></i><i class=\"fa fa-star\"></i><i class=\"fa fa-"
 "star\"></i><i class=\"fa fa-star\"></i><i class=\"fa fa-star-o\"></i></span>"
 msgstr ""
-"Atracción por la marca <span class=\"o_stars o_five_stars\" "
+"Atracción de la marca <span class=\"o_stars o_five_stars\" "
 "id=\"checkId-3\"><i class=\"fa fa-star\"></i><i class=\"fa fa-star\"></i><i "
 "class=\"fa fa-star\"></i><i class=\"fa fa-star\"></i><i class=\"fa fa-"
 "star-o\"></i></span>"
@@ -2689,7 +2703,7 @@ msgid ""
 "star\"></i><i class=\"fa fa-star-o\"></i><i class=\"fa fa-"
 "star-o\"></i></span>"
 msgstr ""
-"Atracción por la marca <span class=\"o_stars o_five_stars\" "
+"Atracción de la marca <span class=\"o_stars o_five_stars\" "
 "id=\"checkId-3\"><i class=\"fa fa-star\"></i><i class=\"fa fa-star\"></i><i "
 "class=\"fa fa-star\"></i><i class=\"fa fa-star-o\"></i><i class=\"fa fa-"
 "star-o\"></i></span>"
@@ -2702,7 +2716,7 @@ msgid ""
 "star-o\"></i><i class=\"fa fa-star-o\"></i><i class=\"fa fa-"
 "star-o\"></i></span>"
 msgstr ""
-"Atracción por la marca <span class=\"o_stars o_five_stars\" "
+"Atracción de la marca <span class=\"o_stars o_five_stars\" "
 "id=\"checkId-3\"><i class=\"fa fa-star\"></i><i class=\"fa fa-star\"></i><i "
 "class=\"fa fa-star-o\"></i><i class=\"fa fa-star-o\"></i><i class=\"fa fa-"
 "star-o\"></i></span>"
@@ -2715,7 +2729,7 @@ msgid ""
 "star-o\"></i><i class=\"fa fa-star-o\"></i><i class=\"fa fa-"
 "star-o\"></i></span>"
 msgstr ""
-"Atracción por la marca <span class=\"o_stars o_five_stars\" "
+"Atracción de la marca <span class=\"o_stars o_five_stars\" "
 "id=\"checkId-3\"><i class=\"fa fa-star-o\"></i><i class=\"fa fa-"
 "star-o\"></i><i class=\"fa fa-star-o\"></i><i class=\"fa fa-star-o\"></i><i "
 "class=\"fa fa-star-o\"></i></span>"
@@ -2921,7 +2935,7 @@ msgid ""
 "Centralize account insights in one document for comprehensive monitoring and"
 " follow-up."
 msgstr ""
-"Centralize la información sobre la cuenta en un solo documento para llevar "
+"Centralice la información sobre la cuenta en un solo documento para llevar "
 "un mejor seguimiento y monitoreo. "
 
 #. module: knowledge
@@ -3153,8 +3167,8 @@ msgid ""
 "Could not move \"%s%s\" in the shared section. Only shared articles can be "
 "moved in this section."
 msgstr ""
-"No se pudo mover \"%s%s\" a la sección de compartidos, solo puede mover los "
-"artículos compartidos."
+"No se pudo mover \"%s%s\" a la sección de compartidos. Solo puede mover "
+"artículos compartidos a esta sección."
 
 #. module: knowledge
 #. odoo-javascript
@@ -3392,7 +3406,7 @@ msgid ""
 "                 before being permanently removed for your database"
 msgstr ""
 "Los artículos eliminados se almacenan en la papelera durante <b>%(threshold)s</b> días adicionales\n"
-"                 antes de ser eliminados de forma permanente de su base de datos"
+"                 antes de eliminarse de forma permanente de su base de datos"
 
 #. module: knowledge
 #: model:ir.model.fields,field_description:knowledge.field_knowledge_article__deletion_date
@@ -3780,7 +3794,7 @@ msgstr "¿Tiene subartículos normales?"
 msgid ""
 "Has the user access to each parent from current article until its root?"
 msgstr ""
-"¿El usuario tiene acceso a cada parte principal desde el artículo actual "
+"¿El usuario tiene acceso a cada parte principal, desde el artículo actual "
 "hasta su origen?"
 
 #. module: knowledge
@@ -3933,7 +3947,7 @@ msgid ""
 "                        Considering we just launched ProductName, I was thinking you would be interested."
 msgstr ""
 "Mientras realizaba una investigación por internet me encontré con su empresa.<br>\n"
-"                       Acabamos de lanzar [escriba el nombre del producto aquí] y considero que podría ser de su interés.  "
+"                       Acabamos de lanzar [escriba el nombre del producto aquí] y considero que podría interesarle.  "
 
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_sales_playbook
@@ -4291,7 +4305,7 @@ msgstr "Es una plantilla"
 #. module: knowledge
 #: model:ir.model.fields,field_description:knowledge.field_knowledge_article__has_item_parent
 msgid "Is the parent an Item?"
-msgstr "¿Es el principal un elemento?"
+msgstr "¿El principal es un elemento?"
 
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_post_mortem
@@ -4301,7 +4315,7 @@ msgstr "Resumen de errores"
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_account_management
 msgid "Issues they are trying to solve:"
-msgstr "Problemas a los que se busca una solución:"
+msgstr "Problemas para los que se está buscando una solución:"
 
 #. module: knowledge
 #: model:ir.model.fields,help:knowledge.field_knowledge_article__template_category_sequence
@@ -4318,22 +4332,22 @@ msgstr ""
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_meeting_minutes_template
 msgid "Item 1"
-msgstr "Primer tema"
+msgstr "Tema 1"
 
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_meeting_minutes_template
 msgid "Item 2"
-msgstr "Segundo tema"
+msgstr "Tema 2"
 
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_meeting_minutes_template
 msgid "Item 3"
-msgstr "Tercer tema"
+msgstr "Tema 3"
 
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_meeting_minutes_template
 msgid "Item 4"
-msgstr "Cuarto tema"
+msgstr "Tema 4"
 
 #. module: knowledge
 #. odoo-javascript
@@ -4555,7 +4569,7 @@ msgstr "Permisos y tiempo personal"
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_hr_faq
 msgid "Let your Team Leader know in advance."
-msgstr "Avise con anticipación a su Líder de equipo. "
+msgstr "Avise con anticipación a su líder de equipo. "
 
 #. module: knowledge
 #. odoo-javascript
@@ -4776,10 +4790,9 @@ msgid ""
 "                            kilometers.<br>Starting from the office, they enjoyed a great tour in the countryside before\n"
 "                            coming back to Grand-Rosière, where they were welcomed with a drink and a burger."
 msgstr ""
-"Más de 150 Odooers participaron en la edición de este año de las carreras de"
-" 5 y 11 kilómetros.<br>El punto de partida fue la oficina, disfrutaron de un"
-" gran recorrido por el campo antes de regresar a Grand-Rosière, donde les "
-"recibimos con una bebida y una hamburguesa."
+"Más de 150 Odooers participaron en la carrera de 5 u 11 kilómetros\n"
+"                            de este año.<br>El recorrido inició en la oficina y pudiero. correr a través del campo antes\n"
+"                            de regresar a Grand-Rosière, donde se les recibió con bebidas y hamburguesas."
 
 #. module: knowledge
 #. odoo-javascript
@@ -4954,7 +4967,7 @@ msgstr "Próxima reunión: <font class=\"text-400\">lugar y fecha</font>"
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_meeting_example_branding
 msgid "Next Meeting: <u>6th May, @John's Office</u>"
-msgstr "Próxima reunión: <u>6 de mayo @ oficina de John</u>"
+msgstr "Próxima reunión: <u>6 de mayo en la oficina de John</u>"
 
 #. module: knowledge
 #. odoo-javascript
@@ -5015,14 +5028,14 @@ msgstr "No se encontraron artículos ocultos"
 #. module: knowledge
 #: model_terms:ir.actions.act_window,help:knowledge.knowledge_article_stage_action
 msgid "No stage yet!"
-msgstr "Aún no hay etapa"
+msgstr "Todavía no hay etapa."
 
 #. module: knowledge
 #. odoo-javascript
 #: code:addons/knowledge/static/src/components/article_template_picker_dialog/article_template_picker_dialog.xml:0
 #, python-format
 msgid "No template yet."
-msgstr "No hay plantilla."
+msgstr "Todavía no hay plantilla."
 
 #. module: knowledge
 #. odoo-javascript
@@ -5115,6 +5128,13 @@ msgid "Ongoing"
 msgstr "En curso"
 
 #. module: knowledge
+#. odoo-javascript
+#: code:addons/knowledge/static/src/components/behaviors/view_link_behavior/view_link_behavior.js:0
+#, python-format
+msgid "Only Internal Users can access this view."
+msgstr "Solo los usuarios internos pueden acceder a esta vista."
+
+#. module: knowledge
 #. odoo-python
 #: code:addons/knowledge/models/knowledge_article.py:0
 #: code:addons/knowledge/models/knowledge_article.py:0
@@ -5164,8 +5184,8 @@ msgid ""
 "Oops, the file %s could not be found. Please replace this file box by a new "
 "one to re-upload the file."
 msgstr ""
-"Uy, no pudimos encontrar el archivo %s, reemplace este cuadro de archivo por"
-" uno nuevo para volver a cargar el archivo."
+"Lo sentimos, no pudimos encontrar el archivo %s, reemplace este cuadro de "
+"archivo por uno nuevo para volver a cargarlo."
 
 #. module: knowledge
 #. odoo-javascript
@@ -5242,7 +5262,7 @@ msgstr "Resultados"
 #. module: knowledge
 #: model:ir.model.fields,field_description:knowledge.field_knowledge_article_stage__parent_id
 msgid "Owner Article"
-msgstr "Propietario del artículo"
+msgstr "Dueño del artículo"
 
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_company_newsletter
@@ -5464,7 +5484,7 @@ msgid ""
 "Properties are fields that can only be added on articles that have a parent."
 msgstr ""
 "Las propiedades son campos que solo se pueden agregar a artículos que tienen"
-" uno principal."
+" un artículo principal."
 
 #. module: knowledge
 #. odoo-javascript
@@ -5690,7 +5710,7 @@ msgstr "Restringir acceso"
 #: code:addons/knowledge/static/src/components/permission_panel/permission_panel.js:0
 #, python-format
 msgid "Restrict own access"
-msgstr "Restringir el propio acceso"
+msgstr "Restringir el acceso propio"
 
 #. module: knowledge
 #: model:ir.model.fields.selection,name:knowledge.selection__knowledge_article__inherited_permission__none
@@ -5933,9 +5953,9 @@ msgid ""
 "fa-star\"></i><i class=\"fa fa-star\"></i><i class=\"fa fa-star\"></i><i "
 "class=\"fa fa-star\"></i><i class=\"fa fa-star\"></i></span>"
 msgstr ""
-"Estatus social <span class=\"o_stars o_five_stars\" id=\"checkId-4\"><i "
-"class=\"fa fa-star\"></i><i class=\"fa fa-star\"></i><i class=\"fa fa-"
-"star\"></i><i class=\"fa fa-star\"></i><i class=\"fa fa-star\"></i></span>"
+"Social <span class=\"o_stars o_five_stars\" id=\"checkId-4\"><i class=\"fa "
+"fa-star\"></i><i class=\"fa fa-star\"></i><i class=\"fa fa-star\"></i><i "
+"class=\"fa fa-star\"></i><i class=\"fa fa-star\"></i></span>"
 
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_marketing_customer_persona_4
@@ -5944,7 +5964,7 @@ msgid ""
 "class=\"fa fa-star\"></i><i class=\"fa fa-star\"></i><i class=\"fa fa-"
 "star\"></i><i class=\"fa fa-star\"></i><i class=\"fa fa-star-o\"></i></span>"
 msgstr ""
-"Estatus social <span class=\"o_stars o_five_stars\" id=\"checkId-4\"><i "
+"Estado social <span class=\"o_stars o_five_stars\" id=\"checkId-4\"><i "
 "class=\"fa fa-star\"></i><i class=\"fa fa-star\"></i><i class=\"fa fa-"
 "star\"></i><i class=\"fa fa-star\"></i><i class=\"fa fa-star-o\"></i></span>"
 
@@ -5956,7 +5976,7 @@ msgid ""
 "star\"></i><i class=\"fa fa-star-o\"></i><i class=\"fa fa-"
 "star-o\"></i></span>"
 msgstr ""
-"Estatus social <span class=\"o_stars o_five_stars\" id=\"checkId-4\"><i "
+"Estado social <span class=\"o_stars o_five_stars\" id=\"checkId-4\"><i "
 "class=\"fa fa-star\"></i><i class=\"fa fa-star\"></i><i class=\"fa fa-"
 "star\"></i><i class=\"fa fa-star-o\"></i><i class=\"fa fa-"
 "star-o\"></i></span>"
@@ -5969,7 +5989,7 @@ msgid ""
 "star-o\"></i><i class=\"fa fa-star-o\"></i><i class=\"fa fa-"
 "star-o\"></i></span>"
 msgstr ""
-"Estatus social <span class=\"o_stars o_five_stars\" id=\"checkId-4\"><i "
+"Estado social <span class=\"o_stars o_five_stars\" id=\"checkId-4\"><i "
 "class=\"fa fa-star-o\"></i><i class=\"fa fa-star-o\"></i><i class=\"fa fa-"
 "star-o\"></i><i class=\"fa fa-star-o\"></i><i class=\"fa fa-"
 "star-o\"></i></span>"
@@ -5981,7 +6001,7 @@ msgid ""
 "class=\"fa fa-star\"></i><i class=\"fa fa-star\"></i><i class=\"fa fa-"
 "star\"></i><i class=\"fa fa-star\"></i><i class=\"fa fa-star-o\"></i></span>"
 msgstr ""
-"Estatus social ​<span class=\"o_stars o_five_stars\" id=\"checkId-4\"><i "
+"Estado social ​<span class=\"o_stars o_five_stars\" id=\"checkId-4\"><i "
 "class=\"fa fa-star\"></i><i class=\"fa fa-star\"></i><i class=\"fa fa-"
 "star\"></i><i class=\"fa fa-star\"></i><i class=\"fa fa-star-o\"></i></span>"
 
@@ -6253,9 +6273,9 @@ msgid ""
 "                                <strong>Odoo Run</strong>\n"
 "                            </font>!"
 msgstr ""
-"¡Gracias a todas las personas que nos ayudaron a organizar esta edición del \n"
+"¡Gracias a todas las personas que nos ayudaron a organizar esta edición de la \n"
 "                            <font class=\"text-o-color-2\">\n"
-"                                <strong>Maratón Odoo</strong>\n"
+"                                <strong>carrera de Odoo</strong>\n"
 "                            </font>!"
 
 #. module: knowledge
@@ -6336,7 +6356,7 @@ msgstr "El registro al que está dirigido este macro no se pudo encontrar."
 #: code:addons/knowledge/controllers/main.py:0
 #, python-format
 msgid "The selected member does not exists or has been already deleted."
-msgstr "El miembro seleccionado no existe o ya ha sido eliminado."
+msgstr "El miembro seleccionado no existe o ya se eliminó."
 
 #. module: knowledge
 #: model:ir.model.fields,help:knowledge.field_knowledge_article__sequence
@@ -6739,7 +6759,7 @@ msgid ""
 "they have write access on the article."
 msgstr ""
 "Cuando está bloqueado, los usuarios no pueden escribir en el cuerpo o "
-"cambiar el título, aún con acceso de edición al artículo."
+"cambiar el título, aún aunque tengan acceso de edición al artículo."
 
 #. module: knowledge
 #: model:ir.model.fields,help:knowledge.field_knowledge_article__to_delete
@@ -6775,10 +6795,9 @@ msgid ""
 msgstr ""
 "Sin importar si tiene preferencia por el encanto rústico de una cabaña de "
 "madera o la intrínseca belleza de las acerías victorianas, aquí podrá "
-"encontrar lo que necesita. ¿Está en búsqueda de una opción más específica? "
-"También podemos ayudarle, solo póngase en contacto con nuestros arquitectos "
-"y nos aseguraremos de construir un lugar que cumpla con sus "
-"especificaciones."
+"encontrar lo que necesita. ¿Busca una opción más específica? También podemos"
+" ayudarle, solo póngase en contacto con nuestros arquitectos y nos "
+"aseguraremos de construir un lugar que cumpla con lo que usted desea."
 
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_meeting_example_branding
@@ -6808,8 +6827,8 @@ msgstr ""
 " priorizar la comodidad al compartir un espacio tan limitado. Para asegurar "
 "que todas las personas que habitarán allí sean felices, verifique que haya "
 "al menos 9m² por persona. Si planea vivir con varios compañeros de "
-"habitación, le recomendamos nuestro modelo Serenità, tiene suficiente "
-"espacio para que todos se sientan a gusto.<br>"
+"habitación, le recomendamos nuestro modelo Serenità, el cual tiene "
+"suficiente espacio para que todos se sientan cómodos.<br>"
 
 #. module: knowledge
 #: model_terms:knowledge.article,template_body:knowledge.knowledge_article_template_product_catalog

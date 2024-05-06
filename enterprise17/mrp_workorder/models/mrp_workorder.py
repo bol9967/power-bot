@@ -261,6 +261,8 @@ class MrpProductionWorkcenterLine(models.Model):
         if not skip_employee_check:
             if not self.env.context.get('mrp_display'):
                 main_employee = self.env.user.employee_id.id
+                if not self.env.user.employee_id:
+                    raise UserError(_("You need to link this user to an employee of this company to process the work order"))
             else:
                 connected_employees = self.env['hr.employee'].get_employees_connected()
                 if len(connected_employees) == 0:
@@ -343,6 +345,7 @@ class MrpProductionWorkcenterLine(models.Model):
             'show_all_workorders': True,
             'workcenter_id': self.workcenter_id.id,
             'search_default_name': self.production_id.name,
+            'shouldHideNewWorkcenterButton': True,
         }
         return action
 

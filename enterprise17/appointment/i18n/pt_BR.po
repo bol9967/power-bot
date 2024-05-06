@@ -3,8 +3,8 @@
 # 	* appointment
 # 
 # Translators:
-# Wil Odoo, 2023
 # a75f12d3d37ea5bf159c4b3e85eb30e7_0fa6927, 2023
+# Wil Odoo, 2024
 # Maitê Dietze, 2024
 # 
 msgid ""
@@ -304,13 +304,13 @@ msgstr ""
 "    <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>\n"
 "        <td width=\"130px;\" style=\"min-width: 130px;\">\n"
 "            <div style=\"border-top-start-radius: 3px; border-top-end-radius: 3px; font-size: 12px; border-collapse: separate; text-align: center; font-weight: bold; color: #ffffff; min-height: 18px; background-color: #875A7B; border: 1px solid #875A7B;\">\n"
-"                <t t-out=\"format_datetime(dt=object.event_id.start, tz=object.mail_tz if not object.event_id.allday else None, dt_format='EEEE', lang_code=object.env.lang) or ''\">Terça</t>\n"
+"                <t t-out=\"format_datetime(dt=object.event_id.start, tz=object.mail_tz if not object.event_id.allday else None, dt_format='EEEE', lang_code=object.env.lang) or ''\">Terça-feira</t>\n"
 "            </div>\n"
 "            <div style=\"font-size: 48px; min-height: auto; font-weight: bold; text-align: center; color: #5F5F5F; background-color: #F8F8F8; border: 1px solid #875A7B;\">\n"
 "                <t t-out=\"format_datetime(dt=object.event_id.start, tz=object.mail_tz if not object.event_id.allday else None, dt_format='d', lang_code=object.env.lang) or ''\">4</t>\n"
 "            </div>\n"
 "            <div style=\"font-size: 12px; text-align: center; font-weight: bold; color: #ffffff; background-color: #875A7B;\">\n"
-"                <t t-out=\"format_datetime(dt=object.event_id.start, tz=object.mail_tz if not object.event_id.allday else None, dt_format='MMMM y', lang_code=object.env.lang) or ''\">maio de 2021</t>\n"
+"                <t t-out=\"format_datetime(dt=object.event_id.start, tz=object.mail_tz if not object.event_id.allday else None, dt_format='MMMM y', lang_code=object.env.lang) or ''\">de maio de 2021</t>\n"
 "            </div>\n"
 "            <div style=\"border-collapse: separate; color: #5F5F5F; text-align: center; font-size: 12px; border-bottom-end-radius: 3px; font-weight: bold ; border: 1px solid #875A7B; border-bottom-start-radius: 3px;\">\n"
 "                <t t-if=\"not object.event_id.allday\">\n"
@@ -339,7 +339,7 @@ msgstr ""
 "                    <li>Quando: <t t-out=\"object.recurrence_id.name or ''\">a cada 1 semana, por 3 eventos</t></li>\n"
 "                </t>\n"
 "                <t t-if=\"not object.event_id.allday and object.event_id.duration\">\n"
-"                    <li>Duração: <t t-out=\"('%dH%02d' % (object.event_id.duration,round(object.event_id.duration*60)%60)) or ''\">0h30</t></li>\n"
+"                    <li>Duração: <t t-out=\"('%dH%02d' % (object.event_id.duration,round(object.event_id.duration*60)%60)) or ''\">30min</t></li>\n"
 "                </t>\n"
 "                <li>Participantes\n"
 "                <ul>\n"
@@ -1896,6 +1896,7 @@ msgstr ""
 #: code:addons/appointment/static/src/views/appointment_calendar/appointment_calendar_controller.xml:0
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_invite_view_form_insert_link
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_validated
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
 #, python-format
 msgid "Discard"
 msgstr "Cancelar"
@@ -2516,6 +2517,11 @@ msgid "Monday"
 msgstr "Segunda"
 
 #. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "More Options"
+msgstr "Mais opções"
+
+#. module: appointment
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_question__question_type__text
 msgid "Multi-line text"
 msgstr "Texto multilinhas "
@@ -2875,6 +2881,11 @@ msgid "Reminders"
 msgstr "Lembretes"
 
 #. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "Remove"
+msgstr "Remover"
+
+#. module: appointment
 #: model:ir.ui.menu,name:appointment.menu_schedule_report
 #: model:ir.ui.menu,name:appointment.reporting_menu_calendar
 msgid "Reporting"
@@ -2910,12 +2921,14 @@ msgstr "Licenças de recursos"
 #. module: appointment
 #: model:ir.actions.act_window,name:appointment.appointment_resource_action
 #: model:ir.model.fields,field_description:appointment.field_appointment_invite__resource_ids
+#: model:ir.model.fields,field_description:appointment.field_calendar_event__resource_ids
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_type__schedule_based_on__resources
 #: model:ir.ui.menu,name:appointment.menu_appointment_resource
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_form
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree_invitation
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_validated
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
 #: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_gantt_booking_resource
 msgid "Resources"
 msgstr "Recursos"
@@ -2976,6 +2989,11 @@ msgstr "Erro no envio de SMS"
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_slot__weekday__6
 msgid "Saturday"
 msgstr "Sábado"
+
+#. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "Save"
+msgstr "Salvar"
 
 #. module: appointment
 #: model:ir.ui.menu,name:appointment.menu_appointment_schedule_resources
@@ -3124,6 +3142,13 @@ msgstr "Configure suas disponibilidades "
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree
 msgid "Share"
 msgstr "Compartilhar"
+
+#. module: appointment
+#. odoo-javascript
+#: code:addons/appointment/static/src/views/appointment_calendar/appointment_calendar_controller.xml:0
+#, python-format
+msgid "Share Appointment Link"
+msgstr "Compartilhar o link da consulta"
 
 #. module: appointment
 #. odoo-javascript
@@ -3368,6 +3393,13 @@ msgstr ""
 #: model:ir.model.constraint,message:appointment.constraint_appointment_slot_check_start_and_end_hour
 msgid "The end time must be later than the start time."
 msgstr "O horário de término deve ser posterior ao horário de início."
+
+#. module: appointment
+#. odoo-python
+#: code:addons/appointment/models/calendar_event.py:0
+#, python-format
+msgid "The event %s cannot book resources without an appointment type."
+msgstr "O evento %s não pode reservar recursos sem um tipo de compromisso."
 
 #. module: appointment
 #. odoo-python
@@ -3691,6 +3723,8 @@ msgid ""
 "If kept empty, the working schedule of the company set on the resource will "
 "be used"
 msgstr ""
+"Se deixado em branco, será usado o cronograma de trabalho da empresa "
+"definido no recurso"
 
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.staff_user_select

@@ -20,8 +20,20 @@ class AccountTaxReportHandler(models.AbstractModel):
 
     def _custom_options_initializer(self, report, options, previous_options=None):
         options['buttons'].append({'name': _('Closing Entry'), 'action': 'action_periodic_vat_entries', 'sequence': 110, 'always_show': True})
+        self._enable_export_buttons_for_common_vat_groups_in_branches(options)
 
-        if not previous_options or not previous_options.get('disable_archived_tag_test'):
+    def _custom_line_postprocessor(self, report, options, lines, warnings=None):
+        if warnings is not None:
+            if 'account_reports.common_warning_draft_in_period' in warnings:
+                # Recompute the warning 'common_warning_draft_in_period' to not include tax closing entries in the banner of unposted moves
+                if not self.env['account.move'].search_count(
+                    [('state', '=', 'draft'), ('date', '<=', options['date']['date_to']),
+                     ('tax_closing_end_date', '=', False)],
+                    limit=1,
+                ):
+                    warnings.pop('account_reports.common_warning_draft_in_period')
+
+            # Chek the use of inactive tags in the period
             tables, where_clause, where_params = report._query_get(options, 'strict_range')
             self._cr.execute(f"""
                 SELECT 1
@@ -35,9 +47,10 @@ class AccountTaxReportHandler(models.AbstractModel):
                 LIMIT 1
             """, where_params)
 
-            options['contains_archived_tag'] = bool(self._cr.fetchone())
+            if self._cr.fetchone():
+                warnings['account_reports.tax_report_warning_inactive_tags'] = {}
 
-        self._enable_export_buttons_for_common_vat_groups_in_branches(options)
+        return lines
 
     # -------------------------------------------------------------------------
     # TAX CLOSING
@@ -313,6 +326,55 @@ class AccountTaxReportHandler(models.AbstractModel):
         # Override this to, for example, apply a rounding to the lines of the closing entry
         return results
 
+    def _vat_closing_entry_results_rounding(self, company, options, results, rounding_accounts, vat_results_summary):
+        """
+        Apply the rounding from the tax report by adding a line to the end of the query results
+        representing the sum of the roundings on each line of the tax report.
+        """
+        # Ignore if the rounding accounts cannot be found
+        if not rounding_accounts.get('profit') or not rounding_accounts.get('loss'):
+            return results
+
+        total_amount = 0.0
+        tax_group_id = None
+
+        for line in results:
+            total_amount += line['amount']
+            # The accounts on the tax group ids from the results should be uniform,
+            # but we choose the greatest id so that the line appears last on the entry.
+            tax_group_id = line['tax_group_id']
+
+        report = self.env['account.report'].browse(options['report_id'])
+
+        for line in report._get_lines(options):
+            model, record_id = report._get_model_info_from_id(line['id'])
+
+            if model != 'account.report.line':
+                continue
+
+            for (operation_type, report_line_id, column_expression_label) in vat_results_summary:
+                for column in line['columns']:
+                    if record_id != report_line_id or column['expression_label'] != column_expression_label:
+                        continue
+
+                    if operation_type == 'due':
+                        total_amount += column['no_format']
+                    elif operation_type == 'deductible':
+                        total_amount -= column['no_format']
+
+        currency = company.currency_id
+        total_difference = currency.round(total_amount)
+
+        if not currency.is_zero(total_difference):
+            results.append({
+                'tax_name': _('Difference from rounding taxes'),
+                'amount': total_difference * -1,
+                'tax_group_id': tax_group_id,
+                'account_id': rounding_accounts['profit'].id if total_difference < 0 else rounding_accounts['loss'].id
+            })
+
+        return results
+
     @api.model
     def _add_tax_group_closing_items(self, tax_group_subtotal, closing_move):
         """Transform the parameter tax_group_subtotal dictionnary into one2many commands.
@@ -384,8 +446,7 @@ class AccountTaxReportHandler(models.AbstractModel):
             'res_model': 'account.tax.group',
             'view_mode': 'tree',
             'views': [[False, 'list']],
-            'context': len(countries) == 1 and {'search_default_country_id': countries.ids or {}},
-            # More than 1 id into search_default isn't supported
+            'domain': ['|', ('country_id', 'in', countries.ids), ('country_id', '=', False)]
         }
 
         raise RedirectWarning(
@@ -450,16 +511,6 @@ class GenericTaxReportCustomHandler(models.AbstractModel):
     _description = 'Generic Tax Report Custom Handler'
 
     def _dynamic_lines_generator(self, report, options, all_column_groups_expression_totals, warnings=None):
-
-        if warnings is not None and 'account_reports.common_warning_draft_in_period' in warnings:
-            # Recompute the warning 'common_warning_draft_in_period' to not include tax closing entries in the banner of unposted moves
-            if not self.env['account.move'].search_count(
-                [('state', '=', 'draft'), ('date', '<=', options['date']['date_to']),
-                 ('tax_closing_end_date', '=', False)],
-                limit=1,
-            ):
-                warnings.pop('account_reports.common_warning_draft_in_period')
-
         return self._get_dynamic_lines(report, options, 'default')
 
     def _caret_options_initializer(self):
@@ -566,9 +617,15 @@ class GenericTaxReportCustomHandler(models.AbstractModel):
         results = defaultdict(lambda: {  # key: type_tax_use
             'base_amount': {column_group_key: 0.0 for column_group_key in options['column_groups']},
             'tax_amount': {column_group_key: 0.0 for column_group_key in options['column_groups']},
+            'tax_non_deductible': {column_group_key: 0.0 for column_group_key in options['column_groups']},
+            'tax_deductible': {column_group_key: 0.0 for column_group_key in options['column_groups']},
+            'tax_due': {column_group_key: 0.0 for column_group_key in options['column_groups']},
             'children': defaultdict(lambda: {  # key: tax_id
                 'base_amount': {column_group_key: 0.0 for column_group_key in options['column_groups']},
                 'tax_amount': {column_group_key: 0.0 for column_group_key in options['column_groups']},
+                'tax_non_deductible': {column_group_key: 0.0 for column_group_key in options['column_groups']},
+                'tax_deductible': {column_group_key: 0.0 for column_group_key in options['column_groups']},
+                'tax_due': {column_group_key: 0.0 for column_group_key in options['column_groups']},
             }),
         })
 
@@ -654,6 +711,14 @@ class GenericTaxReportCustomHandler(models.AbstractModel):
                         results[row['tax_type_tax_use']]['children'][row['tax_id']]['base_amount'][column_group_key] += row['base_amount']
 
             # Fetch the tax amounts.
+
+            select_deductible = join_deductible = group_by_deductible = ''
+            if options.get('account_journal_report_tax_deductibility_columns'):
+                select_deductible = """, repartition.use_in_tax_closing AS trl_tax_closing
+                                       , SIGN(repartition.factor_percent) AS trl_factor"""
+                join_deductible = 'JOIN account_tax_repartition_line repartition ON account_move_line.tax_repartition_line_id = repartition.id'
+                group_by_deductible = ', repartition.use_in_tax_closing, SIGN(repartition.factor_percent)'
+
             self._cr.execute(f'''
                 SELECT
                     tax.id AS tax_id,
@@ -661,8 +726,10 @@ class GenericTaxReportCustomHandler(models.AbstractModel):
                     group_tax.id AS group_tax_id,
                     group_tax.type_tax_use AS group_tax_type_tax_use,
                     SUM(account_move_line.balance) AS tax_amount
+                    {select_deductible}
                 FROM {tables}
                 JOIN account_tax tax ON tax.id = account_move_line.tax_line_id
+                {join_deductible}
                 LEFT JOIN account_tax group_tax ON group_tax.id = account_move_line.group_tax_id
                 WHERE {where_clause}
                     AND (
@@ -676,7 +743,7 @@ class GenericTaxReportCustomHandler(models.AbstractModel):
                         OR
                         (group_tax.id IS NOT NULL AND group_tax.type_tax_use IN ('sale', 'purchase'))
                     )
-                GROUP BY tax.id, group_tax.id
+                GROUP BY tax.id, group_tax.id {group_by_deductible}
             ''', where_params)
 
             for row in self._cr.dictfetchall():
@@ -693,6 +760,17 @@ class GenericTaxReportCustomHandler(models.AbstractModel):
 
                 results[tax_type_tax_use]['tax_amount'][column_group_key] += row['tax_amount']
                 results[tax_type_tax_use]['children'][tax_id]['tax_amount'][column_group_key] += row['tax_amount']
+
+                if options.get('account_journal_report_tax_deductibility_columns'):
+                    tax_detail_label = False
+                    if row['trl_factor'] > 0 and tax_type_tax_use == 'purchase':
+                        tax_detail_label = 'tax_deductible' if row['trl_tax_closing'] else 'tax_non_deductible'
+                    elif row['trl_tax_closing'] and (row['trl_factor'] > 0, tax_type_tax_use) in ((False, 'purchase'), (True, 'sale')):
+                        tax_detail_label = 'tax_due'
+
+                    if tax_detail_label:
+                        results[tax_type_tax_use][tax_detail_label][column_group_key] += row['tax_amount'] * row['trl_factor']
+                        results[tax_type_tax_use]['children'][tax_id][tax_detail_label][column_group_key] += row['tax_amount'] * row['trl_factor']
 
         return results
 
@@ -852,6 +930,19 @@ class GenericTaxReportCustomHandler(models.AbstractModel):
                     col_value = sign * tax_amount
 
                 columns.append(report._build_column_dict(col_value, column, options=options))
+
+                # Add the non-deductible, deductible and due tax amounts.
+                if expr_label == 'tax' and options.get('account_journal_report_tax_deductibility_columns'):
+                    for deduct_type in ('tax_non_deductible', 'tax_deductible', 'tax_due'):
+                        columns.append(report._build_column_dict(
+                            col_value=sign * tax_amount_dict[deduct_type][column['column_group_key']],
+                            col_data={
+                                'figure_type': 'monetary',
+                                'column_group_key': column['column_group_key'],
+                                'expression_label': deduct_type,
+                            },
+                            options=options,
+                        ))
 
             # Prepare line.
             default_vals = {

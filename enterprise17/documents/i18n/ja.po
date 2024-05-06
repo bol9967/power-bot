@@ -4,8 +4,8 @@
 # 
 # Translators:
 # Wil Odoo, 2023
-# Ryoko Tsuda <ryoko@quartile.co>, 2023
 # Junko Augias, 2024
+# Ryoko Tsuda <ryoko@quartile.co>, 2024
 # 
 msgid ""
 msgstr ""
@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-05 13:45+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Junko Augias, 2024\n"
+"Last-Translator: Ryoko Tsuda <ryoko@quartile.co>, 2024\n"
 "Language-Team: Japanese (https://app.transifex.com/odoo/teams/41243/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,6 +27,13 @@ msgstr ""
 #, python-format
 msgid " + Add a tag"
 msgstr " + タグを追加"
+
+#. module: documents
+#. odoo-javascript
+#: code:addons/documents/static/src/owl/components/pdf_manager/pdf_manager.js:0
+#, python-format
+msgid "%s (remaining pages)"
+msgstr ""
 
 #. module: documents
 #. odoo-javascript
@@ -82,7 +89,7 @@ msgid ""
 "your documents in bulk with the split tool: launch user defined actions, "
 "request a signature, convert to vendor bills with AI, etc."
 msgstr ""
-"。スキャンしたファイルは自動的にワークスペースに表示されます。次に、分割ツールでドキュメントを一括処理します。ユーザ定義アクションの起動、署名の要求、AIを使用した仕入先請求書への変換など。"
+"。スキャンしたファイルは自動的にワークスペースに表示されます。次に、分割ツールでドキュメントを一括処理します。ユーザ定義アクションの起動、署名の依頼、AIを使用した仕入先請求書への変換など。"
 
 #. module: documents
 #: model:documents.tag,name:documents.documents_finance_fiscal_year_2017
@@ -898,7 +905,7 @@ msgid ""
 "with AI, etc."
 msgstr ""
 "受信メールを処理する簡単な方法は、スキャナワークスペースEメールにPDFを送信するように設定することです。スキャンしたファイルは自動的にワークスペースに表示されます。次に、分割ツールでドキュメントを一括処理します:"
-" ユーザ定義アクションの起動、署名の要求、AIを使用した仕入先請求書への変換など。"
+" ユーザ定義アクションの起動、署名の依頼、AIを使用した仕入先請求書への変換など。"
 
 #. module: documents
 #. odoo-javascript
@@ -923,6 +930,12 @@ msgstr "元のファイルをアーカイブする"
 #: model_terms:ir.ui.view,arch_db:documents.document_view_form
 msgid "Archived"
 msgstr "アーカイブ済"
+
+#. module: documents
+#: model_terms:ir.ui.view,arch_db:documents.document_view_form
+#: model_terms:ir.ui.view,arch_db:documents.folder_view_search
+msgid "Moved to trash"
+msgstr ""
 
 #. module: documents
 #: model_terms:ir.ui.view,arch_db:documents.folder_view_search
@@ -1502,7 +1515,7 @@ msgstr "ドキュメント: ドキュメント要求"
 #: model_terms:ir.ui.view,arch_db:documents.res_config_settings_view_form
 #, python-format
 msgid "Documents"
-msgstr "書類"
+msgstr "ドキュメント"
 
 #. module: documents
 #: model:ir.model,name:documents.model_documents_link_to_record_wizard
@@ -2247,6 +2260,7 @@ msgstr "移動先ワークスペース"
 #: code:addons/documents/static/src/views/inspector/documents_inspector.xml:0
 #: code:addons/documents/static/src/views/list/folder_list_controller.js:0
 #: model_terms:ir.ui.view,arch_db:documents.folder_deletion_form
+#: model_terms:ir.ui.view,arch_db:documents.document_view_form
 #, python-format
 msgid "Move to trash"
 msgstr "ゴミ箱に移動"
@@ -2752,6 +2766,12 @@ msgid "Restore"
 msgstr "リストア"
 
 #. module: documents
+#: code:addons/documents/models/folder.py:0
+#, python-format
+msgid "Restricted Folder"
+msgstr ""
+
+#. module: documents
 #: model:ir.model.fields,field_description:documents.field_documents_document__message_has_sms_error
 #: model:ir.model.fields,field_description:documents.field_documents_share__message_has_sms_error
 msgid "SMS Delivery error"
@@ -2871,7 +2891,7 @@ msgstr "セットするタグ"
 #. module: documents
 #: model_terms:ir.ui.view,arch_db:documents.res_config_settings_view_form
 msgid "Set deletion delay for documents in the Trash"
-msgstr "ゴミ箱にあるドキュメントの削除遅延を設定する"
+msgstr "ゴミ箱にあるドキュメントの削除遅延を設定"
 
 #. module: documents
 #: model:mail.template,description:documents.mail_template_document_request_reminder
@@ -3264,7 +3284,7 @@ msgstr "未検証"
 #. module: documents
 #: model:mail.activity.type,name:documents.mail_documents_activity_data_tv
 msgid "To validate"
-msgstr "承認する"
+msgstr "承認"
 
 #. module: documents
 #: model_terms:ir.ui.view,arch_db:documents.document_view_search

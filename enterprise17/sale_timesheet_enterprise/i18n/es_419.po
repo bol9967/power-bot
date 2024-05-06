@@ -6,6 +6,7 @@
 # Wil Odoo, 2023
 # Iran Villalobos López, 2023
 # Lucia Pacheco, 2023
+# Fernanda Alvarez, 2024
 # Patricia Gutiérrez Capetillo <pagc@odoo.com>, 2024
 # 
 msgid ""
@@ -47,6 +48,13 @@ msgstr "%(billableTime)s / %(billable_time_target)s (%(billingRate)s%)"
 #. odoo-javascript
 #: code:addons/sale_timesheet_enterprise/static/src/components/timesheet_leaderboard/timesheet_leaderboard.js:0
 #, python-format
+msgid "%(currentBillableTimeText)s / %(currentTargetTotalTimeText)s "
+msgstr "%(currentBillableTimeText)s / %(currentTargetTotalTimeText)s "
+
+#. module: sale_timesheet_enterprise
+#. odoo-javascript
+#: code:addons/sale_timesheet_enterprise/static/src/components/timesheet_leaderboard/timesheet_leaderboard.js:0
+#, python-format
 msgid "%(percentage)s%"
 msgstr "%(percentage)s%"
 
@@ -63,6 +71,24 @@ msgstr "%(totalTime)s "
 #, python-format
 msgid "(%(percentage)s%)"
 msgstr "(%(percentage)s%)"
+
+#. module: sale_timesheet_enterprise
+#: model_terms:ir.ui.view,arch_db:sale_timesheet_enterprise.view_employee_form
+msgid ""
+"<span class=\"w-100\" "
+"groups=\"hr_timesheet.group_hr_timesheet_approver\">per month</span>"
+msgstr ""
+"<span class=\"w-100\" groups=\"hr_timesheet.group_hr_timesheet_approver\">al"
+" mes</span>"
+
+#. module: sale_timesheet_enterprise
+#: model_terms:ir.ui.view,arch_db:sale_timesheet_enterprise.sale_timesheet_enterprise_advance_payment_inv_timesheet_view_form
+msgid ""
+"<span>\n"
+"                            Some employees currently have active timers for the timesheets you are trying to invoice.\n"
+"                            Creating the invoice will automatically stop these timers.\n"
+"                        </span>"
+msgstr ""
 
 #. module: sale_timesheet_enterprise
 #: model_terms:ir.ui.view,arch_db:sale_timesheet_enterprise.res_config_settings_view_form
@@ -119,11 +145,10 @@ msgstr "Objetivo de tasa de facturación para los empleados"
 
 #. module: sale_timesheet_enterprise
 #. odoo-javascript
-#: code:addons/sale_timesheet_enterprise/static/src/components/timesheet_leaderboard/timesheet_leaderboard.js:0
+#: code:addons/sale_timesheet_enterprise/static/src/components/timesheet_leaderboard/timesheet_leaderboard.xml:0
 #, python-format
-msgid "Billing: %(currentBillableTimeText)s / %(currentTargetTotalTimeText)s "
-msgstr ""
-"Facturación: %(currentBillableTimeText)s / %(currentTargetTotalTimeText)s "
+msgid "Billing:"
+msgstr "Facturación:"
 
 #. module: sale_timesheet_enterprise
 #: model_terms:ir.ui.view,arch_db:sale_timesheet_enterprise.res_config_settings_view_form
@@ -446,7 +471,7 @@ msgstr "Tiempo dedicado en esta tarea, excluyendo las subtareas."
 #. module: sale_timesheet_enterprise
 #: model:ir.model.fields,help:sale_timesheet_enterprise.field_project_task__portal_total_hours_spent
 msgid "Time spent on this task, including its sub-tasks."
-msgstr "Tiempo dedicado en esta tarea, incluyendo las subtareas."
+msgstr "Tiempo utilizado en esta tarea y sus subtareas."
 
 #. module: sale_timesheet_enterprise
 #: model_terms:ir.ui.view,arch_db:sale_timesheet_enterprise.timesheet_view_grid_by_invoice_type

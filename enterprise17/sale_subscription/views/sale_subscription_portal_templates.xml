@@ -136,8 +136,8 @@
             <t t-set="upsell_url" t-value="sale_order._get_upsell_portal_url()"/>
             <t t-set="renewal_url" t-value="sale_order._get_renewal_portal_url()"/>
             <div class="alert alert-warning text-center" role="alert" t-if="upsell_url or renewal_url">
-                <t t-if="upsell_url and renewal_url">There is an <a t-att-href="upsell_url">upsell</a> quotation and <a t-att-href="renewal_url">renewal</a> quotation existing for this subscription, please confirm them or reject them.</t>
-                <t t-elif="upsell_url">There is an <a t-att-href="upsell_url">upsell</a> quotation existing for this subscription, please confirm it or reject it.</t>
+                <t t-if="upsell_url and renewal_url">There is a <a t-att-href="upsell_url">quotation</a> and <a t-att-href="renewal_url">renewal</a> quotation existing for this subscription, please confirm them or reject them.</t>
+                <t t-elif="upsell_url">There is a <a t-att-href="upsell_url">quotation</a> existing for this subscription, please confirm it or reject it.</t>
                 <t t-elif="renewal_url">There is a <a t-att-href="renewal_url">renewal</a> quotation existing for this subscription, please confirm it or reject it.</t>
             </div>
         </div>
@@ -220,7 +220,7 @@
                     <t t-call="payment.company_mismatch_warning"/>
                 </div>
                 <div class="clearfix" t-elif="(providers_sudo or tokens_sudo) and sale_order.amount_total> 0">
-                    <h3 class="mb-1">Anticipate payment</h3>
+                    <h3 class="mb-1">Anticipate payment: <span t-field="sale_order.amount_to_invoice" t-options='{"widget": "monetary","display_currency": sale_order.currency_id}'/></h3>
                     <div t-if="sale_order.get_portal_last_transaction().state == 'pending'">
                         <div class="alert alert-warning m-1 mt-3">
                             <span>
@@ -231,6 +231,7 @@
                     <div>
                         <hr class="mt-1 mb-2"/>
                         <t t-call="payment.form">
+                            <t t-set="amount" t-value="sale_order.amount_to_invoice"/>
                             <t t-set="landing_route" t-value="sale_order.get_portal_url()"/>
                         </t>
                     </div>
@@ -248,7 +249,7 @@
             <t t-set="entries">
                 <div class="d-flex flex-wrap flex-column">
                     <div class="flex-grow-1">
-                        <div class="text-center"><h1><span t-field="sale_order.amount_untaxed" t-options='{"widget": "monetary","display_currency": sale_order.currency_id}'/></h1></div>
+                        <div class="text-center"><h1><span t-field="sale_order.amount_total" t-options='{"widget": "monetary","display_currency": sale_order.currency_id}'/></h1></div>
                         <div t-if="sale_order.payment_token_id">Payment method:
                             <t t-out ="sale_order.payment_token_id._build_display_name(max_length=14)"/>
                         </div>

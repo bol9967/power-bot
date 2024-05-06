@@ -5,6 +5,8 @@
 # Translators:
 # lhmflexerp <lhm@flexerp.dk>, 2023
 # Martin Trigaux, 2023
+# Sammi Iversen <sammi@vkdata.dk>, 2024
+# Mads Søndergaard, 2024
 # Sanne Kristensen <sanne@vkdata.dk>, 2024
 # 
 msgid ""
@@ -40,27 +42,50 @@ msgstr "timer"
 #: code:addons/sale_timesheet_enterprise/static/src/views/timesheet_leaderboard_dialog/timesheet_leaderboard_dialog.js:0
 #, python-format
 msgid "%(billableTime)s / %(billable_time_target)s (%(billingRate)s%)"
-msgstr ""
+msgstr "%(billableTime)s / %(billable_time_target)s (%(billingRate)s%)"
+
+#. module: sale_timesheet_enterprise
+#. odoo-javascript
+#: code:addons/sale_timesheet_enterprise/static/src/components/timesheet_leaderboard/timesheet_leaderboard.js:0
+#, python-format
+msgid "%(currentBillableTimeText)s / %(currentTargetTotalTimeText)s "
+msgstr "%(currentBillableTimeText)s / %(currentTargetTotalTimeText)s "
 
 #. module: sale_timesheet_enterprise
 #. odoo-javascript
 #: code:addons/sale_timesheet_enterprise/static/src/components/timesheet_leaderboard/timesheet_leaderboard.js:0
 #, python-format
 msgid "%(percentage)s%"
-msgstr ""
+msgstr "%(percentage)s%"
 
 #. module: sale_timesheet_enterprise
 #. odoo-javascript
 #: code:addons/sale_timesheet_enterprise/static/src/components/timesheet_leaderboard/timesheet_leaderboard.js:0
 #, python-format
 msgid "%(totalTime)s "
-msgstr ""
+msgstr "%(totalTime)s "
 
 #. module: sale_timesheet_enterprise
 #. odoo-javascript
 #: code:addons/sale_timesheet_enterprise/static/src/components/timesheet_leaderboard/timesheet_leaderboard.js:0
 #, python-format
 msgid "(%(percentage)s%)"
+msgstr "(%(percentage)s%)"
+
+#. module: sale_timesheet_enterprise
+#: model_terms:ir.ui.view,arch_db:sale_timesheet_enterprise.view_employee_form
+msgid ""
+"<span class=\"w-100\" "
+"groups=\"hr_timesheet.group_hr_timesheet_approver\">per month</span>"
+msgstr ""
+
+#. module: sale_timesheet_enterprise
+#: model_terms:ir.ui.view,arch_db:sale_timesheet_enterprise.sale_timesheet_enterprise_advance_payment_inv_timesheet_view_form
+msgid ""
+"<span>\n"
+"                            Some employees currently have active timers for the timesheets you are trying to invoice.\n"
+"                            Creating the invoice will automatically stop these timers.\n"
+"                        </span>"
 msgstr ""
 
 #. module: sale_timesheet_enterprise
@@ -118,10 +143,10 @@ msgstr ""
 
 #. module: sale_timesheet_enterprise
 #. odoo-javascript
-#: code:addons/sale_timesheet_enterprise/static/src/components/timesheet_leaderboard/timesheet_leaderboard.js:0
+#: code:addons/sale_timesheet_enterprise/static/src/components/timesheet_leaderboard/timesheet_leaderboard.xml:0
 #, python-format
-msgid "Billing: %(currentBillableTimeText)s / %(currentTargetTotalTimeText)s "
-msgstr ""
+msgid "Billing:"
+msgstr "Fakturering:"
 
 #. module: sale_timesheet_enterprise
 #: model_terms:ir.ui.view,arch_db:sale_timesheet_enterprise.res_config_settings_view_form
@@ -212,7 +237,7 @@ msgstr "Forbrug af timer"
 #. module: sale_timesheet_enterprise
 #: model_terms:ir.ui.view,arch_db:sale_timesheet_enterprise.project_sharing_inherit_project_task_view_tree
 msgid "Hours Spent on Sub-Tasks"
-msgstr ""
+msgstr "Timer brugt på underopgaver"
 
 #. module: sale_timesheet_enterprise
 #: model:ir.model.fields,field_description:sale_timesheet_enterprise.field_hr_timesheet_tip__id
@@ -225,6 +250,8 @@ msgid ""
 "If you help a colleague on a project, your time should be recorded on this "
 "project's timesheet as well."
 msgstr ""
+"Hvis du hjælper en kollega med et projekt, skal din tid også noteres på "
+"dette projekts timeseddel."
 
 #. module: sale_timesheet_enterprise
 #: model_terms:ir.ui.view,arch_db:sale_timesheet_enterprise.res_config_settings_view_form
@@ -242,6 +269,8 @@ msgid ""
 "It's part of the job to search for information. A customer can't expect you "
 "to know everything on the spot. These hours should also be billable."
 msgstr ""
+"Det er en del af jobbet at søge information. En kunde kan ikke forvente, at "
+"du ved alt på stedet. Disse timer bør også være fakturerbare."
 
 #. module: sale_timesheet_enterprise
 #: model:ir.model,name:sale_timesheet_enterprise.model_account_move_line
@@ -269,7 +298,7 @@ msgstr "Leaderboard"
 #: model:hr.timesheet.tip,name:sale_timesheet_enterprise.timesheet_tip_4
 #, python-format
 msgid "Make it a habit to record timesheets every day."
-msgstr ""
+msgstr "Gør det til en vane at registrere timesedler hver dag."
 
 #. module: sale_timesheet_enterprise
 #: model_terms:ir.ui.view,arch_db:sale_timesheet_enterprise.timesheet_view_grid_by_invoice_type
@@ -279,7 +308,7 @@ msgstr "Måned"
 #. module: sale_timesheet_enterprise
 #: model_terms:ir.actions.act_window,help:sale_timesheet_enterprise.hr_timesheet_tip_action
 msgid "Motivate employees to fill timesheets with these tips."
-msgstr ""
+msgstr "Motiver medarbejderne til at udfylde timesedler med disse tips."
 
 #. module: sale_timesheet_enterprise
 #: model_terms:ir.actions.act_window,help:sale_timesheet_enterprise.hr_timesheet_tip_action

@@ -3,7 +3,7 @@
 
 from odoo import  models, api, fields
 from odoo.tools.date_utils import relativedelta
-from odoo.tools import format_date
+from odoo.tools import format_date, clean_context
 
 
 class SaleOrderLine(models.Model):
@@ -66,7 +66,7 @@ class SaleOrderLine(models.Model):
             for the period we just invoiced and launch stock rule for the next period.
         """
         stock_subscription_line = self._get_stock_subscription_lines()
-        stock_subscription_line._action_launch_stock_rule()
+        stock_subscription_line.with_context(clean_context(self._context))._action_launch_stock_rule()
         return super(SaleOrderLine, self - stock_subscription_line)._reset_subscription_quantity_post_invoice()
 
     def _action_launch_stock_rule(self, previous_product_uom_qty=False):
@@ -77,6 +77,20 @@ class SaleOrderLine(models.Model):
                                            line.qty_invoiced or
                                            (line.product_id.invoice_policy == 'delivery' and line.order_id.start_date and line.order_id.next_invoice_date > line.order_id.start_date))
         return super(SaleOrderLine, lines)._action_launch_stock_rule(previous_product_uom_qty)
+
+    @api.model
+    def _get_incoming_outgoing_moves_filter(self):
+        """Check subscription moves in/out during invoice period."""
+        base_filter = super()._get_incoming_outgoing_moves_filter()
+        if self.recurring_invoice:
+            start, end = self.order_id.last_invoice_date, self.order_id.next_invoice_date
+            def date_filter(m):
+                return start <= m.date.date() < end
+            return {
+                'incoming_moves': lambda m: base_filter['incoming_moves'](m) and date_filter(m),
+                'outgoing_moves': lambda m: base_filter['outgoing_moves'](m) and date_filter(m)
+            }
+        return base_filter
 
     def _get_qty_procurement(self, previous_product_uom_qty=False):
         """ Compute the quantity that was already deliver for the current period.

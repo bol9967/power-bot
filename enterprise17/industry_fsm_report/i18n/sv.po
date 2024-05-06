@@ -340,7 +340,7 @@ msgstr "Tillverkare"
 #. module: industry_fsm_report
 #: model_terms:ir.ui.view,arch_db:industry_fsm_report.worksheet_custom_page
 msgid "Marc Demo"
-msgstr ""
+msgstr "Marc Demo"
 
 #. module: industry_fsm_report
 #: model_terms:ir.ui.view,arch_db:industry_fsm_report.report_custom_x_project_task_worksheet_template_4
@@ -438,7 +438,7 @@ msgstr "Aktivitet"
 #. module: industry_fsm_report
 #: model:ir.model,name:industry_fsm_report.model_project_task_recurrence
 msgid "Task Recurrence"
-msgstr ""
+msgstr "Återkommande uppgifter"
 
 #. module: industry_fsm_report
 #: model:ir.model,name:industry_fsm_report.model_report_industry_fsm_report_worksheet_custom

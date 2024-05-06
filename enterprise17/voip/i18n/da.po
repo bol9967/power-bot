@@ -8,6 +8,7 @@
 # Martin Trigaux, 2023
 # Mads Søndergaard, 2023
 # Ejner Sønniksen <ejner@vkdata.dk>, 2023
+# Sanne Kristensen <sanne@vkdata.dk>, 2024
 # 
 msgid ""
 msgstr ""
@@ -15,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 22:20+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Ejner Sønniksen <ejner@vkdata.dk>, 2023\n"
+"Last-Translator: Sanne Kristensen <sanne@vkdata.dk>, 2024\n"
 "Language-Team: Danish (https://app.transifex.com/odoo/teams/41243/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,14 +29,14 @@ msgstr ""
 #: code:addons/voip/static/src/core/call_model.js:0
 #, python-format
 msgid "%(minutes)s min %(seconds)s sec"
-msgstr ""
+msgstr "%(minutes)s min %(seconds)s sek"
 
 #. module: voip
 #. odoo-javascript
 #: code:addons/voip/static/src/core/call_model.js:0
 #, python-format
 msgid "%(minutes)s minutes"
-msgstr ""
+msgstr "%(minutes)s minutter"
 
 #. module: voip
 #. odoo-javascript
@@ -49,14 +50,14 @@ msgstr ""
 #: code:addons/voip/static/src/core/call_model.js:0
 #, python-format
 msgid "%(seconds)s seconds"
-msgstr ""
+msgstr "%(seconds)s sekunder"
 
 #. module: voip
 #. odoo-javascript
 #: code:addons/voip/static/src/core/call_model.js:0
 #, python-format
 msgid "1 minute"
-msgstr ""
+msgstr "1 minut"
 
 #. module: voip
 #. odoo-javascript
@@ -70,14 +71,14 @@ msgstr ""
 #: code:addons/voip/static/src/core/call_model.js:0
 #, python-format
 msgid "1 second"
-msgstr ""
+msgstr "1 sekund"
 
 #. module: voip
 #. odoo-javascript
 #: code:addons/voip/static/src/core/call_model.js:0
 #, python-format
 msgid "2 minutes"
-msgstr ""
+msgstr "2 minutter"
 
 #. module: voip
 #. odoo-javascript
@@ -91,7 +92,7 @@ msgstr ""
 #: code:addons/voip/static/src/core/call_model.js:0
 #, python-format
 msgid "2 seconds"
-msgstr ""
+msgstr "2 sekunder"
 
 #. module: voip
 #. odoo-javascript
@@ -976,7 +977,7 @@ msgstr "Bruger"
 #. module: voip
 #: model:ir.model,name:voip.model_res_users_settings
 msgid "User Settings"
-msgstr ""
+msgstr "Bruger indstillinger"
 
 #. module: voip
 #. odoo-javascript

@@ -9,19 +9,19 @@
 # Haojun Zou <apollo_zhj@msn.com>, 2023
 # 3eec91a23d05c632ffac786ac42b81b8_b6fff7b <8985b7bc57db860af29969457dbb51b3_1018915>, 2023
 # Martin Wilderoth <martin.wilderoth@linserv.se>, 2023
-# Lasse L, 2023
 # Chrille Hedberg <hedberg.chrille@gmail.com>, 2023
 # Kim Asplund <kim.asplund@gmail.com>, 2023
 # Fredrik Arvas <fredrik.arvas@vertel.se>, 2023
 # Mikael Åkerberg <mikael.akerberg@mariaakerberg.com>, 2023
 # Daniel Löfgren, 2023
 # Simon S, 2023
-# Martin Trigaux, 2023
 # Robin Calvin, 2023
 # Björn Hayer, 2023
 # Kristoffer Grundström <lovaren@gmail.com>, 2023
-# Jakob Krabbe <jakob.krabbe@vertel.se>, 2024
 # Anders Wallenquist <anders.wallenquist@vertel.se>, 2024
+# Martin Trigaux, 2024
+# Lasse L, 2024
+# Jakob Krabbe <jakob.krabbe@vertel.se>, 2024
 # 
 msgid ""
 msgstr ""
@@ -29,7 +29,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-26 16:10+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Anders Wallenquist <anders.wallenquist@vertel.se>, 2024\n"
+"Last-Translator: Jakob Krabbe <jakob.krabbe@vertel.se>, 2024\n"
 "Language-Team: Swedish (https://app.transifex.com/odoo/teams/41243/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -528,7 +528,7 @@ msgstr ""
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_kanban
 msgid "<span class=\"text-bg-danger\">Archived</span>"
-msgstr ""
+msgstr "<span class=\"text-bg-danger\">Arkiverad</span>"
 
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_form
@@ -801,7 +801,7 @@ msgstr "Svar"
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_answer_input_view_tree
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_form
 msgid "Answer Breakdown"
-msgstr ""
+msgstr "Fördelning av svar"
 
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_answer_input_view_form
@@ -1108,7 +1108,7 @@ msgstr ""
 #. module: appointment
 #: model:ir.model.fields,field_description:appointment.field_appointment_type__slot_ids
 msgid "Availabilities"
-msgstr ""
+msgstr "Tillgänglighet"
 
 #. module: appointment
 #: model:ir.model.fields,field_description:appointment.field_appointment_slot__schedule_based_on
@@ -1353,7 +1353,7 @@ msgstr "E-postbekräftelse"
 #. module: appointment
 #: model:ir.model.fields,field_description:appointment.field_appointment_type__message_confirmation
 msgid "Confirmation Message"
-msgstr ""
+msgstr "Meddelande om bekräftelse"
 
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_validated
@@ -1375,7 +1375,7 @@ msgstr "Anslut din kalender"
 #. module: appointment
 #: model:onboarding.onboarding.step,title:appointment.appointment_onboarding_configure_calendar_provider_step
 msgid "Connect your calendar"
-msgstr ""
+msgstr "Anslut din kalender"
 
 #. module: appointment
 #: model:ir.model,name:appointment.model_res_partner
@@ -1407,7 +1407,7 @@ msgstr ""
 #: code:addons/appointment/static/src/views/appointment_calendar/appointment_calendar_controller.js:0
 #, python-format
 msgid "Copied!"
-msgstr ""
+msgstr "Kopierad!"
 
 #. module: appointment
 #. odoo-javascript
@@ -1575,6 +1575,7 @@ msgstr ""
 #: code:addons/appointment/static/src/views/appointment_calendar/appointment_calendar_controller.xml:0
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_invite_view_form_insert_link
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_validated
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
 #, python-format
 msgid "Discard"
 msgstr "Förkasta"
@@ -2169,6 +2170,11 @@ msgid "Monday"
 msgstr "måndag"
 
 #. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "More Options"
+msgstr "Fler alternativ"
+
+#. module: appointment
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_question__question_type__text
 msgid "Multi-line text"
 msgstr ""
@@ -2206,7 +2212,7 @@ msgstr ""
 #. module: appointment
 #: model_terms:ir.actions.act_window,help:appointment.appointment_answer_input_action_from_question
 msgid "No Answers yet!"
-msgstr ""
+msgstr "Inga svar ännu!"
 
 #. module: appointment
 #: model_terms:ir.actions.act_window,help:appointment.appointment_type_action
@@ -2522,6 +2528,11 @@ msgid "Reminders"
 msgstr "Påminnelser"
 
 #. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "Remove"
+msgstr "Ta bort"
+
+#. module: appointment
 #: model:ir.ui.menu,name:appointment.menu_schedule_report
 #: model:ir.ui.menu,name:appointment.reporting_menu_calendar
 msgid "Reporting"
@@ -2557,12 +2568,14 @@ msgstr ""
 #. module: appointment
 #: model:ir.actions.act_window,name:appointment.appointment_resource_action
 #: model:ir.model.fields,field_description:appointment.field_appointment_invite__resource_ids
+#: model:ir.model.fields,field_description:appointment.field_calendar_event__resource_ids
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_type__schedule_based_on__resources
 #: model:ir.ui.menu,name:appointment.menu_appointment_resource
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_form
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree_invitation
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_validated
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
 #: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_gantt_booking_resource
 msgid "Resources"
 msgstr "Resurser"
@@ -2623,6 +2636,11 @@ msgstr "SMS leveransfel"
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_slot__weekday__6
 msgid "Saturday"
 msgstr "lördag"
+
+#. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "Save"
+msgstr "Spara"
 
 #. module: appointment
 #: model:ir.ui.menu,name:appointment.menu_appointment_schedule_resources
@@ -2769,6 +2787,13 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree
 msgid "Share"
 msgstr "Dela Dokument"
+
+#. module: appointment
+#. odoo-javascript
+#: code:addons/appointment/static/src/views/appointment_calendar/appointment_calendar_controller.xml:0
+#, python-format
+msgid "Share Appointment Link"
+msgstr ""
 
 #. module: appointment
 #. odoo-javascript
@@ -3007,6 +3032,13 @@ msgstr ""
 #. module: appointment
 #: model:ir.model.constraint,message:appointment.constraint_appointment_slot_check_start_and_end_hour
 msgid "The end time must be later than the start time."
+msgstr ""
+
+#. module: appointment
+#. odoo-python
+#: code:addons/appointment/models/calendar_event.py:0
+#, python-format
+msgid "The event %s cannot book resources without an appointment type."
 msgstr ""
 
 #. module: appointment
@@ -3310,7 +3342,7 @@ msgstr ""
 #. module: appointment
 #: model:onboarding.onboarding.step,description:appointment.appointment_onboarding_configure_calendar_provider_step
 msgid "With Outlook or Google"
-msgstr ""
+msgstr "Med Outlook eller Google"
 
 #. module: appointment
 #: model:ir.model.fields,field_description:appointment.field_appointment_resource__resource_calendar_id
@@ -3399,7 +3431,7 @@ msgstr ""
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_form
 msgid "e.g. John Smith"
-msgstr ""
+msgstr "t.ex. John Smith"
 
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_resource_view_form
@@ -3460,7 +3492,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_meeting_details
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_validated
 msgid "people"
-msgstr ""
+msgstr "människor"
 
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_form

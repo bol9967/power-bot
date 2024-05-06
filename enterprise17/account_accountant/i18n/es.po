@@ -63,8 +63,8 @@ msgid ""
 "<b class=\"tip_title\">Tip: Find an Accountant or register your Accounting "
 "Firm</b>"
 msgstr ""
-"<b class=\"tip_title\">Consejo: Encuentre un contador o registre su firma de"
-" contabilidad</b>"
+"<b class=\"tip_title\">Consejo: encuentre un asesor fiscal o registre su "
+"despacho de contabilidad</b>"
 
 #. module: account_accountant
 #. odoo-javascript
@@ -109,7 +109,7 @@ msgstr "<span class=\"o_stat_text\">Extracto bancario</span>"
 #. module: account_accountant
 #: model_terms:digest.tip,tip_description:account_accountant.digest_tip_account_accountant_1
 msgid "<span class=\"tip_button_text\">Find an Accountant</span>"
-msgstr "<span class=\"tip_button_text\">Encontrar un contador</span>"
+msgstr "<span class=\"tip_button_text\">Encontrar un asesor fiscal</span>"
 
 #. module: account_accountant
 #: model_terms:digest.tip,tip_description:account_accountant.digest_tip_account_accountant_1
@@ -243,12 +243,13 @@ msgstr "Todos los modelos de conciliación"
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_account_reconcile_wizard__allow_partials
 msgid "Allow partials"
-msgstr "Permitir registros parciales"
+msgstr "Permitir conciliación parcial"
 
 #. module: account_accountant
 #: model:res.groups,name:account_accountant.group_fiscal_year
 msgid "Allow to define fiscal years of more or less than a year"
-msgstr "Permite definir años fiscales para más de 1 año o menos de 1 año."
+msgstr ""
+"Permite definir ejercicios fiscales para más de 1 año o menos de 1 año."
 
 #. module: account_accountant
 #. odoo-javascript
@@ -348,7 +349,7 @@ msgstr "Modelo de conciliación disponible"
 #: code:addons/account_accountant/static/src/components/bank_reconciliation/finish_buttons.xml:0
 #, python-format
 msgid "Back to"
-msgstr "Volver a"
+msgstr "Regresar a"
 
 #. module: account_accountant
 #. odoo-javascript
@@ -361,7 +362,7 @@ msgstr "Saldo"
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_digest_digest__kpi_account_bank_cash
 msgid "Bank & Cash Moves"
-msgstr "Movimientos de bancarios y de efectivo"
+msgstr "Movimientos bancarios y de caja"
 
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_bank_rec_widget_line__bank_account
@@ -404,7 +405,7 @@ msgstr "Extracto bancario.pdf"
 #: model:ir.model,name:account_accountant.model_bank_rec_widget
 msgid "Bank reconciliation widget for a single statement line"
 msgstr ""
-"Widget de conciliación bancaria para una sola línea del estado de cuenta"
+"Widget de conciliación bancaria para una sola línea del extracto de cuenta"
 
 #. module: account_accountant
 #: model:ir.model.fields.selection,name:account_accountant.selection__res_company__deferred_amount_computation_method__day
@@ -440,7 +441,7 @@ msgstr ""
 #. module: account_accountant
 #: model_terms:ir.actions.act_window,help:account_accountant.actions_account_fiscal_year
 msgid "Click here to create a new fiscal year."
-msgstr "Haga clic aquí para crear un nuevo año fiscal."
+msgstr "Haga clic aquí para crear un nuevo ejercicio fiscal."
 
 #. module: account_accountant
 #: model_terms:digest.tip,tip_description:account_accountant.digest_tip_account_accountant_1
@@ -448,8 +449,8 @@ msgid ""
 "Click here to find an accountant or if you want to list out your accounting "
 "services on Odoo"
 msgstr ""
-"Haga clic aquí para encontrar un contador o si desea enlistar sus servicios "
-"de contabilidad en Odoo"
+"Haga clic aquí para encontrar un asesor fiscal o si desea enlistar sus "
+"servicios de contabilidad en Odoo"
 
 #. module: account_accountant
 #. odoo-javascript
@@ -679,7 +680,7 @@ msgstr "Ingresos diferidos"
 #. module: account_accountant
 #: model_terms:ir.ui.view,arch_db:account_accountant.res_config_settings_view_form
 msgid "Define fiscal years of more or less than one year"
-msgstr "Definir años fiscales de más de 1 año o menos de 1 año."
+msgstr "Defina ejercicios fiscales de más de 1 año o menos de 1 año."
 
 #. module: account_accountant
 #: model_terms:ir.ui.view,arch_db:account_accountant.view_bank_statement_form_with_buttons
@@ -723,7 +724,7 @@ msgstr "Conversaciones"
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_account_reconcile_wizard__display_allow_partials
 msgid "Display Allow Partials"
-msgstr "Mostrar \"Permitir registros parciales\""
+msgstr "Mostrar \"Permitir conciliación parcial\""
 
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_account_auto_reconcile_wizard__display_name
@@ -743,7 +744,7 @@ msgstr "Mostrar la moneda del importe trazado"
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_bank_rec_widget_line__display_stroked_balance
 msgid "Display Stroked Balance"
-msgstr "Mostrar balance trazado"
+msgstr "Mostrar saldo trazado"
 
 #. module: account_accountant
 #. odoo-python
@@ -808,12 +809,12 @@ msgstr "Encuentrar asientos para conciliar automáticamente"
 #: model:ir.model,name:account_accountant.model_account_fiscal_year
 #: model_terms:ir.ui.view,arch_db:account_accountant.res_config_settings_view_form
 msgid "Fiscal Year"
-msgstr "Año fiscal"
+msgstr "Ejercicio fiscal"
 
 #. module: account_accountant
 #: model_terms:ir.ui.view,arch_db:account_accountant.action_account_fiscal_year_form
 msgid "Fiscal Year 2018"
-msgstr "Año fiscal 2018"
+msgstr "Ejercicio fiscal 2018"
 
 #. module: account_accountant
 #: model:ir.actions.act_window,name:account_accountant.actions_account_fiscal_year
@@ -821,17 +822,17 @@ msgstr "Año fiscal 2018"
 #: model:ir.ui.menu,name:account_accountant.menu_account_fiscal_year
 #: model_terms:ir.ui.view,arch_db:account_accountant.res_config_settings_view_form
 msgid "Fiscal Years"
-msgstr "Años fiscales"
+msgstr "Ejercicios fiscales"
 
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_res_config_settings__fiscalyear_last_day
 msgid "Fiscalyear Last Day"
-msgstr "Último día del año fiscal"
+msgstr "Último día del ejercicio fiscal"
 
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_res_config_settings__fiscalyear_last_month
 msgid "Fiscalyear Last Month"
-msgstr "Último mes del año fiscal"
+msgstr "Último mes del ejercicio fiscal"
 
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_bank_rec_widget_line__flag
@@ -841,7 +842,7 @@ msgstr "Marcar"
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_account_reconcile_wizard__force_partials
 msgid "Force Partials"
-msgstr ""
+msgstr "Forzar conciliación parcial"
 
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_bank_rec_widget_line__force_price_included_taxes
@@ -962,7 +963,7 @@ msgstr ""
 #. module: account_accountant
 #: model_terms:ir.ui.view,arch_db:account_accountant.view_account_move_line_search_bank_rec_widget
 msgid "Incoming"
-msgstr "Entrada"
+msgstr "Entrante"
 
 #. module: account_accountant
 #. odoo-python
@@ -972,8 +973,8 @@ msgid ""
 "Incorrect fiscal year date: day is out of range for month. Month: %s; Day: "
 "%s"
 msgstr ""
-"Fecha de año fiscal incorrecta: el día está fuera del rango del mes. Mes: "
-"%s; Día: %s"
+"Fecha de ejercicio fiscal incorrecta: el día está fuera del rango del mes. "
+"Mes: %s; Día: %s"
 
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_bank_rec_widget_line__index
@@ -983,12 +984,12 @@ msgstr "Índice"
 #. module: account_accountant
 #: model:ir.model.fields.selection,name:account_accountant.selection__bank_rec_widget__state__invalid
 msgid "Invalid"
-msgstr "Inválido"
+msgstr "No válido"
 
 #. module: account_accountant
 #: model_terms:ir.ui.view,arch_db:account_accountant.view_bank_statement_line_search_bank_rec_widget
 msgid "Invalid statements"
-msgstr "Estados de cuenta no válidos"
+msgstr "Extractos bancarios no válidos"
 
 #. module: account_accountant
 #: model:ir.model.fields,help:account_accountant.field_bank_rec_widget__state
@@ -1034,7 +1035,7 @@ msgstr "Es una transferencia de cuenta requerida para la conciliación"
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_account_reconcile_wizard__can_silently_reconcile
 msgid "Is silent reconcile possible"
-msgstr ""
+msgstr "¿Es posible le conciliación silenciosa?"
 
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_account_reconcile_wizard__lock_date_violated_warning_message
@@ -1045,7 +1046,7 @@ msgstr ""
 #. module: account_accountant
 #: model_terms:ir.ui.view,arch_db:account_accountant.account_journal_dashboard_kanban_view
 msgid "Items"
-msgstr "Artículos"
+msgstr "Apuntes"
 
 #. module: account_accountant
 #: model:ir.model,name:account_accountant.model_account_journal
@@ -1097,7 +1098,8 @@ msgstr "Apuntes contables a conciliar"
 #. module: account_accountant
 #: model_terms:ir.ui.view,arch_db:account_accountant.view_account_move_line_reconcile_search
 msgid "Journal items where matching number isn't set"
-msgstr "Apuntes contables donde el emparejamiento no está configurado"
+msgstr ""
+"Apuntes contables en los que el número de conciliación no está configurado"
 
 #. module: account_accountant
 #: model:ir.model.fields,help:account_accountant.field_res_config_settings__deferred_journal_id
@@ -1191,17 +1193,17 @@ msgstr "Widget de línea de la conciliación bancaria"
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_res_config_settings__fiscalyear_lock_date
 msgid "Lock Date for All Users"
-msgstr "Bloquea una fecha para todos los usuarios"
+msgstr "Fecha de bloqueo para todos los usuarios"
 
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_res_config_settings__period_lock_date
 msgid "Lock Date for Non-Advisers"
-msgstr "Fecha establecida para no asesores"
+msgstr "Fecha de bloqueo para no asesores"
 
 #. module: account_accountant
 #: model:ir.ui.menu,name:account_accountant.menu_action_change_lock_date
 msgid "Lock Dates"
-msgstr "Fechas bloqueadas"
+msgstr "Fechas de bloqueo"
 
 #. module: account_accountant
 #: model_terms:ir.ui.view,arch_db:account_accountant.view_account_change_lock_date
@@ -1219,7 +1221,7 @@ msgstr "Operaciones manuales"
 #: model:ir.model.fields.selection,name:account_accountant.selection__res_company__generate_deferred_expense_entries_method__manual
 #: model:ir.model.fields.selection,name:account_accountant.selection__res_company__generate_deferred_revenue_entries_method__manual
 msgid "Manually & Grouped"
-msgstr "Manual y agrupados"
+msgstr "Manualmente y agrupado"
 
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_bank_rec_widget_line__manually_modified
@@ -1239,7 +1241,7 @@ msgstr "Combinar"
 #: code:addons/account_accountant/static/src/components/bank_reconciliation/bank_rec_form.xml:0
 #, python-format
 msgid "Match Existing Entries"
-msgstr "Emparejar asientos existentes"
+msgstr "Conciliar asientos existentes"
 
 #. module: account_accountant
 #: model_terms:ir.ui.view,arch_db:account_accountant.view_bank_statement_line_kanban_bank_rec_widget
@@ -1279,7 +1281,7 @@ msgstr "Método utilizado para generar asientos de ingresos diferidos"
 #: code:addons/account_accountant/models/bank_rec_widget.py:0
 #, python-format
 msgid "Misc"
-msgstr "Misc."
+msgstr "Varios"
 
 #. module: account_accountant
 #. odoo-javascript
@@ -1291,7 +1293,7 @@ msgstr "Más"
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_account_move_line__move_attachment_ids
 msgid "Move Attachment"
-msgstr "Mover adjunto"
+msgstr "Archivo adjunto del asiento"
 
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_account_reconcile_wizard__move_line_ids
@@ -1344,7 +1346,7 @@ msgid ""
 "this date."
 msgstr ""
 "Ningún usuario puede editar asientos contables relacionados con un impuesto "
-"antes e inclusive de esta fecha."
+"antes o en esta fecha."
 
 #. module: account_accountant
 #: model:ir.model.fields,help:account_accountant.field_res_config_settings__fiscalyear_lock_date
@@ -1352,8 +1354,8 @@ msgid ""
 "No users, including Advisers, can edit accounts prior to and inclusive of "
 "this date. Use it for fiscal year locking for example."
 msgstr ""
-"Ningún usuario, incluyendo Asesores, puede editar cuentas antes de y en esta"
-" fecha. Utilízala, por ejemplo, para bloquear un año fiscal."
+"Ningún usuario, asesores incluidos, puede editar cuentas antes de y en esta "
+"fecha. Utilícela, por ejemplo, para bloquear un ejercicio fiscal."
 
 #. module: account_accountant
 #: model_terms:ir.ui.view,arch_db:account_accountant.view_bank_statement_line_search_bank_rec_widget
@@ -1380,7 +1382,7 @@ msgstr "¡Nada que hacer aquí!"
 #. module: account_accountant
 #: model:ir.model.fields.selection,name:account_accountant.selection__res_company__generate_deferred_expense_entries_method__on_validation
 msgid "On bill validation"
-msgstr "En la validación de facturas"
+msgstr "En la validación de la factura"
 
 #. module: account_accountant
 #: model:ir.model.fields.selection,name:account_accountant.selection__res_company__generate_deferred_revenue_entries_method__on_validation
@@ -1393,8 +1395,8 @@ msgstr "En la validación de la factura"
 #, python-format
 msgid "Only Billing Administrators are allowed to change lock dates!"
 msgstr ""
-"¡Solo los administradores de facturación pueden cambiar las fechas de "
-"bloqueo!"
+"Solo los administradores de facturación pueden cambiar las fechas de "
+"bloqueo."
 
 #. module: account_accountant
 #: model_terms:ir.ui.view,arch_db:account_accountant.view_account_reconcile_wizard
@@ -1402,6 +1404,8 @@ msgid ""
 "Only partial reconciliation is possible. Proceed in multiple steps if you "
 "want to full reconcile."
 msgstr ""
+"Sólo es posible una conciliación parcial. Proceda en varios pasos si desea "
+"una conciliación completa."
 
 #. module: account_accountant
 #: model:ir.model.fields,help:account_accountant.field_res_config_settings__period_lock_date
@@ -1410,9 +1414,9 @@ msgid ""
 "of this date. Use it for period locking inside an open fiscal year, for "
 "example."
 msgstr ""
-"Sólo los usuarios con el rol 'Asesor' pueden editar cuentas antes de y en "
-"esta fecha. Utilízalo para bloquear un periodo dentro de un año fiscal "
-"abierto, por ejemplo."
+"Solo los usuarios con la función de 'asesor' pueden editar cuentas antes de "
+"y en esta fecha. Utilícelo para bloquear un periodo dentro de un ejercicio "
+"fiscal abierto, por ejemplo."
 
 #. module: account_accountant
 #: model_terms:ir.ui.view,arch_db:account_accountant.view_account_move_line_list_bank_rec_widget
@@ -1480,7 +1484,7 @@ msgstr "Moneda del contacto"
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_bank_rec_widget__partner_name
 msgid "Partner Name"
-msgstr "Nombre de la empresa"
+msgstr "Nombre del contacto"
 
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_bank_rec_widget_line__partner_payable_account_id
@@ -1545,7 +1549,7 @@ msgstr "Conciliación de pagos"
 #. module: account_accountant
 #: model_terms:ir.ui.view,arch_db:account_accountant.view_account_change_lock_date
 msgid "Pick a date to lock"
-msgstr "Elija una fecha que bloquear"
+msgstr "Elija una fecha para bloquear"
 
 #. module: account_accountant
 #. odoo-python
@@ -1575,7 +1579,7 @@ msgstr "Predecir el producto de la factura"
 #. module: account_accountant
 #: model_terms:ir.ui.view,arch_db:account_accountant.res_config_settings_view_form
 msgid "Predict vendor bill product"
-msgstr "Predecir el producto en la factura del proveedor"
+msgstr "Predecir el producto de la factura del proveedor"
 
 #. module: account_accountant
 #: model:ir.model,name:account_accountant.model_account_reconcile_model
@@ -1602,7 +1606,7 @@ msgid ""
 "for Accountant users."
 msgstr ""
 "Impide la creación de asientos antes de la fecha definida. Excepto para los "
-"contadores."
+"asesores fiscales."
 
 #. module: account_accountant
 #: model:ir.model.fields,help:account_accountant.field_account_change_lock_date__tax_lock_date
@@ -1703,7 +1707,7 @@ msgstr "Restante en moneda"
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_bank_rec_widget__return_todo_command
 msgid "Return Todo Command"
-msgstr "Restablecer comando por hacer"
+msgstr "Restablecer comando pendiente"
 
 #. module: account_accountant
 #: model:ir.model,name:account_accountant.model_account_reconcile_model_line
@@ -1729,7 +1733,7 @@ msgstr "Guardar y nuevo"
 #. module: account_accountant
 #: model_terms:ir.ui.view,arch_db:account_accountant.view_account_move_line_reconcile_search
 msgid "Search Journal Items to Reconcile"
-msgstr "Buscar apuntes contables por conciliar"
+msgstr "Buscar apuntes contables a conciliar"
 
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_bank_rec_widget__selected_aml_ids
@@ -1807,7 +1811,7 @@ msgstr "Fecha de inicio"
 #. module: account_accountant
 #: model:ir.model.fields,help:account_accountant.field_account_fiscal_year__date_from
 msgid "Start Date, included in the fiscal year."
-msgstr "Fecha de inicio, incluida en el año fiscal."
+msgstr "Fecha de inicio, incluida en el ejercicio fiscal."
 
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_bank_rec_widget__state
@@ -1860,7 +1864,7 @@ msgstr "Moneda del importe de base de impuestos"
 #. module: account_accountant
 #: model_terms:ir.ui.view,arch_db:account_accountant.view_move_line_reconcile_tree
 msgid "Tax Grids"
-msgstr "Cuadrículas de impuestos"
+msgstr "Tablas de impuestos"
 
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_res_config_settings__tax_lock_date
@@ -2011,7 +2015,8 @@ msgstr "Consejo: actualización masiva de elementos del diario"
 #. module: account_accountant
 #: model:digest.tip,name:account_accountant.digest_tip_account_accountant_1
 msgid "Tip: Find an Accountant or register your Accounting Firm"
-msgstr "Consejo: Encuentre un contador o registre su firma de contabilidad"
+msgstr ""
+"Consejo: Encuentre un asesor fiscal o registre su firma de contabilidad"
 
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_account_auto_reconcile_wizard__to_date
@@ -2037,7 +2042,7 @@ msgstr "A revisar"
 #. module: account_accountant
 #: model:ir.model.fields,field_description:account_accountant.field_bank_rec_widget__todo_command
 msgid "Todo Command"
-msgstr "Comando por hacer"
+msgstr "Comando pendiente"
 
 #. module: account_accountant
 #: model_terms:ir.ui.view,arch_db:account_accountant.view_move_line_reconcile_tree
@@ -2180,8 +2185,8 @@ msgid ""
 "You can not have an overlap between two fiscal years, please correct the "
 "start and/or end dates of your fiscal years."
 msgstr ""
-"No puedes superponer dos años fiscales, corrige las fechas de inicio y/o "
-"cierre de tus años fiscales."
+"No puede sobreponer dos ejercicios fiscales, corrija las fechas de inicio o "
+"cierre de sus ejercicios fiscales."
 
 #. module: account_accountant
 #. odoo-python
@@ -2228,8 +2233,7 @@ msgstr ""
 #, python-format
 msgid ""
 "You cannot generate deferred entries for a miscellaneous journal entry."
-msgstr ""
-"No puede generar asientos diferidos para un asiento de diario diverso."
+msgstr "No puede generar asientos diferidos para un asiento de varios."
 
 #. module: account_accountant
 #. odoo-python
@@ -2240,7 +2244,7 @@ msgid ""
 "can create a credit note instead."
 msgstr ""
 "No puede restablecer a borrador una factura que se encuentra agrupada en los"
-" asientos diferidos, pero puede crear una nota de crédito."
+" asientos diferidos, pero puede crear una factura rectificativa."
 
 #. module: account_accountant
 #. odoo-python
@@ -2290,7 +2294,7 @@ msgstr ""
 #: code:addons/account_accountant/static/src/components/bank_reconciliation/rainbowman_content.xml:0
 #, python-format
 msgid "You reconciled"
-msgstr "Conciliaste"
+msgstr "Concilió"
 
 #. module: account_accountant
 #: model:ir.model.fields.selection,name:account_accountant.selection__bank_rec_widget_line__flag__aml
@@ -2355,7 +2359,7 @@ msgstr "tax_line"
 #. module: account_accountant
 #: model_terms:ir.ui.view,arch_db:account_accountant.account_journal_dashboard_kanban_view
 msgid "to check"
-msgstr "por revisar"
+msgstr "a revisar"
 
 #. module: account_accountant
 #. odoo-javascript

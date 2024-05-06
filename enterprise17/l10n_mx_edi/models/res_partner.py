@@ -45,12 +45,11 @@ class ResPartner(models.Model):
     )
     l10n_mx_edi_addenda_is_readonly = fields.Boolean(compute="_compute_l10n_mx_edi_addenda_is_readonly")
     l10n_mx_edi_addenda_name = fields.Char(related="l10n_mx_edi_addenda.name")
-    country_code = fields.Char(related='country_id.code', string='Country Code')
 
     def _compute_l10n_mx_edi_addenda_is_readonly(self):
-        has_group_system = self.user_has_groups('base.group_system')
+        can_not_read = not self.env['ir.ui.view'].check_access_rights('read', raise_exception=False)
         for partner in self:
-            partner.l10n_mx_edi_addenda_is_readonly = not has_group_system
+            partner.l10n_mx_edi_addenda_is_readonly = can_not_read
 
     @api.depends('country_code')
     def _compute_l10n_mx_edi_fiscal_regime(self):

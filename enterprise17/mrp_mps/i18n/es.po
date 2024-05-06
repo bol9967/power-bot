@@ -32,7 +32,7 @@ msgstr "- Pronóstico de demanda indirecta"
 #: code:addons/mrp_mps/static/src/components/line.xml:0
 #, python-format
 msgid "ATP"
-msgstr "ATP"
+msgstr "Disponible para prometer"
 
 #. module: mrp_mps
 #. odoo-javascript
@@ -40,7 +40,7 @@ msgstr "ATP"
 #: code:addons/mrp_mps/static/src/components/line.xml:0
 #, python-format
 msgid "Actual"
-msgstr "Actualidad"
+msgstr "Real"
 
 #. module: mrp_mps
 #. odoo-javascript
@@ -85,7 +85,7 @@ msgstr "Reposición real "
 #: code:addons/mrp_mps/models/mrp_mps.py:0
 #, python-format
 msgid "Actual Replenishment %s %s (%s - %s)"
-msgstr "Reposición real%s%s(%s-%s)"
+msgstr "Reposición real %s%s(%s-%s)"
 
 #. module: mrp_mps
 #. odoo-javascript
@@ -194,8 +194,8 @@ msgstr ""
 msgid ""
 "Default value for the time ranges in Master Production Schedule report."
 msgstr ""
-"Valor predeterminado para los intervalos de tiempo del Programa Maestro de "
-"Producción"
+"Valor por defecto para los intervalos de tiempo del plan maestro de "
+"producción"
 
 #. module: mrp_mps
 #. odoo-javascript
@@ -210,7 +210,7 @@ msgstr "Eliminar"
 #: model:ir.model.fields,field_description:mrp_mps.field_mrp_product_forecast__forecast_qty
 #, python-format
 msgid "Demand Forecast"
-msgstr "Demanda prevista"
+msgstr "Pronóstico de la demanda"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__mrp_mps_show_actual_demand
@@ -220,27 +220,27 @@ msgstr "Mostrar demanda real"
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__mrp_mps_show_actual_demand_year_minus_2
 msgid "Display Actual Demand Before Year"
-msgstr "Mostrar la demanda real antes del año"
+msgstr "Mostrar demanda real antes del año"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__mrp_mps_show_actual_demand_year_minus_1
 msgid "Display Actual Demand Last Year"
-msgstr "Mostrar la demanda real del año pasado"
+msgstr "Mostrar demanda real del año pasado"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__mrp_mps_show_actual_replenishment
 msgid "Display Actual Replenishment"
-msgstr "Mostrar reabastecimiento real"
+msgstr "Mostrar reposición real"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__mrp_mps_show_available_to_promise
 msgid "Display Available to Promise"
-msgstr "Pantalla disponible para prometer "
+msgstr "Mostrar disponible para prometer"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__mrp_mps_show_demand_forecast
 msgid "Display Demand Forecast"
-msgstr "Visualizar pronóstico de demanda "
+msgstr "Mostrar pronóstico de demanda"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__mrp_mps_show_indirect_demand
@@ -257,12 +257,12 @@ msgstr "Nombre mostrado"
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__mrp_mps_show_safety_stock
 msgid "Display Safety Stock"
-msgstr "Visualizar stock de seguridad"
+msgstr "Mostrar stock de seguridad"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__mrp_mps_show_starting_inventory
 msgid "Display Starting Inventory"
-msgstr "Mostrar inventario inicial "
+msgstr "Mostrar inventario inicial"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_res_company__mrp_mps_show_to_replenish
@@ -272,7 +272,7 @@ msgstr "Mostrar para reponer "
 #. module: mrp_mps
 #: model:ir.model.fields.selection,name:mrp_mps.selection__mrp_production_schedule__replenish_state__excessive_replenishment
 msgid "Excessive Replenishment"
-msgstr "Reabastecimiento excesivo"
+msgstr "Reposición excesiva"
 
 #. module: mrp_mps
 #. odoo-javascript
@@ -291,14 +291,14 @@ msgstr "ID externo"
 #. module: mrp_mps
 #: model:ir.model,name:mrp_mps.model_mrp_mps_forecast_details
 msgid "Forecast Demand Details"
-msgstr "Detalles de demanda previstos"
+msgstr "Detalles de la demanda pronosticada"
 
 #. module: mrp_mps
 #. odoo-javascript
 #: code:addons/mrp_mps/static/src/components/line.xml:0
 #, python-format
 msgid "Forecast Report"
-msgstr "Informe de Previsión"
+msgstr "Informe de pronóstico"
 
 #. module: mrp_mps
 #. odoo-javascript
@@ -326,7 +326,7 @@ msgstr "Stock pronosticado"
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_mrp_production_schedule__forecast_ids
 msgid "Forecasted quantity at date"
-msgstr "Cantidad prevista hasta la fecha"
+msgstr "Cantidad pronosticada hasta la fecha"
 
 #. module: mrp_mps
 #: model:ir.model.fields,help:mrp_mps.field_mrp_production_schedule__sequence
@@ -364,7 +364,7 @@ msgstr "Última actualización el"
 #. module: mrp_mps
 #: model:ir.ui.menu,name:mrp_mps.mrp_mps_menu_planning
 msgid "MPS"
-msgstr "CPE (Calendario de Producción Estandar)"
+msgstr "MPS"
 
 #. module: mrp_mps
 #: model_terms:ir.ui.view,arch_db:mrp_mps.mrp_mps_forecast_details_form_view
@@ -385,7 +385,7 @@ msgstr "Periodo de fabricación"
 #: model:ir.ui.menu,name:mrp_mps.stock_mrp_mps_report_menu
 #, python-format
 msgid "Master Production Schedule"
-msgstr "Programa Maestro de Producción"
+msgstr "Plan maestro de producción"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_mrp_production_schedule__max_to_replenish_qty
@@ -400,7 +400,7 @@ msgstr "Mínimo para reponer"
 #. module: mrp_mps
 #: model:ir.model.fields.selection,name:mrp_mps.selection__res_company__manufacturing_period__month
 msgid "Monthly"
-msgstr "Mensual"
+msgstr "Mensualmente"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_mrp_mps_forecast_details__move_ids
@@ -412,7 +412,7 @@ msgstr "Asiento"
 #: code:addons/mrp_mps/static/src/components/main.xml:0
 #, python-format
 msgid "No product yet. Add one to start scheduling."
-msgstr "No hay productos aún. Agregue uno para empezar a programar."
+msgstr "Todavía no hay productos. Agregue uno para empezar a programar."
 
 #. module: mrp_mps
 #: model_terms:ir.ui.view,arch_db:mrp_mps.res_config_settings_view_form
@@ -430,13 +430,13 @@ msgid ""
 "Number of columns for the        given period to display in Master "
 "Production Schedule"
 msgstr ""
-"Número de columnas para el periodo dado para mostrar en el Programa maestro "
-"de producción"
+"Número de columnas para el periodo dado para mostrar en el plan maestro de "
+"producción"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_mrp_product_forecast__procurement_launched
 msgid "Procurement has been run for this forecast"
-msgstr "Se ha ejecutado la adquisición para este pronóstico"
+msgstr "Se ejecutó el aprovisionamiento para este pronóstico"
 
 #. module: mrp_mps
 #: model:ir.model,name:mrp_mps.model_product_template
@@ -502,7 +502,7 @@ msgstr "Cantidad de orden de fabricación"
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_mrp_mps_forecast_details__rfq_qty
 msgid "Quantity from RFQ"
-msgstr "Cantidad de la solicitud de presupuesto"
+msgstr "Cantidad de la SdP"
 
 #. module: mrp_mps
 #. odoo-javascript
@@ -528,12 +528,12 @@ msgstr "Recepciones"
 #: code:addons/mrp_mps/static/src/components/main.xml:0
 #, python-format
 msgid "Replenish"
-msgstr "Reabastecer"
+msgstr "Reponer"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_mrp_production_schedule__replenish_state
 msgid "Replenish State"
-msgstr "Estado de reabastecimiento"
+msgstr "Estado de reposición"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_mrp_product_forecast__replenish_qty_updated
@@ -543,12 +543,12 @@ msgstr "Replenish_qty se ha actualizado manualmente"
 #. module: mrp_mps
 #: model_terms:ir.ui.view,arch_db:mrp_mps.mrp_mps_search_view
 msgid "Replenishment Too High"
-msgstr "Reabastecimiento demasiado alto"
+msgstr "Reposición demasiado alta"
 
 #. module: mrp_mps
 #: model_terms:ir.ui.view,arch_db:mrp_mps.mrp_mps_search_view
 msgid "Replenishment Too Low"
-msgstr "Reabastecimiento demasiado bajo"
+msgstr "Reposición demasiado baja"
 
 #. module: mrp_mps
 #: model_terms:ir.ui.view,arch_db:mrp_mps.mrp_mps_forecast_details_form_view
@@ -565,9 +565,7 @@ msgstr "Filas"
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_mrp_production_schedule__forecast_target_qty
 msgid "Safety Stock Target"
-msgstr ""
-"Objetivo de stock de seguridad\n"
-" "
+msgstr "Objetivo de stock de seguridad"
 
 #. module: mrp_mps
 #: model_terms:ir.ui.view,arch_db:mrp_mps.mrp_mps_production_schedule_form_view
@@ -577,7 +575,7 @@ msgstr "Guardar"
 #. module: mrp_mps
 #: model:ir.model,name:mrp_mps.model_mrp_production_schedule
 msgid "Schedule the production of Product in a warehouse"
-msgstr "Programe la producción del Producto en un almacén."
+msgstr "Programe la producción del producto en un almacén"
 
 #. module: mrp_mps
 #: model:ir.model.fields,field_description:mrp_mps.field_purchase_order__date_planned_mps
@@ -616,12 +614,12 @@ msgstr "Regla de inventario"
 #: code:addons/mrp_mps/static/src/components/line.xml:0
 #, python-format
 msgid "Suggested Replenishment"
-msgstr "Reabastecimiento sugerido"
+msgstr "Reposición sugerida"
 
 #. module: mrp_mps
 #: model:ir.model.fields,help:mrp_mps.field_mrp_production_schedule__replenish_state
 msgid "Technical field to support filtering by replenish state"
-msgstr "Campo técnico para apoyar el filtrado por estado de reabastecimiento"
+msgstr "Campo técnico para apoyar el filtrado por estado de reposición"
 
 #. module: mrp_mps
 #: model:ir.model.constraint,message:mrp_mps.constraint_mrp_production_schedule_warehouse_product_ref_uniq
@@ -633,7 +631,7 @@ msgstr "La combinación de almacén y producto debe ser única"
 #: code:addons/mrp_mps/static/src/components/line.xml:0
 #, python-format
 msgid "The confirmed demand, based on the confirmed sales orders."
-msgstr "La demanda confirmada, basada en los pedidos de venta confirmados."
+msgstr "La demanda confirmada según las órdenes de venta confirmadas."
 
 #. module: mrp_mps
 #. odoo-javascript
@@ -643,15 +641,15 @@ msgid ""
 "The forecasted demand to fulfill the needs in components of the "
 "Manufacturing Orders."
 msgstr ""
-"La demanda prevista para satisfacer las necesidades de los componentes de "
-"los pedidos de fabricación."
+"La demanda pronosticada para satisfacer las necesidades de los componentes "
+"de las órdenes de fabricación."
 
 #. module: mrp_mps
 #. odoo-javascript
 #: code:addons/mrp_mps/static/src/components/line.xml:0
 #, python-format
 msgid "The forecasted demand. This value has to be entered manually."
-msgstr "La demanda prevista. Este valor debe ingresarse manualmente."
+msgstr "La demanda pronosticada. Este valor debe ingresarse manualmente."
 
 #. module: mrp_mps
 #. odoo-javascript
@@ -678,7 +676,7 @@ msgid ""
 msgstr ""
 "El programa maestro traduce sus ventas y pronóstico de demanda en un plan de producción y compra para cada componente.\n"
 "                    Asegura que todo se programe a tiempo, según limitaciones como: existencias de seguridad, capacidad de producción, plazos.\n"
-"                    Es la herramienta perfecta para apoyar sus juntas de planificación de ventas y operaciones."
+"                    Es la herramienta perfecta para apoyar sus reuniones de planificación de ventas y operaciones."
 
 #. module: mrp_mps
 #: model:ir.model.fields,help:mrp_mps.field_mrp_production_schedule__max_to_replenish_qty
@@ -687,10 +685,9 @@ msgid ""
 "MPS. Note that if the demand is higher than that amount, the remaining "
 "quantity will be transferred to the next period automatically."
 msgstr ""
-"El reabastecimiento máximo que desea usar en cada periodo en el programa "
-"maestro de producción. Tome en cuenta que si la demanda es mayor que esta "
-"cifra, la cantidad restante se transferirá al siguiente periodo de forma "
-"automática."
+"La reposición máxima que desea usar en cada periodo en el plan maestro de "
+"producción. Tome en cuenta que si la demanda es mayor que esta cifra, la "
+"cantidad restante se transferirá automáticamente al siguiente periodo."
 
 #. module: mrp_mps
 #. odoo-javascript
@@ -701,7 +698,7 @@ msgid ""
 "Manufacturing Orders."
 msgstr ""
 "La cantidad que se repone, en función de las solicitudes de presupuesto y "
-"los pedidos de fabricación."
+"los órdenes de fabricación."
 
 #. module: mrp_mps
 #. odoo-javascript
@@ -734,19 +731,19 @@ msgstr "Periodo de tiempo"
 #: model_terms:ir.ui.view,arch_db:mrp_mps.mrp_mps_search_view
 #, python-format
 msgid "To Replenish"
-msgstr "Reponer"
+msgstr "A reponer"
 
 #. module: mrp_mps
 #: model:ir.model.fields.selection,name:mrp_mps.selection__mrp_production_schedule__replenish_state__under_replenishment
 msgid "Under Replenishment"
-msgstr "En reabastecimiento"
+msgstr "Bajo reposición"
 
 #. module: mrp_mps
 #: model:ir.model.fields,help:mrp_mps.field_mrp_production_schedule__min_to_replenish_qty
 msgid ""
 "Unless the demand is 0, Odoo will always at least replenish this quantity."
 msgstr ""
-"A menos que la demanda sea 0, Odoo siempre reabastecerá por lo menos esta "
+"A menos que la demanda sea 0, Odoo siempre repondrá por lo menos esta "
 "cantidad."
 
 #. module: mrp_mps

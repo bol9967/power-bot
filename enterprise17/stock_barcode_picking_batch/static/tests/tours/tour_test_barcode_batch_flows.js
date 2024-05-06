@@ -867,3 +867,107 @@ registry.category("web_tour.tours").add('test_pack_and_same_product_several_sml'
     },
     ...stepUtils.validateBarcodeOperation(),
 ]});
+
+registry.category("web_tour.tours").add("test_delete_from_batch", { test: true, steps: () => [
+    {
+        trigger: ".o_stock_barcode_main_menu:contains('Barcode Scanning')",
+    },
+    {
+        trigger: ".button_batch_transfer",
+    },
+    {
+        trigger: ".o-kanban-button-new",
+    },
+    {
+        trigger: ".o_barcode_line_title:contains('Delivery Orders')",
+    },
+    {
+        trigger: ".o_confirm:not([disabled])",
+    },
+    {
+        trigger: ".o_barcode_line_title:contains('picking_delivery_1')",
+    },
+    {
+        extra_trigger: ".o_highlight .o_barcode_line_title:contains('picking_delivery_1')",
+        trigger: ".o_confirm",
+    },
+    {
+        trigger: ".o_add_line",
+    },
+    {
+        trigger: ".o_field_widget[name=product_id] input",
+        run: "text productlot1",
+    },
+    {
+        trigger: ".ui-menu-item > a:contains('productlot1')",
+    },
+    {
+        trigger: ".o_save",
+    },
+    {
+        trigger: ".o_barcode_line.o_selected .o_edit",
+    },
+    {
+        trigger: ".o_delete",
+    },
+    {
+        trigger: ".o_barcode_lines",
+        isCheck: true,
+    },
+]});
+
+registry.category("web_tour.tours").add('test_split_line_on_exit_for_batch', {test: true, steps: () => [
+    // Opens the batch and check its lines.
+    { trigger: ".o_stock_barcode_main_menu", run: "scan batch_split_line_on_exit" },
+    {
+        trigger: ".o_barcode_client_action",
+        run: () => {
+            helper.assertLinesCount(2);
+            helper.assertLineProduct(0, "product1");
+            helper.assertLineQty(0, "0 / 4");
+            helper.assertLineBelongTo(0, "receipt1");
+            helper.assertLineProduct(1, "product2");
+            helper.assertLineQty(1, "0 / 4");
+            helper.assertLineBelongTo(1, "receipt2");
+        }
+    },
+    // Scans 2x product1 and 1x product2 and goes back to the main menu.
+    { trigger: ".o_barcode_client_action", run: "scan product1" },
+    { trigger: ".o_barcode_line.o_selected", run: "scan product1" },
+    { trigger: ".o_barcode_client_action", run: "scan product2" },
+    {
+        trigger: ".o_barcode_line.o_selected[data-barcode='product2']",
+        run: () => {
+            helper.assertLinesCount(2);
+            helper.assertLineProduct(0, "product1");
+            helper.assertLineQty(0, "2 / 4");
+            helper.assertLineBelongTo(0, "receipt1");
+            helper.assertLineProduct(1, "product2");
+            helper.assertLineQty(1, "1 / 4");
+            helper.assertLineBelongTo(1, "receipt2");
+        }
+    },
+    // Goes back to the main menu (that's here the uncompleted lines shoud be split.)
+    { trigger: "button.o_exit" },
+    // Re-opens the batch and checks uncompleted lines were split.
+    { trigger: ".o_stock_barcode_main_menu", run: "scan batch_split_line_on_exit" },
+    {
+        trigger: ".o_barcode_client_action",
+        run: () => {
+            helper.assertLinesCount(4);
+            const [line1, line2, line3, line4] = helper.getLines();
+            helper.assertLineProduct(line1, "product1");
+            helper.assertLineQty(line1, "0 / 2");
+            helper.assertLineBelongTo(line1, "receipt1");
+            helper.assertLineProduct(line2, "product2");
+            helper.assertLineQty(line2, "0 / 3");
+            helper.assertLineBelongTo(line2, "receipt2");
+            helper.assertLineProduct(line3, "product1");
+            helper.assertLineQty(line3, "2 / 2");
+            helper.assertLineBelongTo(line3, "receipt1");
+            helper.assertLineProduct(line4, "product2");
+            helper.assertLineQty(line4, "1 / 1");
+            helper.assertLineBelongTo(line4, "receipt2");
+        }
+    },
+]});

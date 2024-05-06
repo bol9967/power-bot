@@ -10,6 +10,7 @@ from urllib import parse
 
 from odoo import exceptions
 from odoo.addons.knowledge.tests.common import KnowledgeCommonWData
+from odoo.exceptions import UserError
 from odoo.tests.common import tagged, users
 from odoo.tools import mute_logger
 
@@ -149,6 +150,30 @@ class TestKnowledgeArticleBusiness(KnowledgeCommonBusinessCase):
         _title = 'Fthagn, but with parent private none: cracboum'
         with self.assertRaises(exceptions.AccessError):
             Article.article_create(title=_title, parent_id=private_nonmember.id, is_private=False)
+
+    @users('employee')
+    def test_article_get_sidebar_articles(self):
+        """ Testing the main access point for the sidebar. """
+        playground_root = self.article_workspace.with_env(self.env)
+        playground_children = self.workspace_children.with_env(self.env)
+        shared_root = self.article_shared.with_env(self.env)
+        # all articles are folded, expect only roots and no favorite
+        sidebar_articles = self.env['knowledge.article'].get_sidebar_articles()
+        self.assertListEqual(sidebar_articles['favorite_ids'], [])
+        self.assertListEqual([article['id'] for article in sidebar_articles['articles']], (shared_root + playground_root).ids)
+        # add both articles as favorite, favorite_ids should be populated
+        (playground_root + shared_root).action_toggle_favorite()
+        sidebar_articles = self.env['knowledge.article'].get_sidebar_articles()
+        self.assertListEqual(sidebar_articles['favorite_ids'], (playground_root + shared_root).ids)
+        # remove access to shared article, favorite_ids should have one element and only playground should be kept
+        shared_root.sudo()._add_members(self.partner_employee, 'none', True)
+        sidebar_articles = self.env['knowledge.article'].get_sidebar_articles()
+        self.assertListEqual(sidebar_articles['favorite_ids'], playground_root.ids)
+        self.assertListEqual([article['id'] for article in sidebar_articles['articles']], playground_root.ids)
+        # unfold playground, should contain its children
+        sidebar_articles = self.env['knowledge.article'].get_sidebar_articles(playground_root.ids)
+        self.assertListEqual(sidebar_articles['favorite_ids'], [playground_root.id])
+        self.assertListEqual([article['id'] for article in sidebar_articles['articles']], (playground_children + playground_root).ids)
 
     @mute_logger('odoo.addons.base.models.ir_rule', 'odoo.addons.mail.models.mail_mail', 'odoo.models.unlink', 'odoo.tests')
     @users('employee')
@@ -1346,6 +1371,31 @@ class TestKnowledgeArticleRemoval(KnowledgeCommonBusinessCase):
         with self.assertRaises(exceptions.AccessError,
                                msg="ACLs: unlink is not accessible to employees"):
             article_workspace.unlink()
+
+    def test_unarchive_article_items_having_archived_parent(self):
+        """ Check that the user can not unarchive an article item whose parent is archived. """
+        parent_article = self.env['knowledge.article'].create({
+            'active': False,
+            'to_delete': True,
+            'name': 'Parent article',
+        })
+        article_item = self.env['knowledge.article'].create({
+            'active': False,
+            'to_delete': True,
+            'name': 'Article item',
+            'parent_id': parent_article.id,
+            'is_article_item': True,
+        })
+
+        with self.assertRaises(UserError):
+            article_item.action_unarchive()
+
+        (parent_article + article_item).action_unarchive()
+        self.assertTrue(parent_article.active)
+        self.assertFalse(parent_article.to_delete)
+        self.assertTrue(article_item.active)
+        self.assertFalse(article_item.to_delete)
+        self.assertEqual(article_item.parent_id, parent_article)
 
 
     @users('employee')

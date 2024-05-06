@@ -53,6 +53,9 @@ class HrPayrollEmployeeDeclaration(models.Model):
 
         for (res_model, res_id), declarations in declarations_by_sheet.items():
             sheet = self.env[res_model].browse(res_id)
+            if not sheet.exists():
+                _logger.warning('Sheet %s %s does not exist', res_model, res_id)
+                continue
             report_id = sheet._get_pdf_report().id
             rendering_data = sheet._get_rendering_data(declarations.employee_id)
             if 'error' in rendering_data:
@@ -67,7 +70,7 @@ class HrPayrollEmployeeDeclaration(models.Model):
                 _logger.info('Printing %s (%s/%s)', sheet._description, counter, sheet_count)
                 counter += 1
                 sheet_filename = sheet._get_pdf_filename(employee)
-                sheet_file, dummy = report_sudo.with_context(lang=employee.lang)._render_qweb_pdf(
+                sheet_file, dummy = report_sudo.with_context(lang=employee.lang or self.env.lang)._render_qweb_pdf(
                     report_id,
                     [employee.id], data={'report_data': employee_data, 'employee': employee, 'company_id': employee.company_id})
                 pdf_files.append((employee, sheet_filename, sheet_file))
@@ -106,3 +109,15 @@ class HrPayrollEmployeeDeclaration(models.Model):
                 }
             }
         }
+
+    @api.autovacuum
+    def _gc_orphan_declarations(self):
+        orphans = self.env['hr.payroll.employee.declaration']
+        grouped_declarations = self.read_group([], ['ids:array_agg(id)', 'res_ids:array_agg(res_id)'], ['res_model'])
+        for gd in grouped_declarations:
+            sheet_ids = self.env[gd['res_model']].browse(set(gd['res_ids'])).exists().ids
+            for declaration in self.browse(gd['ids']):
+                if declaration.res_id not in sheet_ids:
+                    orphans += declaration
+        if orphans:
+            orphans.unlink()

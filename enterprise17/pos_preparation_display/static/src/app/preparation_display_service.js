@@ -4,7 +4,7 @@ import { registry } from "@web/core/registry";
 import { PreparationDisplay } from "@pos_preparation_display/app/models/preparation_display";
 import { useService } from "@web/core/utils/hooks";
 
-const preparationDisplayService = {
+export const preparationDisplayService = {
     dependencies: ["orm", "bus_service", "sound"],
     async start(env, { orm, bus_service, sound }) {
         const datas = await orm.call(
@@ -35,7 +35,9 @@ const preparationDisplayService = {
                 }
                 switch (detail.type) {
                     case "load_orders":
-                        sound.play("notification");
+                        if (detail.payload.sound) {
+                            sound.play("notification");
+                        }
                         return preparationDisplayService.getOrders();
                     case "change_order_stage":
                         return preparationDisplayService.wsMoveToNextStage(

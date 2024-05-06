@@ -67,12 +67,12 @@ msgstr ""
 #. module: quality_control
 #: model_terms:ir.ui.view,arch_db:quality_control.stock_picking_view_form_inherit_quality
 msgid "<span class=\"o_stat_text text-danger\">Quality Checks</span>"
-msgstr "<span class=\"o_stat_text text-danger\">Comprobación de calidad</span>"
+msgstr "<span class=\"o_stat_text text-danger\">Controles de calidad</span>"
 
 #. module: quality_control
 #: model_terms:ir.ui.view,arch_db:quality_control.stock_picking_view_form_inherit_quality
 msgid "<span class=\"o_stat_text text-success\">Quality Checks</span>"
-msgstr "<span class=\"o_stat_text text-success\">Comprobación de calidad</span>"
+msgstr "<span class=\"o_stat_text text-success\">Controles de calidad</span>"
 
 #. module: quality_control
 #: model_terms:ir.ui.view,arch_db:quality_control.quality_point_view_form_inherit_quality_control
@@ -386,7 +386,7 @@ msgid ""
 "              quality checks at the right logistic operation: transfers, manufacturing orders."
 msgstr ""
 "Defina puntos de control de calidad para que automáticamente se generen\n"
-"              controles de calidad con la operación de logística correcta: transferencias y órdenes de fabricación."
+"              controles de calidad con la operación de logística correcta: traslados y órdenes de fabricación."
 
 #. module: quality_control
 #: model:ir.model.fields,help:quality_control.field_quality_check__testing_percentage_within_lot
@@ -435,13 +435,13 @@ msgstr "Nombre mostrado"
 #. module: quality_control
 #: model_terms:ir.ui.view,arch_db:quality_control.quality_alert_team_view_form
 msgid "Email Alias"
-msgstr "Pseudónimo de correo"
+msgstr "Alias de correo electrónico"
 
 #. module: quality_control
 #: model:ir.model.fields,help:quality_control.field_quality_check__product_tracking
 #: model:ir.model.fields,help:quality_control.field_quality_check_wizard__product_tracking
 msgid "Ensure the traceability of a storable product in your warehouse."
-msgstr "Asegure la trazabilidad de un producto almacenable en su almacén"
+msgstr "Asegure la trazabilidad de un producto almacenable en su almacén."
 
 #. module: quality_control
 #: model:ir.model.fields.selection,name:quality_control.selection__quality_check__measure_success__fail
@@ -609,7 +609,7 @@ msgstr "Tolerancia máxima"
 #: model:ir.model.fields,field_description:quality_control.field_quality_check_wizard__measure
 #: model_terms:ir.ui.view,arch_db:quality_control.quality_check_view_form
 msgid "Measure"
-msgstr "Medida"
+msgstr "Medición"
 
 #. module: quality_control
 #: model:ir.model.fields,field_description:quality_control.field_quality_point__measure_frequency_unit
@@ -744,7 +744,7 @@ msgstr ""
 #. module: quality_control
 #: model:ir.ui.menu,name:quality_control.menu_quality_dashboard
 msgid "Overview"
-msgstr "Información general"
+msgstr "Vista general"
 
 #. module: quality_control
 #: model_terms:ir.ui.view,arch_db:quality_control.quality_point_view_form_inherit_quality_control
@@ -1085,25 +1085,25 @@ msgstr "Cantidad fallida"
 #: model:ir.model.fields,field_description:quality_control.field_quality_check__qty_tested
 #: model:ir.model.fields,field_description:quality_control.field_quality_check_wizard__qty_tested
 msgid "Quantity Tested"
-msgstr "Cantidad testeada"
+msgstr "Cantidad probada"
 
 #. module: quality_control
 #: model:ir.model.fields,help:quality_control.field_quality_check__qty_tested
 #: model:ir.model.fields,help:quality_control.field_quality_check_wizard__qty_tested
 msgid "Quantity of product tested within the lot"
-msgstr "Cantidad testeada del producto dentro del lote"
+msgstr "Cantidad probada del producto dentro del lote"
 
 #. module: quality_control
 #: model:ir.model.fields,help:quality_control.field_quality_check__qty_to_test
 #: model:ir.model.fields,help:quality_control.field_quality_check_wizard__qty_to_test
 msgid "Quantity of product to test within the lot"
-msgstr "Cantidad por testear del producto dentro del lote"
+msgstr "Cantidad a probar del producto dentro del lote"
 
 #. module: quality_control
 #: model:ir.model.fields,field_description:quality_control.field_quality_check__qty_to_test
 #: model:ir.model.fields,field_description:quality_control.field_quality_check_wizard__qty_to_test
 msgid "Quantity to Test"
-msgstr "Cantidad por testear"
+msgstr "Cantidad a probar"
 
 #. module: quality_control
 #: model:ir.model.fields.selection,name:quality_control.selection__quality_point__measure_frequency_type__random
@@ -1315,7 +1315,7 @@ msgstr "Debe proporcionar una fotografía antes de validar"
 #: code:addons/quality_control/models/stock_picking.py:0
 #, python-format
 msgid "You still need to do the quality checks!"
-msgstr "Está pendiente de hacer los controles de calidad!"
+msgstr "¡Aún debe realizar los controles de calidad!"
 
 #. module: quality_control
 #: model_terms:ir.ui.view,arch_db:quality_control.quality_alert_team_view_form

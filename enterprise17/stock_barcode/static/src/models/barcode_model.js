@@ -150,12 +150,20 @@ export default class BarcodeModel extends EventBus {
         return false;
     }
 
+    get useScanDestinationLocation() {
+        return this.displayDestinationLocation;
+    }
+
     get displayResultPackage() {
         return false;
     }
 
     get displaySourceLocation() {
         return this.groups.group_stock_multi_locations;
+    }
+
+    get useScanSourceLocation() {
+        return this.displaySourceLocation;
     }
 
     groupKey(line) {
@@ -364,6 +372,10 @@ export default class BarcodeModel extends EventBus {
         this._createState();
     }
 
+    beforeQuit() {
+        return this.save();
+    }
+
     async save() {
         const { route, params } = this._getSaveCommand();
         if (route) {
@@ -408,12 +420,6 @@ export default class BarcodeModel extends EventBus {
                 location_id = this.cache.getRecord('stock.location', args.location_id);
             }
             line.location_id = location_id;
-        }
-        if (!location_id && this.lastScanned.sourceLocation) {
-            line.location_id = this.lastScanned.sourceLocation;
-            if(line.package_id && line.package_id.location_id != line.location_id.id) {
-                line.package_id = false;
-            }
         }
         if (lot_id) {
             if (typeof lot_id === 'number') {
@@ -562,7 +568,8 @@ export default class BarcodeModel extends EventBus {
     }
 
     _defaultLocation() {
-        return Object.values(this.cache.dbIdCache['stock.location'])[0];
+        const lastScannedLocation = this.lastScanned.sourceLocation;
+        return lastScannedLocation || Object.values(this.cache.dbIdCache['stock.location'])[0];
     }
 
     _defaultDestLocation() {
@@ -1088,7 +1095,8 @@ export default class BarcodeModel extends EventBus {
                     {
                         lot_id: lotId,
                         lot_name: (!lotId && barcodeData.lotName) || false,
-                    }
+                        context: { location_id: currentLine.location_id },
+                    },
                 );
                 this.cache.setCache(res.records);
                 if (prefilledPackage && res.quant && res.quant.package_id) {
@@ -1277,8 +1285,8 @@ export default class BarcodeModel extends EventBus {
             }
         }
         // Sort by product's category.
-        const categ1 = l1.categ_id;
-        const categ2 = l2.categ_id;
+        const categ1 = l1.product_category_name;
+        const categ2 = l2.product_category_name;
         if (categ1 < categ2) {
             return -1;
         } else if (categ1 > categ2) {

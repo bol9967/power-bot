@@ -78,12 +78,12 @@ msgstr "Cada línea debe ser un número de serie o de lote."
 #. module: industry_fsm_stock
 #: model:ir.model.fields,help:industry_fsm_stock.field_fsm_stock_tracking__tracking
 msgid "Ensure the traceability of a storable product in your warehouse."
-msgstr "Asegure la trazabilidad de un producto almacenable en su almacén"
+msgstr "Asegure la trazabilidad de un producto almacenable en su almacén."
 
 #. module: industry_fsm_stock
 #: model:ir.model.fields,field_description:industry_fsm_stock.field_sale_order_line__fsm_lot_id
 msgid "Fsm Lot"
-msgstr "Lote de Servicio externo"
+msgstr "Lote de servicio externo"
 
 #. module: industry_fsm_stock
 #: model:ir.model.fields,field_description:industry_fsm_stock.field_fsm_stock_tracking__id
@@ -139,7 +139,7 @@ msgstr "Cantidad"
 #. module: industry_fsm_stock
 #: model:ir.model.fields,field_description:industry_fsm_stock.field_product_product__quantity_decreasable
 msgid "Quantity Decreasable"
-msgstr "Cantidad disminuible"
+msgstr "Cantidad decreciente"
 
 #. module: industry_fsm_stock
 #: model:ir.model.fields,field_description:industry_fsm_stock.field_product_product__quantity_decreasable_sum
@@ -149,7 +149,7 @@ msgstr "Suma de la cantidad decreciente"
 #. module: industry_fsm_stock
 #: model:ir.model.fields,field_description:industry_fsm_stock.field_fsm_stock_tracking_line__sale_order_line_id
 msgid "Sale Order Line"
-msgstr "Línea pedido de venta"
+msgstr "Línea de orden de venta"
 
 #. module: industry_fsm_stock
 #: model:ir.model,name:industry_fsm_stock.model_sale_order_line
@@ -165,7 +165,7 @@ msgstr "Mismo almacén"
 #. module: industry_fsm_stock
 #: model:ir.model.fields,field_description:industry_fsm_stock.field_product_product__serial_missing
 msgid "Serial Missing"
-msgstr "De serie faltante"
+msgstr "Número de serie faltante"
 
 #. module: industry_fsm_stock
 #: model:ir.model,name:industry_fsm_stock.model_stock_move
@@ -186,7 +186,7 @@ msgid ""
 "The ordered quantity cannot be decreased below the amount already delivered."
 " Instead, create a return in your inventory."
 msgstr ""
-"La cantidad ordenada no puede disminuir por debajo del importe que ya se "
+"La cantidad pedida no puede disminuir por debajo del importe que ya se "
 "entregó. En su lugar, cree una devolución en su inventario."
 
 #. module: industry_fsm_stock

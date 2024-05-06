@@ -1299,6 +1299,14 @@ class Article(models.Model):
           * To avoid 'restoring' an article that will not appear anywhere on
             the knowledge home page, make the article a root article.
         """
+        for article_item in self.filtered(lambda article: article.is_article_item \
+                                        and article.parent_id not in self \
+                                        and article.parent_id.sudo().to_delete):
+            raise UserError(
+                _('"%(article_item_name)s" is an Article Item from "%(article_name)s" and cannot be restored on its own. Contact the owner of "%(article_name)s" to have it restored instead.',
+                    article_item_name=article_item.display_name,
+                    article_name=article_item.parent_id.display_name))
+
         writable_descendants = self.with_context(active_test=False)._detach_unwritable_descendants().with_env(self.env)
         res = super(Article, self + writable_descendants).action_unarchive()
         # Trash management: unarchive removes the article from the trash
@@ -2811,6 +2819,9 @@ class Article(models.Model):
             # Do not fetch articles that the user did not join (articles with
             # internal permissions may be set as visible to members only)
             root_articles_domain.append(("is_article_visible", "=", True))
+        else:
+            # Do not fetch private articles of other users for portal user
+            expression.AND([root_articles_domain, ['|', ('user_has_access', '=', True), ('category', '!=', 'private')]])
 
         # Fetch root article_ids as sudo, ACLs will be checked on next global call fetching 'all_visible_articles'
         # this helps avoiding 2 queries done for ACLs (and redundant with the global fetch)
@@ -2818,7 +2829,7 @@ class Article(models.Model):
 
         favorite_articles_ids = self.env['knowledge.article.favorite'].sudo().search(
             [("user_id", "=", self.env.user.id), ('is_article_active', '=', True)]
-        ).article_id.ids
+        ).article_id.filtered(lambda article: article.user_has_access).ids
 
         # Add favorite articles and items (they are root articles in the
         # favorite tree)

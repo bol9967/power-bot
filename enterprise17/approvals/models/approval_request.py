@@ -92,6 +92,12 @@ class ApprovalRequest(models.Model):
         for request in self:
             request.attachment_number = attachment.get(request.id, 0)
 
+    @api.constrains('date_start', 'date_end')
+    def _check_dates(self):
+        for request in self:
+            if request.date_start and request.date_end and request.date_start > request.date_end:
+                raise ValidationError(_("Start date should precede the end date."))
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
@@ -379,4 +385,4 @@ class ApprovalApprover(models.Model):
         is_user = self.env.user.has_group('approvals.group_approval_user')
         for approval in self:
             approval.can_edit = not approval.user_id or not approval.category_approver or is_user
-            approval.can_edit_user_id = is_user or approval.request_id.request_owner_id == self.env.user
+            approval.can_edit_user_id = is_user or approval.request_id.request_owner_id == self.env.user or not approval.user_id

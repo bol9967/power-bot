@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-05 13:45+0000\n"
+"POT-Creation-Date: 2024-03-05 15:02+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
 "Last-Translator: Tony Ng, 2024\n"
 "Language-Team: Chinese (Taiwan) (https://app.transifex.com/odoo/teams/41243/zh_TW/)\n"
@@ -32,12 +32,12 @@ msgstr "您已獲得{gained}點數。{new_line}您的總點數達到{total}點�
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_recruitment_report__referral_hired
 msgid "# Hired by Referral"
-msgstr ""
+msgstr "經推薦聘用數目"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_applicant_employee_referral_kanban
 msgid "<b>Responsible: </b>"
-msgstr ""
+msgstr "<b>負責人：</b>"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_applicant_employee_referral_kanban
@@ -47,23 +47,23 @@ msgstr ""
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_applicant_employee_referral_kanban
 msgid "<i class=\"fa fa-square-o\" title=\"Open\"/>"
-msgstr ""
+msgstr "<i class=\"fa fa-square-o\" title=\"開放\"/>"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_applicant_employee_referral_kanban
 msgid "<i class=\"text-danger fa fa-times\" title=\"Closed\"/>"
-msgstr ""
+msgstr "<i class=\"text-danger fa fa-times\" title=\"已關閉\"/>"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_applicant_employee_referral_kanban
 msgid "<i class=\"text-success fa fa-check\" title=\"Done\"/>"
-msgstr ""
+msgstr "<i class=\"text-success fa fa-check\" title=\"已完成\"/>"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_level_form
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_reward_form
 msgid "<span class=\"ml8\">Points</span>"
-msgstr ""
+msgstr "<span class=\"ml8\">分</span>"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_reward_form
@@ -82,11 +82,13 @@ msgid ""
 "<span title=\"Buy\"><i class=\"fa fa-shopping-basket me-3\" role=\"img\" "
 "aria-label=\"Buy\"/>Buy</span>"
 msgstr ""
+"<span title=\"購買\"><i class=\"fa fa-shopping-basket me-3\" role=\"img\" "
+"aria-label=\"購買\"/>購買</span>"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_job_employee_referral_kanban
 msgid "<span title=\"More info\">More info</span>"
-msgstr ""
+msgstr "<span title=\"更多資訊\">更多資訊</span>"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_job_employee_referral_kanban
@@ -94,11 +96,13 @@ msgid ""
 "<span title=\"My Link to Share\"><i class=\"fa fa-lg fa-link\" role=\"img\" "
 "aria-label=\"My Link to Share\"/></span>"
 msgstr ""
+"<span title=\"我的分享連結\"><i class=\"fa fa-lg fa-link\" role=\"img\" aria-"
+"label=\"我的分享連結\"/></span>"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_job_employee_referral_kanban
 msgid "<span title=\"Send by Mail\">Refer Friend</span>"
-msgstr ""
+msgstr "<span title=\"以郵件傳送\">推薦朋友</span>"
 
 #. module: hr_referral
 #. odoo-python
@@ -107,7 +111,7 @@ msgstr ""
 msgid ""
 "A new alert has been added to the Referrals app! Check your <a "
 "href=%(url)s>dashboard</a> now!"
-msgstr ""
+msgstr "內部推薦應用程式加入了新警報！請即查看你的<a href=%(url)s>概覽畫面</a>。"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_reward__message_needaction
@@ -148,7 +152,7 @@ msgstr "警示"
 #. module: hr_referral
 #: model:ir.model,name:hr_referral.model_hr_referral_alert
 msgid "Alert in Referral App"
-msgstr ""
+msgstr "內部推薦程式通知"
 
 #. module: hr_referral
 #: model:ir.actions.act_window,name:hr_referral.action_hr_referral_alert_configuration
@@ -161,14 +165,14 @@ msgstr "警示"
 msgid ""
 "Alerts will be displayed on the first screen to give information or "
 "redirects the employees"
-msgstr ""
+msgstr "第一個螢幕會顯示警示，以向員工提供資訊或重新導向"
 
 #. module: hr_referral
 #: model:ir.model.fields,help:hr_referral.field_hr_recruitment_stage__points
 msgid ""
 "Amount of points that the referent will receive when the applicant will "
 "reach this stage"
-msgstr ""
+msgstr "申請人到達此階段時，推薦人將獲得的積分分數"
 
 #. module: hr_referral
 #: model:ir.model,name:hr_referral.model_hr_applicant
@@ -182,7 +186,7 @@ msgstr "申請人"
 #: code:addons/hr_referral/models/hr_applicant.py:0
 #, python-format
 msgid "Applicant must have a company."
-msgstr ""
+msgstr "申請人必須有公司設定。"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_points__applicant_name
@@ -212,7 +216,7 @@ msgstr "頭像"
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_reward_backend_kanban
 #, python-format
 msgid "Awarded Employees"
-msgstr ""
+msgstr "獲獎勵員工"
 
 #. module: hr_referral
 #: model:ir.model.fields.selection,name:hr_referral.selection__hr_referral_friend__position__back
@@ -256,14 +260,14 @@ msgstr "群組"
 #: code:addons/hr_referral/static/src/views/dashboard.xml:0
 #, python-format
 msgid "Choose an avatar for your new friend!"
-msgstr ""
+msgstr "為你的新朋友選擇頭像！"
 
 #. module: hr_referral
 #. odoo-javascript
 #: code:addons/hr_referral/static/src/views/dashboard.xml:0
 #, python-format
 msgid "Click to level up!"
-msgstr ""
+msgstr "按一下以升級！"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.hr_referral_link_to_share_view_form
@@ -304,22 +308,22 @@ msgstr "成本"
 #. module: hr_referral
 #: model_terms:ir.actions.act_window,help:hr_referral.action_hr_referral_friend_configuration
 msgid "Create a new friend"
-msgstr ""
+msgstr "建立新朋友"
 
 #. module: hr_referral
 #: model_terms:ir.actions.act_window,help:hr_referral.action_hr_referral_level_configuration
 msgid "Create a new level"
-msgstr ""
+msgstr "建立新等級"
 
 #. module: hr_referral
 #: model_terms:ir.actions.act_window,help:hr_referral.action_hr_referral_alert_configuration
 msgid "Create new alerts"
-msgstr ""
+msgstr "建立新提醒"
 
 #. module: hr_referral
 #: model_terms:ir.actions.act_window,help:hr_referral.action_hr_referral_points
 msgid "Create new reward points"
-msgstr ""
+msgstr "建立新的獎勵積分"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_alert__create_uid
@@ -361,7 +365,7 @@ msgstr "儀表板"
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_friend__image
 msgid "Dashboard Image"
-msgstr ""
+msgstr "概覽畫面圖片"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.employee_referral_report_view_search
@@ -401,19 +405,19 @@ msgstr "說明"
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_job__direct_clicks
 msgid "Direct Clicks"
-msgstr ""
+msgstr "直接點擊"
 
 #. module: hr_referral
 #. odoo-python
 #: code:addons/hr_referral/report/hr_referral_report.py:0
 #, python-format
 msgid "Direct Referral"
-msgstr ""
+msgstr "直接推薦"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_alert__dismissed_user_ids
 msgid "Dismissed User"
-msgstr ""
+msgstr "已解僱使用者"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_alert__display_name
@@ -434,20 +438,20 @@ msgstr "顯示名稱"
 #: code:addons/hr_referral/wizard/hr_referral_send_mail.py:0
 #, python-format
 msgid "Do not have access"
-msgstr ""
+msgstr "沒有存取權限"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_reward_kanban
 msgid ""
 "Do you want to confirm this reward? After confirmation an HR will contact "
 "you."
-msgstr ""
+msgstr "確認此獎勵？確認後，人力資源人員將聯絡你。"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_applicant__earned_points
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_report__earned_points
 msgid "Earned Points"
-msgstr ""
+msgstr "已獲取積分"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_send_mail__email_to
@@ -459,7 +463,7 @@ msgstr "電郵"
 #: code:addons/hr_referral/static/src/views/dashboard.xml:0
 #, python-format
 msgid "Email a friend"
-msgstr ""
+msgstr "向朋友傳送電郵"
 
 #. module: hr_referral
 #: model:ir.model.fields,help:hr_referral.field_hr_referral_points__applicant_subject
@@ -474,17 +478,17 @@ msgstr "員工"
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_report__employee_referral_hired
 msgid "Employee Referral Hired"
-msgstr ""
+msgstr "員工推薦對象已獲聘用"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_report__employee_referral_refused
 msgid "Employee Referral Refused"
-msgstr ""
+msgstr "員工推薦對象不獲聘用"
 
 #. module: hr_referral
 #: model:ir.model,name:hr_referral.model_hr_referral_report
 msgid "Employee Referral Report"
-msgstr ""
+msgstr "員工推薦報告"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_reward_form
@@ -498,12 +502,12 @@ msgstr "員工"
 #: model_terms:ir.ui.view,arch_db:hr_referral.hr_referral_report_view_form
 #: model_terms:ir.ui.view,arch_db:hr_referral.hr_referral_report_view_tree
 msgid "Employees Analysis"
-msgstr ""
+msgstr "員工分析"
 
 #. module: hr_referral
 #: model:ir.actions.act_window,name:hr_referral.employee_referral_report_action
 msgid "Employees Referral Analysis"
-msgstr ""
+msgstr "員工推薦分析"
 
 #. module: hr_referral
 #: model:ir.model.fields,help:hr_referral.field_hr_referral_alert__url
@@ -520,7 +524,7 @@ msgstr "Facebook"
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_job__facebook_clicks
 msgid "Facebook Clicks"
-msgstr ""
+msgstr "Facebook 點擊"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_reward__message_follower_ids
@@ -540,52 +544,52 @@ msgstr "Font awesome 圖示，例如，fa-task"
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_onboarding_tree
 msgid "Force Onboarding"
-msgstr ""
+msgstr "強制入職培訓"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_applicant__friend_id
 msgid "Friend"
-msgstr ""
+msgstr "朋友"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_friend__name
 msgid "Friend Name"
-msgstr ""
+msgstr "朋友姓名"
 
 #. module: hr_referral
 #: model:ir.actions.act_window,name:hr_referral.action_hr_referral_friend_configuration
 #: model:ir.ui.menu,name:hr_referral.menu_hr_referral_friend_configuration
 msgid "Friends"
-msgstr ""
+msgstr "朋友"
 
 #. module: hr_referral
 #: model:ir.model,name:hr_referral.model_hr_referral_friend
 msgid "Friends for Referrals"
-msgstr ""
+msgstr "推薦的朋友"
 
 #. module: hr_referral
 #: model:ir.model.fields.selection,name:hr_referral.selection__hr_referral_friend__position__front
 msgid "Front"
-msgstr ""
+msgstr "前方"
 
 #. module: hr_referral
 #. odoo-javascript
 #: code:addons/hr_referral/static/src/views/dashboard.xml:0
 #, python-format
 msgid "Gather your team"
-msgstr ""
+msgstr "召集你的團隊"
 
 #. module: hr_referral
 #. odoo-javascript
 #: code:addons/hr_referral/static/src/views/dashboard.xml:0
 #, python-format
 msgid "Gather your team!"
-msgstr ""
+msgstr "召集你的團隊！"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_reward__gift_manager_id
 msgid "Gift Responsible"
-msgstr ""
+msgstr "禮物負責人"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_points_filter
@@ -595,7 +599,7 @@ msgstr "禮物"
 #. module: hr_referral
 #: model:ir.model.fields.selection,name:hr_referral.selection__hr_referral_alert__onclick__all_jobs
 msgid "Go to All Jobs"
-msgstr ""
+msgstr "前往所有工作職位"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.employee_referral_report_view_search
@@ -606,7 +610,7 @@ msgstr "分組依據"
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.hr_referral_alert_view_search
 msgid "HR Referral Alert Search"
-msgstr ""
+msgstr "人力資源推薦通知搜尋"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_reward__has_message
@@ -616,7 +620,7 @@ msgstr "有訊息"
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_recruitment_report__has_referrer
 msgid "Has Referrer"
-msgstr ""
+msgstr "有推薦人"
 
 #. module: hr_referral
 #. odoo-python
@@ -646,12 +650,12 @@ msgstr "決定聘用"
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_res_users__hr_referral_level_id
 msgid "Hr Referral Level"
-msgstr ""
+msgstr "人力資源推薦等級"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_res_users__hr_referral_onboarding_page
 msgid "Hr Referral Onboarding Page"
-msgstr ""
+msgstr "人力資源推薦入職簡介頁面"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_alert__id
@@ -706,7 +710,7 @@ msgstr "進行中"
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_applicant__is_accessible_to_current_user
 msgid "Is Accessible To Current User"
-msgstr ""
+msgstr "目前使用者可存取"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_reward__message_is_follower
@@ -736,17 +740,17 @@ msgstr "職務管理"
 #: code:addons/hr_referral/static/src/views/dashboard.xml:0
 #, python-format
 msgid "Job Referral Program"
-msgstr ""
+msgstr "工作職位推薦計劃"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_job__job_open_date
 msgid "Job Start Recruitment Date"
-msgstr ""
+msgstr "職位開始招聘日期"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_report__write_date
 msgid "Last Update Date"
-msgstr ""
+msgstr "上次更新日期"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_alert__write_uid
@@ -777,7 +781,7 @@ msgstr "最後更新於"
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_applicant__last_valuable_stage_id
 msgid "Last Valuable Stage"
-msgstr ""
+msgstr "最後一個有價值的階段"
 
 #. module: hr_referral
 #: model_terms:ir.actions.act_window,help:hr_referral.action_hr_referral_reward_configuration
@@ -792,7 +796,7 @@ msgstr "讓我們創建超級獎勵來感謝<br>你的員工。"
 #. module: hr_referral
 #: model_terms:ir.actions.act_window,help:hr_referral.action_hr_applicant_employee_referral
 msgid "Let's share a job position."
-msgstr ""
+msgstr "讓我們分享一個工作職位。"
 
 #. module: hr_referral
 #. odoo-javascript
@@ -809,7 +813,7 @@ msgstr "級別名稱"
 #. module: hr_referral
 #: model:ir.model,name:hr_referral.model_hr_referral_level
 msgid "Level for referrals"
-msgstr ""
+msgstr "推薦等級"
 
 #. module: hr_referral
 #: model:ir.actions.act_window,name:hr_referral.action_hr_referral_level_configuration
@@ -836,13 +840,13 @@ msgstr "Linkedin"
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_job__linkedin_clicks
 msgid "Linkedin Clicks"
-msgstr ""
+msgstr "Linkedin點擊"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_applicant__max_points
 #: model:ir.model.fields,field_description:hr_referral.field_hr_job__max_points
 msgid "Max Points"
-msgstr ""
+msgstr "最高積分"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_report__medium_id
@@ -867,21 +871,21 @@ msgstr "我的活動截止時間"
 #. module: hr_referral
 #: model:ir.actions.act_window,name:hr_referral.action_hr_applicant_employee_referral
 msgid "My Referral"
-msgstr ""
+msgstr "我的轉介"
 
 #. module: hr_referral
 #. odoo-python
 #: code:addons/hr_referral/wizard/hr_referral_alert_mail_wizard.py:0
 #, python-format
 msgid "New Alert In Referrals App"
-msgstr ""
+msgstr "內部推薦程式新通知"
 
 #. module: hr_referral
 #. odoo-python
 #: code:addons/hr_referral/models/hr_referral_reward.py:0
 #, python-format
 msgid "New gift awarded for %s"
-msgstr ""
+msgstr "新禮物已獎勵給 %s"
 
 #. module: hr_referral
 #. odoo-javascript
@@ -918,19 +922,19 @@ msgstr "無資料可供顯示"
 #. module: hr_referral
 #: model_terms:ir.actions.act_window,help:hr_referral.action_hr_job_employee_referral
 msgid "No job positions are available to share."
-msgstr ""
+msgstr "沒有工作職位可供分享。"
 
 #. module: hr_referral
 #: model:ir.model.fields.selection,name:hr_referral.selection__hr_referral_alert__onclick__no
 msgid "Not Clickable"
-msgstr ""
+msgstr "不可點擊"
 
 #. module: hr_referral
 #: model:ir.model.fields.selection,name:hr_referral.selection__hr_applicant__referral_state__closed
 #: model:ir.model.fields.selection,name:hr_referral.selection__hr_referral_report__referral_state__closed
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_filter
 msgid "Not Hired"
-msgstr ""
+msgstr "未聘用"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_reward__message_needaction_counter
@@ -972,13 +976,18 @@ msgstr "正在進行"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_job_employee_referral_kanban
-msgid "Open"
-msgstr "開啟"
+msgid "Open Position"
+msgstr "開放職位"
+
+#. module: hr_referral
+#: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_job_employee_referral_kanban
+msgid "Open Positions"
+msgstr "開放職位"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_reward_kanban
 msgid "Point icon"
-msgstr ""
+msgstr "積分圖示"
 
 #. module: hr_referral
 #: model:ir.actions.act_window,name:hr_referral.action_hr_referral_points
@@ -997,52 +1006,46 @@ msgstr "分"
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_report__points_not_hired
 msgid "Points Given For Not Hired"
-msgstr ""
+msgstr "未聘用而獲取積分"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_reward__points_missing
 msgid "Points Missing"
-msgstr ""
+msgstr "遺失的積分"
 
 #. module: hr_referral
 #. odoo-javascript
 #: code:addons/hr_referral/static/src/views/dashboard.xml:0
 #, python-format
 msgid "Points Received"
-msgstr ""
+msgstr "已獲取積分"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_job_employee_referral_kanban
 msgid "Points icon"
-msgstr ""
+msgstr "積分圖示"
 
 #. module: hr_referral
 #: model:ir.model,name:hr_referral.model_hr_referral_points
 msgid "Points line for referrals"
-msgstr ""
+msgstr "推薦積分資料行"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_reward_kanban
 msgid "Points to buy this"
-msgstr ""
+msgstr "購買的所需積分"
 
 #. module: hr_referral
 #. odoo-javascript
 #: code:addons/hr_referral/static/src/views/dashboard.xml:0
 #, python-format
 msgid "Points to spend"
-msgstr ""
+msgstr "待花費積分"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_friend__position
-#: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_job_employee_referral_kanban
 msgid "Position"
 msgstr "職位"
-
-#. module: hr_referral
-#: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_job_employee_referral_kanban
-msgid "Positions"
-msgstr ""
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_reward_kanban
@@ -1055,19 +1058,14 @@ msgid "Product Name"
 msgstr "產品名稱"
 
 #. module: hr_referral
-#: model:ir.model.fields,field_description:hr_referral.field_hr_referral_reward__rating_ids
-msgid "Ratings"
-msgstr "點評"
-
-#. module: hr_referral
 #: model_terms:ir.actions.act_window,help:hr_referral.action_hr_applicant_employee_referral
 msgid "Ready to receive points?"
-msgstr ""
+msgstr "準備好獲取積分嗎？"
 
 #. module: hr_referral
 #: model:ir.model,name:hr_referral.model_hr_recruitment_report
 msgid "Recruitment Analysis Report"
-msgstr ""
+msgstr "招聘分析報告"
 
 #. module: hr_referral
 #: model:ir.model,name:hr_referral.model_hr_recruitment_stage
@@ -1078,68 +1076,75 @@ msgstr "招聘階段"
 #: model_terms:ir.ui.view,arch_db:hr_referral.hr_referral_report_view_form
 #: model_terms:ir.ui.view,arch_db:hr_referral.hr_referral_report_view_tree
 msgid "Referer"
-msgstr ""
+msgstr "推薦人"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_points_filter
 msgid "Referral"
-msgstr ""
+msgstr "內部推薦"
 
 #. module: hr_referral
 #: model:ir.model,name:hr_referral.model_hr_referral_alert_mail_wizard
 msgid "Referral Alert Mail Wizard"
-msgstr ""
+msgstr "推薦通知郵件精靈"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_res_company__hr_referral_background
 #: model:ir.model.fields,field_description:hr_referral.field_res_config_settings__hr_referral_background
 msgid "Referral Background"
-msgstr ""
+msgstr "推薦背景"
 
 #. module: hr_referral
 #: model:ir.model,name:hr_referral.model_hr_referral_link_to_share
 msgid "Referral Link To Share"
-msgstr ""
+msgstr "推薦連結（分享用）"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_res_users__referral_point_ids
 msgid "Referral Point"
-msgstr ""
+msgstr "推薦積分"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_applicant__referral_points_ids
 msgid "Referral Points"
-msgstr ""
+msgstr "推薦積分"
 
 #. module: hr_referral
 #: model:res.groups,name:hr_referral.group_hr_referral_reward_responsible_user
 msgid "Referral Reward Responsible User"
-msgstr ""
+msgstr "負責推薦獎勵的使用者"
 
 #. module: hr_referral
 #: model:ir.model,name:hr_referral.model_hr_referral_send_mail
 msgid "Referral Send Mail"
-msgstr ""
+msgstr "推薦發送郵件"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_applicant__referral_state
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_report__referral_state
 msgid "Referral State"
-msgstr ""
+msgstr "推薦狀態"
+
+#. module: hr_referral
+#. odoo-python
+#: code:addons/hr_referral/wizard/hr_referral_link_to_share.py:0
+#, python-format
+msgid "Referral: %(job_url)s"
+msgstr "內部推薦：%(job_url)s"
 
 #. module: hr_referral
 #. odoo-python
 #: code:addons/hr_referral/models/hr_applicant.py:0
 #, python-format
 msgid "Referral: %s"
-msgstr ""
+msgstr "內部推薦：%s"
 
 #. module: hr_referral
 #. odoo-python
 #: code:addons/hr_referral/models/hr_applicant.py:0
 #, python-format
 msgid "Referral: %s (%s)"
-msgstr ""
+msgstr "推薦：%s（%s）"
 
 #. module: hr_referral
 #. odoo-javascript
@@ -1158,7 +1163,7 @@ msgstr "由 推薦"
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_applicant__ref_user_id
 msgid "Referred By User"
-msgstr ""
+msgstr "由使用者推薦"
 
 #. module: hr_referral
 #: model:ir.ui.menu,name:hr_referral.menu_report_employee_referral_all
@@ -1180,12 +1185,12 @@ msgstr "責任使用者"
 #: code:addons/hr_referral/static/src/views/dashboard.xml:0
 #, python-format
 msgid "Restart Onboarding"
-msgstr ""
+msgstr "重新開始入職簡介"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.res_config_settings_view__form
 msgid "Restore Default"
-msgstr ""
+msgstr "還原預設值"
 
 #. module: hr_referral
 #. odoo-javascript
@@ -1198,7 +1203,7 @@ msgstr "獎勵"
 #. module: hr_referral
 #: model:ir.model,name:hr_referral.model_hr_referral_reward
 msgid "Reward for Referrals"
-msgstr ""
+msgstr "推薦獎勵"
 
 #. module: hr_referral
 #. odoo-javascript
@@ -1218,12 +1223,12 @@ msgstr "簡訊發送錯誤"
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_points_filter
 msgid "Search Points / Gifts"
-msgstr ""
+msgstr "搜尋積分/禮物"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_filter
 msgid "Search Referral"
-msgstr ""
+msgstr "搜尋內部推薦"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.hr_referral_alert_mail_wizard_view_form
@@ -1233,12 +1238,12 @@ msgstr "發送"
 #. module: hr_referral
 #: model:ir.actions.act_window,name:hr_referral.hr_referral_send_mail_action
 msgid "Send Job Offer by Mail"
-msgstr ""
+msgstr "以郵件發送聘用邀約"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.hr_referral_send_mail_view_form
 msgid "Send Job by Mail"
-msgstr ""
+msgstr "以郵件發送工作職位"
 
 #. module: hr_referral
 #: model:ir.actions.act_window,name:hr_referral.hr_referral_alert_mail_wizard_action
@@ -1256,7 +1261,7 @@ msgstr "序列號"
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_points__sequence_stage
 msgid "Sequence of stage"
-msgstr ""
+msgstr "階段順序"
 
 #. module: hr_referral
 #: model:ir.actions.act_window,name:hr_referral.action_hr_referral_configuration
@@ -1274,27 +1279,27 @@ msgstr "分享"
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_job_employee_referral_kanban
 msgid "Share Now"
-msgstr ""
+msgstr "立即分享"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_job_employee_referral_kanban
 msgid "Share on {{ source.name }}"
-msgstr ""
+msgstr "分享至 {{ source.name }}"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_job_employee_referral_kanban
 msgid "Share on {{source.name}}"
-msgstr ""
+msgstr "分享至 {{source.name}}"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_applicant__shared_item_infos
 msgid "Shared Item Infos"
-msgstr ""
+msgstr "共享項目資訊"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_recruitment_stage__use_in_referral
 msgid "Show in Referrals"
-msgstr ""
+msgstr "在推薦中顯示"
 
 #. module: hr_referral
 #. odoo-javascript
@@ -1308,14 +1313,14 @@ msgstr "跳過"
 #: code:addons/hr_referral/static/src/views/dashboard.xml:0
 #, python-format
 msgid "Skip and Start"
-msgstr ""
+msgstr "跳過並開始"
 
 #. module: hr_referral
 #. odoo-python
 #: code:addons/hr_referral/models/hr_applicant.py:0
 #, python-format
 msgid "Sorry, your referral %s has been refused in the recruitment process."
-msgstr ""
+msgstr "抱歉，你的推薦對象 %s 已在招募過程中被拒絕。"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_res_users__utm_source_id
@@ -1325,7 +1330,7 @@ msgstr "來源"
 #. module: hr_referral
 #: model:ir.model.fields.selection,name:hr_referral.selection__hr_referral_alert__onclick__url
 msgid "Specify URL"
-msgstr ""
+msgstr "指定網址"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_points__stage_id
@@ -1377,7 +1382,7 @@ msgstr "主題 / 申請"
 #: code:addons/hr_referral/static/src/views/dashboard.xml:0
 #, python-format
 msgid "Successful"
-msgstr ""
+msgstr "成功"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_onboarding__text
@@ -1389,14 +1394,14 @@ msgstr "文字"
 msgid ""
 "This field holds the image used as image for the friend on the dashboard, "
 "limited to 1024x1024px."
-msgstr ""
+msgstr "此欄位包含概覽畫面上的朋友圖片，上限為 1024×1024px。"
 
 #. module: hr_referral
 #: model:ir.model.fields,help:hr_referral.field_hr_referral_friend__image_head
 msgid ""
 "This field holds the image used as image for the head's friend when the user"
 " must choose a new friend, limited to 1024x1024px."
-msgstr ""
+msgstr "此欄位是使用者必須選擇新朋友時，用作朋友頭部圖像的圖片，上限為 1024×1024px。"
 
 #. module: hr_referral
 #: model:ir.model.fields,help:hr_referral.field_hr_referral_reward__image
@@ -1410,33 +1415,33 @@ msgstr "該欄位儲存產品的圖像，限制到  1024x1024px."
 msgid ""
 "This link contains a tracker so that people clicking on it will account to a"
 " referral for you, even if they apply on a position after a few days."
-msgstr ""
+msgstr "此連結內置追蹤器，點擊者將會記錄為你的推薦對象，即使他們在幾天後才申請工作職位。"
 
 #. module: hr_referral
 #: model:ir.model.fields,help:hr_referral.field_hr_recruitment_stage__use_in_referral
 msgid ""
 "This option is used in app 'Referrals'. If checked, the stage is displayed "
 "in 'Referrals Dashboard' and points are given to the employee."
-msgstr ""
+msgstr "此選項用於「內部推薦」應用程式。如果勾選，該階段會在「推薦概覽畫面」顯示，員工會獲得積分。"
 
 #. module: hr_referral
 #: model_terms:ir.actions.act_window,help:hr_referral.employee_referral_report_action
 msgid "This reports allow you to follow the referrals and their evolution."
-msgstr ""
+msgstr "這些報告幫助你追蹤獲推薦人的情況及發展動向。"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_onboarding_tree
 msgid ""
 "This will make the onboarding visible to all employees who have already seen"
 " it. Do you want to continue?"
-msgstr ""
+msgstr "這將使所有已經看過入職資訊的員工，都可再看到該些資訊。確定繼續？"
 
 #. module: hr_referral
 #. odoo-javascript
 #: code:addons/hr_referral/static/src/views/dashboard.xml:0
 #, python-format
 msgid "To Spend"
-msgstr ""
+msgstr "待花費"
 
 #. module: hr_referral
 #. odoo-javascript
@@ -1448,12 +1453,12 @@ msgstr "總計"
 #. module: hr_referral
 #: model:ir.model.fields.selection,name:hr_referral.selection__hr_referral_link_to_share__channel__twitter
 msgid "Twitter"
-msgstr "推特"
+msgstr "Twitter"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_job__twitter_clicks
 msgid "Twitter Clicks"
-msgstr ""
+msgstr "Twitter 點擊次數"
 
 #. module: hr_referral
 #: model:ir.model.fields,help:hr_referral.field_hr_referral_reward__activity_exception_decoration
@@ -1502,19 +1507,19 @@ msgstr "使用者"
 #. module: hr_referral
 #: model:ir.model.fields,help:hr_referral.field_hr_referral_reward__gift_manager_id
 msgid "User responsible of this gift."
-msgstr ""
+msgstr "負責此禮物的使用者。"
 
 #. module: hr_referral
 #: model:res.groups,name:hr_referral.group_hr_recruitment_referral_user
 msgid "User: Referral only"
-msgstr ""
+msgstr "使用者：只限推薦"
 
 #. module: hr_referral
 #. odoo-javascript
 #: code:addons/hr_referral/static/src/views/dashboard.xml:0
 #, python-format
 msgid "View Jobs"
-msgstr ""
+msgstr "查看工作職位"
 
 #. module: hr_referral
 #. odoo-python
@@ -1536,14 +1541,14 @@ msgstr "網站溝通記錄"
 #. module: hr_referral
 #: model:ir.model,name:hr_referral.model_hr_referral_onboarding
 msgid "Welcome Onboarding in Referral App"
-msgstr ""
+msgstr "內部推薦應用程式歡迎簡介"
 
 #. module: hr_referral
 #. odoo-python
 #: code:addons/hr_referral/models/hr_applicant.py:0
 #, python-format
 msgid "You are not allowed to access applicant records."
-msgstr ""
+msgstr "你不可查閱申請人的記錄。"
 
 #. module: hr_referral
 #. odoo-python
@@ -1553,7 +1558,7 @@ msgid ""
 "You are not allowed to access this application record because you're not one"
 " of the interviewers of this application. If you think that's an error, "
 "please contact your administrator."
-msgstr ""
+msgstr "你不可存取此申請記錄，因為你不是此申請的面試官之一。如果認為有錯誤，請聯絡你的管理員。"
 
 #. module: hr_referral
 #. odoo-python
@@ -1584,62 +1589,62 @@ msgstr ""
 msgid ""
 "You do not have enough points in this company to buy this product. In this "
 "company, you have %s points."
-msgstr ""
+msgstr "你在此公司的積分不足以購買此產品。在此公司內，你有 %s 分。"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_applicant_employee_referral_kanban
 msgid "You earned"
-msgstr ""
+msgstr "你已賺取"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_reward_kanban
 msgid "You need another"
-msgstr ""
+msgstr "你需要另一個"
 
 #. module: hr_referral
 #. odoo-python
 #: code:addons/hr_referral/models/hr_applicant.py:0
 #, python-format
 msgid "Your referrer got a step further!"
-msgstr ""
+msgstr "你的推薦對象向前邁進一步了！"
 
 #. module: hr_referral
 #. odoo-python
 #: code:addons/hr_referral/models/hr_applicant.py:0
 #, python-format
 msgid "Your referrer is hired!"
-msgstr ""
+msgstr "你的推薦對象已獲聘！"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_job_employee_referral_kanban
 msgid "click(s)"
-msgstr ""
+msgstr "次點擊"
 
 #. module: hr_referral
 #. odoo-javascript
 #: code:addons/hr_referral/static/src/views/dashboard.xml:0
 #, python-format
 msgid "has been hired!"
-msgstr ""
+msgstr "已獲聘用！"
 
 #. module: hr_referral
 #: model_terms:ir.ui.view,arch_db:hr_referral.view_hr_referral_alert_form
 msgid "https://www.google.com"
-msgstr ""
+msgstr "https://www.google.com"
 
 #. module: hr_referral
 #. odoo-javascript
 #: code:addons/hr_referral/static/src/views/dashboard.xml:0
 #, python-format
 msgid "reward"
-msgstr ""
+msgstr "獎勵"
 
 #. module: hr_referral
 #. odoo-javascript
 #: code:addons/hr_referral/static/src/views/dashboard.xml:0
 #, python-format
 msgid "share"
-msgstr ""
+msgstr "分享"
 
 #. module: hr_referral
 #: model:ir.model.fields,field_description:hr_referral.field_hr_referral_send_mail__url

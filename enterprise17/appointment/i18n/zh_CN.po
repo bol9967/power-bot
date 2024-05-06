@@ -5,8 +5,8 @@
 # Translators:
 # 山西清水欧度(QQ:54773801) <54773801@qq.com>, 2023
 # Chloe Wang, 2024
-# Wil Odoo, 2024
 # 湘子 南 <1360857908@qq.com>, 2024
+# Wil Odoo, 2024
 # Jeffery CHEN <jeffery9@gmail.com>, 2024
 # 
 msgid ""
@@ -1116,7 +1116,7 @@ msgstr "任何用户/资源"
 #: code:addons/appointment/models/appointment_type.py:0
 #, python-format
 msgid "Anytime appointment types should only have one user but got %s users"
-msgstr "随时约会类型应该只有一个用户，但却有%s用户"
+msgstr "随时预约类型应该只有一个用户，但却有%s用户"
 
 #. module: appointment
 #. odoo-javascript
@@ -1147,7 +1147,7 @@ msgstr "已预约"
 #. module: appointment
 #: model:mail.template,subject:appointment.appointment_booked_mail_template
 msgid "Appointment Booked: {{ object.appointment_type_id.name }}"
-msgstr "预约已预订。{{ object.appointment_type_id.name }}}。"
+msgstr "预约已预订: {{ object.appointment_type_id.name }}"
 
 #. module: appointment
 #: model:ir.model,name:appointment.model_appointment_booking_line
@@ -1164,7 +1164,7 @@ msgstr "预约已取消"
 #. module: appointment
 #: model:mail.template,subject:appointment.appointment_canceled_mail_template
 msgid "Appointment Canceled: {{ object.appointment_type_id.name }}"
-msgstr "预约取消了。{{ object.appointment_type_id.name }}}。"
+msgstr "预约取消了: {{ object.appointment_type_id.name }}"
 
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form
@@ -1867,6 +1867,7 @@ msgstr "判断间隙是否涉及全天，主要用于独特的间隙类型"
 #: code:addons/appointment/static/src/views/appointment_calendar/appointment_calendar_controller.xml:0
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_invite_view_form_insert_link
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_validated
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
 #, python-format
 msgid "Discard"
 msgstr "丢弃"
@@ -2464,6 +2465,11 @@ msgid "Monday"
 msgstr "周一"
 
 #. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "More Options"
+msgstr "更多选项"
+
+#. module: appointment
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_question__question_type__text
 msgid "Multi-line text"
 msgstr "多行文本"
@@ -2817,6 +2823,11 @@ msgid "Reminders"
 msgstr "提醒"
 
 #. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "Remove"
+msgstr "删除"
+
+#. module: appointment
 #: model:ir.ui.menu,name:appointment.menu_schedule_report
 #: model:ir.ui.menu,name:appointment.reporting_menu_calendar
 msgid "Reporting"
@@ -2852,12 +2863,14 @@ msgstr "资源请假"
 #. module: appointment
 #: model:ir.actions.act_window,name:appointment.appointment_resource_action
 #: model:ir.model.fields,field_description:appointment.field_appointment_invite__resource_ids
+#: model:ir.model.fields,field_description:appointment.field_calendar_event__resource_ids
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_type__schedule_based_on__resources
 #: model:ir.ui.menu,name:appointment.menu_appointment_resource
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_form
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree_invitation
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_validated
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
 #: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_gantt_booking_resource
 msgid "Resources"
 msgstr "资源"
@@ -2918,6 +2931,11 @@ msgstr "短信发送错误"
 #: model:ir.model.fields.selection,name:appointment.selection__appointment_slot__weekday__6
 msgid "Saturday"
 msgstr "周六"
+
+#. module: appointment
+#: model_terms:ir.ui.view,arch_db:appointment.calendar_event_view_form_gantt_booking
+msgid "Save"
+msgstr "保存"
 
 #. module: appointment
 #: model:ir.ui.menu,name:appointment.menu_appointment_schedule_resources
@@ -3064,6 +3082,13 @@ msgstr "设置您的可用性"
 #: model_terms:ir.ui.view,arch_db:appointment.appointment_type_view_tree
 msgid "Share"
 msgstr "分享"
+
+#. module: appointment
+#. odoo-javascript
+#: code:addons/appointment/static/src/views/appointment_calendar/appointment_calendar_controller.xml:0
+#, python-format
+msgid "Share Appointment Link"
+msgstr "分享预约链接"
 
 #. module: appointment
 #. odoo-javascript
@@ -3303,6 +3328,13 @@ msgstr "已用容量不得小于预留容量"
 #: model:ir.model.constraint,message:appointment.constraint_appointment_slot_check_start_and_end_hour
 msgid "The end time must be later than the start time."
 msgstr "结束时间必须晚于开始时间。"
+
+#. module: appointment
+#. odoo-python
+#: code:addons/appointment/models/calendar_event.py:0
+#, python-format
+msgid "The event %s cannot book resources without an appointment type."
+msgstr ""
 
 #. module: appointment
 #. odoo-python
@@ -3605,7 +3637,7 @@ msgstr "工作日"
 msgid ""
 "If kept empty, the working schedule of the company set on the resource will "
 "be used"
-msgstr ""
+msgstr "如果保持为空，将使用资源上设置的公司工作时间表。"
 
 #. module: appointment
 #: model_terms:ir.ui.view,arch_db:appointment.staff_user_select

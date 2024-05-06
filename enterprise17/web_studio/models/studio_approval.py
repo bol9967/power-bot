@@ -198,7 +198,7 @@ class StudioApprovalRule(models.Model):
         # retrieve all approvals, and patch their corresponding model
         for approval in self.search([]):
             Model = self.env.get(approval.model_name)
-            if approval.method:
+            if approval.method and Model is not None:
                 approval_method = _make_approval_method(approval.method, approval.model_name)
                 _patch(Model, approval.method, approval_method)
 
@@ -405,24 +405,31 @@ class StudioApprovalRule(models.Model):
         })
         if not self.env.context.get('prevent_approval_request_unlink'):
             ruleSudo._unlink_request(res_id)
-        # approval rules for higher levels can be requested if no rules with the current level are set
-        same_level_rules = ruleSudo.search([
-                ('id', '!=', ruleSudo.id),
-                ('notification_order', '=', ruleSudo.notification_order),
+
+        if ruleSudo.notification_order != '3':
+            same_level_rules = []
+            higher_level_rules = []
+            # approval rules for higher levels can be requested if no rules with the current level are set
+            for rule in ruleSudo.search_read([
+                ('notification_order', '>=', ruleSudo.notification_order),
                 ('active', '=', True),
                 ("model_name", "=", ruleSudo.model_name),
                 ('method', '=', ruleSudo.method),
                 ('action_id', '=', ruleSudo.action_id.id)
-            ])
-        if ruleSudo.notification_order != '3' and not same_level_rules:
-            for approval_rule in ruleSudo.search([
-                ('notification_order', '>', ruleSudo.notification_order),
-                ('active', '=', True),
-                ("model_name", "=", ruleSudo.model_name),
-                ('method', '=', ruleSudo.method),
-                ('action_id', '=', ruleSudo.action_id.id)
-            ]):
-                approval_rule._create_request(res_id)
+            ], ["domain", "notification_order"]):
+                if rule["id"] == ruleSudo.id:
+                    continue
+                rule_domain = rule["domain"] and literal_eval(rule["domain"])
+                if rule_domain and not record.filtered_domain(rule_domain):
+                    continue
+                if rule["notification_order"] == ruleSudo.notification_order:
+                    same_level_rules.append(rule["id"])
+                else:
+                    higher_level_rules.append(rule["id"])
+
+            if not same_level_rules:
+                for rule in ruleSudo.browse(higher_level_rules):
+                    rule._create_request(res_id)
         return result
 
     def _get_rule_domain(self, model, method, action_id):
@@ -607,13 +614,16 @@ class StudioApprovalRule(models.Model):
     def _create_request(self, res_id):
         self.ensure_one()
         ruleSudo = self.sudo()
-        if not self.responsible_id or not self.model_id.sudo().is_mail_activity:
+        if not (self.responsible_id or ruleSudo.users_to_notify) or not self.model_id.sudo().is_mail_activity:
             return False
         request = self.env['studio.approval.request'].sudo().search([('rule_id', '=', self.id), ('res_id', '=', res_id)])
         if request:
             # already requested, let's not create a shitload of activities for the same user
             return False
         if self.notification_order != '1':
+            # search and read entries as sudo. Otherwise we won't see entries create/approved by other users
+            entry_sudo = self.env["studio.approval.entry"].sudo()
+            record = self.env[ruleSudo.model_name].browse(res_id)
             # avoid asking for an approval if all request from a lower level have not yet been validated
             for approval_rule in ruleSudo.search([
                 ('notification_order', '<', self.notification_order),
@@ -622,7 +632,10 @@ class StudioApprovalRule(models.Model):
                 ('method', '=', ruleSudo.method),
                 ('action_id', '=', ruleSudo.action_id.id)
             ]):
-                existing_entry = self.env['studio.approval.entry'].search([
+                rule_domain = approval_rule.domain and literal_eval(approval_rule.domain)
+                if rule_domain and not record.filtered_domain(rule_domain):
+                    continue
+                existing_entry = entry_sudo.search([
                     ('model', '=', ruleSudo.model_name),
                     ('method', '=', ruleSudo.method),
                     ('action_id', '=', ruleSudo.action_id.id),
@@ -634,13 +647,14 @@ class StudioApprovalRule(models.Model):
                     return False
 
         record = self.env[self.model_name].browse(res_id)
-        activity_type_id = self._get_or_create_activity_type()
-        activity = record.activity_schedule(activity_type_id=activity_type_id, user_id=self.responsible_id.id)
-        request = self.env['studio.approval.request'].sudo().create({
-            'rule_id': self.id,
-            'mail_activity_id': activity.id,
-            'res_id': res_id,
-        })
+        if self.responsible_id:
+            activity_type_id = self._get_or_create_activity_type()
+            activity = record.activity_schedule(activity_type_id=activity_type_id, user_id=self.responsible_id.id)
+            request = self.env['studio.approval.request'].sudo().create({
+                'rule_id': self.id,
+                'mail_activity_id': activity.id,
+                'res_id': res_id,
+            })
         partner_ids = ruleSudo.users_to_notify.partner_id
         request.notify_to_users(record, ruleSudo.name, partner_ids)
         return True

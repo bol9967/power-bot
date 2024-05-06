@@ -90,7 +90,7 @@
                 t-key="column.id"
                 class="o_grid_section o_grid_highlightable position-relative d-flex align-items-center justify-content-center fw-bold"
                 t-att-class="{
-                    'border-top bg-info bg-opacity-50' : column.isToday,
+                    'bg-info bg-opacity-50' : column.isToday,
                     'bg-200 border-top' : !column.isToday,
                     'bg-opacity-75' : getUnavailableClass(column) === 'o_grid_unavailable'
                 }"
@@ -153,7 +153,7 @@
                 <t t-set="fieldName" t-value="rowField.name"/>
                 <GridComponent
                     t-if="row.initialRecordValues[fieldName] or rowField_index === 0"
-                    classNames="`d-flex z-index-1 text-truncate o_grid_field_${fieldName.replace('_id','')}${isMobile ? '' : ' text-nowrap'}${row.isAdditionalRow ? ' pe-1' : ''}`"
+                    classNames="`z-index-1 text-truncate o_grid_field_${fieldName.replace('_id','')}${isMobile ? '' : ' text-nowrap'}${row.isAdditionalRow ? ' pe-1' : 'd-flex'}`"
                     name="fieldName"
                     value="row.initialRecordValues[fieldName]"
                     model="props.model"

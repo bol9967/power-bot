@@ -160,7 +160,7 @@ export class PdfManager extends Component {
             this._focusNextGroup.bind(this, "right"),
             "control+ArrowRight"
         );
-        this._setUseCommand(_t("Select focused page"), this._spaceKeySelect.bind(this), "space", {
+        this._setUseCommand(_t("Select focused page"), this._spaceKeySelect.bind(this), "control+space", {
             allowRepeat: true,
         });
         this._setUseCommand(
@@ -202,7 +202,7 @@ export class PdfManager extends Component {
         this._setUseCommand(
             _t("Split selected pages"),
             this._splitSelectionHandler.bind(this),
-            "s",
+            "control+s",
             {
                 allowRepeat: true,
             }
@@ -210,7 +210,7 @@ export class PdfManager extends Component {
         this._setUseCommand(
             _t("Delete focused or selected pages"),
             this.onArchive.bind(this),
-            "backspace"
+            "alt+backspace"
         );
         useHotkey("ArrowDown", this._focusNextPage.bind(this, "down", false), {
             allowRepeat: true,
@@ -831,7 +831,11 @@ export class PdfManager extends Component {
         const allPages = this.sortedPagesIds;
         this.state.groupData = {};
         this.state.groupIds = [];
-        this._createGroup({ name: _t("(Remaining pages"), pageIds: allPages, isSelected: true });
+        this._createGroup({
+            name: this.state.fileName ? _t("%s (remaining pages)", this.state.fileName) : _t("Remaining Pages"),
+            pageIds: allPages,
+            isSelected: true
+        });
         await this._applyChanges();
     }
     /**

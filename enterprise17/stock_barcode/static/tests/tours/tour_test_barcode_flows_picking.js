@@ -408,6 +408,14 @@ registry.category("web_tour.tours").add('test_internal_picking_reserved_1', {tes
     },
 ]});
 
+registry.category("web_tour.tours").add('test_procurement_backorder', {
+    test: true, steps: () => [
+        { trigger: '.o_barcode_client_action', run: 'scan PB' },
+        { trigger: '.o_barcode_line:contains("PB")', run: 'scan O-BTN.validate' },
+        { trigger: '.o_notification.border-success', isCheck: true },
+    ]
+});
+
 registry.category("web_tour.tours").add('test_receipt_reserved_1', {test: true, steps: () => [
     {
         trigger: '.o_barcode_client_action',
@@ -635,6 +643,44 @@ registry.category("web_tour.tours").add('test_receipt_product_not_consecutively'
     },
 ]});
 
+registry.category("web_tour.tours").add("test_delivery_source_location", {test: true, steps: () => [
+    // FIRST DELIVERY (using stock from WH/Stock)
+    { trigger: ".o_stock_barcode_main_menu", run: 'scan delivery_from_stock' },
+    // Tries to scan a location who doesn't belong to the delivery's source location.
+    { trigger: '.o_scan_message.o_scan_src', run: 'scan WH-SECOND-STOCK' },
+    {
+        trigger: '.o_notification.border-danger',
+        run: () => {
+            helper.assertErrorMessage("The scanned location doesn't belong to this operation's location");
+    }},
+    { trigger: 'button.o_notification_close' },
+    // Scans the right location now.
+    { trigger: '.o_barcode_client_action', run: 'scan LOC-01-00-00' },
+    { trigger: '.o_scan_message.o_scan_product', run: 'scan product1' },
+    { trigger: '.o_barcode_line.o_selected', run: 'scan product1' },
+    { trigger: '.o_barcode_line.o_selected', run: 'scan product1' },
+    { trigger: '.o_barcode_line.o_selected', run: 'scan product1' },
+    { trigger: '.o_validate_page.btn-success' },
+
+    // SECOND DELIVERY (using stock from WH/Second Stock)
+    { trigger: ".o_stock_barcode_main_menu", run: 'scan delivery_from_second_stock' },
+    // Tries to scan a location who doesn't belong to the delivery's source location.
+    { trigger: '.o_scan_message.o_scan_src', run: 'scan LOC-01-00-00' },
+    {
+        trigger: '.o_notification.border-danger',
+        run: () => {
+            helper.assertErrorMessage("The scanned location doesn't belong to this operation's location");
+    }},
+    { trigger: 'button.o_notification_close' },
+    // Scans the right location now.
+    { trigger: '.o_barcode_client_action', run: 'scan WH-SECOND-STOCK' },
+    { trigger: '.o_scan_message.o_scan_product', run: 'scan product1' },
+    { trigger: '.o_barcode_line.o_selected', run: 'scan product1' },
+    { trigger: '.o_barcode_line.o_selected', run: 'scan product1' },
+    { trigger: '.o_barcode_line.o_selected', run: 'scan product1' },
+    ...stepUtils.validateBarcodeOperation('.o_validate_page.btn-success'),
+]});
+
 registry.category("web_tour.tours").add("test_delivery_lot_with_multi_companies", {test: true, steps: () => [
     // Scans tsn-002: should find nothing since this SN belongs to another company.
     { trigger: ".o_barcode_client_action", run: "scan tsn-002" },
@@ -728,6 +774,31 @@ registry.category("web_tour.tours").add('test_delivery_lot_with_package', {test:
         trigger: '.o_discard',
     },
     ...stepUtils.validateBarcodeOperation(),
+]});
+
+registry.category("web_tour.tours").add('test_delivery_lot_with_package_delivery_step', {test: true, steps: () => [
+    {
+        trigger: '.o_barcode_line',
+        run: 'scan LOC-01-02-00',
+    },
+    {
+        trigger: '.o_barcode_line',
+        run: 'scan productlot1',
+    },
+    {
+        trigger: '.o_barcode_line',
+        run: 'scan sn'
+    },
+    {
+        trigger: '.o_barcode_line:contains("sn")',
+        run: 'scan O-BTN.validate'
+    },
+    {
+        trigger: '.o_notification.border-success',
+        run: function () {
+            helper.assertErrorMessage('The transfer has been validated');
+        },
+    },
 ]});
 
 registry.category("web_tour.tours").add('test_delivery_reserved_1', {test: true, steps: () => [
@@ -1832,22 +1903,6 @@ registry.category("web_tour.tours").add('test_bypass_source_scan', {test: true, 
 
     {
         trigger: '.o_barcode_client_action',
-        run: 'scan THEPACK',
-    },
-
-    {
-        trigger: '.o_notification.border-danger'
-    },
-
-    {
-        trigger: '.o_barcode_client_action',
-        run: function () {
-            helper.assertErrorMessage("You are expected to scan one or more products or a package available at the picking location");
-        },
-    },
-
-    {
-        trigger: '.o_barcode_client_action',
         run: 'scan serial1',
     },
 
@@ -1883,11 +1938,16 @@ registry.category("web_tour.tours").add('test_bypass_source_scan', {test: true, 
         run: 'scan lot1',
     },
 
+    // Tries to scan a pack in a location the delivery shouldn't have access.
+    { trigger: '.o_scan_message.o_scan_product', run: 'scan SUSPACK' },
     {
-        trigger: '.o_scan_message.o_scan_product',
-        run: 'scan LOC-01-02-00',
+        trigger: '.o_notification.border-danger',
+        run: function () {
+            helper.assertErrorMessage("You are expected to scan one or more products or a package available at the picking location");
+        },
     },
-
+    { trigger: 'button.o_notification_close' },
+    // Scans a package in the right location now.
     {
         trigger: '.o_scan_message.o_scan_product',
         run: 'scan THEPACK',
@@ -1971,6 +2031,11 @@ registry.category("web_tour.tours").add('test_picking_type_mandatory_scan_settin
         extra_trigger: 'div[name="barcode_messages"] .fa-check-square',
     },
     { trigger: '.o_notification.border-success', isCheck: true },
+    // Checks that, despite scanning set to 'no', source and destination locations are still shown
+    { trigger: '.o_barcode_line:nth-child(1) .o_line_source_location:contains(".../Section 1")', isCheck: true },
+    { trigger: '.o_barcode_line:nth-child(1) .o_line_destination_location:contains("WH/Stock")', isCheck: true },
+    { trigger: '.o_barcode_line:nth-child(2) .o_line_source_location:contains(".../Section 1")', isCheck: true },
+    { trigger: '.o_barcode_line:nth-child(2) .o_line_destination_location:contains("WH/Stock")', isCheck: true },
 ]});
 
 registry.category("web_tour.tours").add('test_picking_type_mandatory_scan_settings_pick_int_2', {test: true, steps: () => [
@@ -3812,6 +3877,106 @@ registry.category("web_tour.tours").add('test_split_line_reservation', {test: tr
     },
 ]});
 
+registry.category("web_tour.tours").add('test_split_line_on_destination_scan', {test: true, steps: () => [
+    // Scans 2x product1.
+    { trigger: '.o_barcode_line', run: "scan product1"},
+    { trigger: '.o_barcode_line', run: "scan product1"},
+    {
+        trigger: '.o_barcode_line.o_selected .qty-done:contains("2")',
+        run: () => {
+            helper.assertLinesCount(1);
+            helper.assertLineDestinationLocation(0, "WH/Stock");
+            helper.assertLineQty(0, "2 / 4");
+        }
+    },
+    // Scans the line's destination -> The line should be splitted in two.
+    { trigger: '.o_barcode_line', run: "scan LOC-01-00-00"},
+    {
+        trigger: '.o_barcode_line:nth-child(2)',
+        run: () => {
+            helper.assertLinesCount(2);
+            helper.assertLineDestinationLocation(0, "WH/Stock");
+            helper.assertLineDestinationLocation(1, "WH/Stock");
+            helper.assertLineQty(0, "2 / 2");
+            helper.assertLineQty(1, "0 / 2");
+        }
+    },
+    // Scans remaining quantity, then shelf1 as the destination and close the receipt.
+    { trigger: '.o_barcode_line', run: "scan product1" },
+    { trigger: '.o_barcode_line.o_selected:not(".o_line_completed")', run: "scan product1" },
+    { trigger: '.o_barcode_line.o_selected.o_line_completed', run: "scan LOC-01-01-00" },
+    {
+        trigger: '.o_validate_page.btn-success',
+        run: () => {
+            helper.assertLinesCount(2);
+            helper.assertLineDestinationLocation(0, "WH/Stock");
+            helper.assertLineDestinationLocation(1, ".../Section 1");
+            helper.assertLineQty(0, "2 / 2");
+            helper.assertLineQty(1, "2 / 2");
+        }
+    },
+    ...stepUtils.validateBarcodeOperation(),
+]});
+
+registry.category("web_tour.tours").add('test_split_line_on_exit_for_receipt', {test: true, steps: () => [
+    // Opens the receipt and check its lines.
+    { trigger: ".o_stock_barcode_main_menu", run: "scan receipt_split_line_on_exit" },
+    {
+        trigger: ".o_barcode_client_action",
+        run: () => {
+            helper.assertLinesCount(2);
+            helper.assertLineProduct(0, "product1");
+            helper.assertLineQty(0, "0 / 4");
+            helper.assertLineProduct(1, "product2");
+            helper.assertLineQty(1, "0 / 4");
+        }
+    },
+    // Scans 1x product1 then put in pack => Should split the line.
+    { trigger: ".o_barcode_client_action", run: "scan product1" },
+    { trigger: ".o_barcode_line.o_selected", run: "scan O-BTN.pack" },
+    // Scans again 2x product1 => The line with no package just be incremented.
+    { trigger: ".o_barcode_line.o_selected .result-package", run: "scan product1" },
+    { trigger: ".o_barcode_line.o_selected.o_line_not_completed", run: "scan product1" },
+    // Scans 1x product2 then checks the lines' state.
+    { trigger: ".o_barcode_line.o_selected .qty-done:contains('2')", run: "scan product2" },
+    {
+        trigger: ".o_barcode_line.o_selected .qty-done:contains('1')",
+        run: () => {
+            helper.assertLinesCount(3);
+            const [line1, line2, line3] = helper.getLines();
+            helper.assertLineProduct(line1, "product1");
+            helper.assertLineQty(line1, "2 / 3");
+            helper.assertLineProduct(line2, "product2");
+            helper.assertLineQty(line2, "1 / 4");
+            helper.assertLineProduct(line3, "product1");
+            helper.assertLineQty(line3, "1 / 1");
+            helper.assert(line3.querySelector(".result-package").innerText, "PACK0001000")
+        }
+    },
+    // Goes back to the main menu (that's here the uncompleted lines shoud be split.)
+    { trigger: "button.o_exit" },
+    // Re-opens the picking and checks uncompleted lines were split.
+    { trigger: ".o_stock_barcode_main_menu", run: "scan receipt_split_line_on_exit" },
+    {
+        trigger: ".o_barcode_client_action",
+        run: () => {
+            helper.assertLinesCount(5);
+            const [line1, line2, line3, line4, line5] = helper.getLines();
+            helper.assertLineProduct(line1, "product1");
+            helper.assertLineQty(line1, "0 / 1");
+            helper.assertLineProduct(line2, "product2");
+            helper.assertLineQty(line2, "0 / 3");
+            helper.assertLineProduct(line3, "product1");
+            helper.assertLineQty(line3, "2 / 2");
+            helper.assertLineProduct(line4, "product1");
+            helper.assertLineQty(line4, "1 / 1");
+            helper.assert(line4.querySelector(".result-package").innerText, "PACK0001000")
+            helper.assertLineProduct(line5, "product2");
+            helper.assertLineQty(line5, "1 / 1");
+        }
+    },
+]});
+
 registry.category("web_tour.tours").add('test_split_line_on_scan', {test: true, steps: () => [
     // Scan product2 twice
     {
@@ -3968,3 +4133,22 @@ registry.category("web_tour.tours").add('test_editing_done_picking', {
         },
     ]
 });
+
+registry.category("web_tour.tours").add("test_sml_sort_order_by_product_category", { test: true, steps: () => [
+    {
+        trigger: ".o_barcode_client_action",
+        run: () => {
+            helper.assertLinesCount(3);
+            // Product B should be first because it belongs to category A.
+            const line1 = document.querySelector('.o_barcode_line:first-child');
+            helper.assertLineProduct(line1, "Product B");
+            // Product A should comes after Product B because of its category
+            // and before Product C because of its product's name.
+            const line2 = document.querySelector('.o_barcode_line:nth-child(2)');
+            helper.assertLineProduct(line2, "Product A");
+            // Product C should be last.
+            const line3 = document.querySelector('.o_barcode_line:last-child');
+            helper.assertLineProduct(line3, "Product C");
+        }
+    },
+]});

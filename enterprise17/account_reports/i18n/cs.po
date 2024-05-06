@@ -4,21 +4,23 @@
 # 
 # Translators:
 # Ivana Bartonkova, 2023
-# Jakub Smolka, 2023
 # Tomáš Píšek, 2023
-# Aleš Fiala <f.ales1@seznam.cz>, 2024
-# karolína schusterová <karolina.schusterova@vdp.sk>, 2024
-# Wil Odoo, 2024
 # Jiří Podhorecký, 2024
+# Jakub Smolka, 2024
 # Katerina Horylova, 2024
+# Aleš Fiala <f.ales1@seznam.cz>, 2024
+# Rastislav Brencic <rastislav.brencic@azet.sk>, 2024
+# Marek Záda, 2024
+# Wil Odoo, 2024
+# karolína schusterová <karolina.schusterova@vdp.sk>, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-26 16:10+0000\n"
+"POT-Creation-Date: 2024-04-04 14:45+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Katerina Horylova, 2024\n"
+"Last-Translator: karolína schusterová <karolina.schusterova@vdp.sk>, 2024\n"
 "Language-Team: Czech (https://app.transifex.com/odoo/teams/41243/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -46,6 +48,13 @@ msgstr "a jeden další"
 #, python-format
 msgid " is not supported by the Journal Report"
 msgstr "není podporováno v účetním výkazu"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "\" account balance is affected by"
+msgstr "\"zůstatek účtu je ovlivněn"
 
 #. module: account_reports
 #. odoo-python
@@ -97,6 +106,16 @@ msgid "(%s lines)"
 msgstr "(%s položek)"
 
 #. module: account_reports
+#: model:account.report.line,name:account_reports.outstanding_receipts
+msgid "(+) Outstanding Receipts"
+msgstr "(+) Neuhrazené příjmy"
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.outstanding_payments
+msgid "(-) Outstanding Payments"
+msgstr "(-) Neuhrazené platby"
+
+#. module: account_reports
 #. odoo-python
 #: code:addons/account_reports/models/account_report.py:0
 #, python-format
@@ -123,6 +142,13 @@ msgstr ", včetně analytických simulací"
 #, python-format
 msgid ", Only Show Unreconciled Entries"
 msgstr ", zobrazit pouze nesrovnané položky"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid ", leading to an unexplained difference of"
+msgstr ""
 
 #. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.view_move_form_vat_return
@@ -166,6 +192,11 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_reports.partner_view_buttons
 msgid "<span class=\"o_stat_text\">Partner Ledger</span>"
 msgstr "<span class=\"o_stat_text\">Saldokonto</span>"
+
+#. module: account_reports
+#: model_terms:ir.ui.view,arch_db:account_reports.account_reports_journal_dashboard_kanban_view
+msgid "<span role=\"separator\">Reconciliation</span>"
+msgstr "<span role=\"separator\">Párování</span>"
 
 #. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.view_account_report_file_download_error_wizard_form
@@ -470,12 +501,14 @@ msgstr "Všechny varianty výkazu"
 
 #. module: account_reports
 #: model:account.report.column,name:account_reports.account_financial_report_ec_sales_amount
+#: model:account.report.column,name:account_reports.bank_reconciliation_report_amount
 msgid "Amount"
 msgstr "Částka"
 
 #. module: account_reports
 #: model:account.report.column,name:account_reports.aged_payable_report_amount_currency
 #: model:account.report.column,name:account_reports.aged_receivable_report_amount_currency
+#: model:account.report.column,name:account_reports.bank_reconciliation_report_amount_currency
 #: model:account.report.column,name:account_reports.partner_ledger_report_amount_currency
 msgid "Amount Currency"
 msgstr "Měna množství"
@@ -635,6 +668,18 @@ msgstr "Zůstatek v cizí měně"
 
 #. module: account_reports
 #. odoo-python
+#: code:addons/account_reports/models/bank_reconciliation_report.py:0
+#, python-format
+msgid "Balance of '%s'"
+msgstr ""
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.balance_bank
+msgid "Balance of Bank"
+msgstr ""
+
+#. module: account_reports
+#. odoo-python
 #: code:addons/account_reports/models/account_generic_tax_report.py:0
 #, python-format
 msgid "Balance tax advance payment account"
@@ -653,6 +698,21 @@ msgstr "Běžný daňový zůstatek (splatný)"
 #, python-format
 msgid "Balance tax current account (receivable)"
 msgstr "Běžný účet se zůstatkovou daní (pohledávka)"
+
+#. module: account_reports
+#: model:ir.actions.client,name:account_reports.action_account_report_bank_reconciliation
+msgid "Bank Reconciliation"
+msgstr "Bankovní párování"
+
+#. module: account_reports
+#: model:account.report,name:account_reports.bank_reconciliation_report
+msgid "Bank Reconciliation Report"
+msgstr "Zpráva o bankovním párování"
+
+#. module: account_reports
+#: model:ir.model,name:account_reports.model_account_bank_reconciliation_report_handler
+msgid "Bank Reconciliation Report Custom Handler"
+msgstr "Vlastní zpracování výkazu o odsouhlasení banky"
 
 #. module: account_reports
 #: model:account.report.line,name:account_reports.account_financial_report_bank_view0
@@ -1049,6 +1109,7 @@ msgstr "Dal"
 #. module: account_reports
 #: model:account.report.column,name:account_reports.aged_payable_report_currency
 #: model:account.report.column,name:account_reports.aged_receivable_report_currency
+#: model:account.report.column,name:account_reports.bank_reconciliation_report_currency
 #: model:account.report.column,name:account_reports.general_ledger_report_amount_currency
 msgid "Currency"
 msgstr "Měna"
@@ -1114,8 +1175,18 @@ msgid "Custom Handler Model Name"
 msgstr "Název modelu vlastního zpracování"
 
 #. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/bank_reconciliation_report.py:0
+#, python-format
+msgid ""
+"Custom engine _report_custom_engine_last_statement_balance_amount does not "
+"support groupby"
+msgstr ""
+
+#. module: account_reports
 #. odoo-javascript
 #: code:addons/account_reports/static/src/components/account_report/filters/filter_comparison.xml:0
+#: model:account.report.column,name:account_reports.bank_reconciliation_report_date
 #: model:ir.model.fields,field_description:account_reports.field_account_multicurrency_revaluation_wizard__date
 #, python-format
 msgid "Date"
@@ -1138,6 +1209,14 @@ msgstr "Datum nemůže být prázdné"
 #, python-format
 msgid "Debit"
 msgstr "Má dáti"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/journal_report/line/line.xml:0
+#: model_terms:ir.ui.view,arch_db:account_reports.journal_report_pdf_export_main_table_body
+#, python-format
+msgid "Deductible"
+msgstr "Odpočitatelná položka"
 
 #. module: account_reports
 #. odoo-javascript
@@ -1208,6 +1287,13 @@ msgid "Depreciation"
 msgstr "Odpisy"
 
 #. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/account_generic_tax_report.py:0
+#, python-format
+msgid "Difference from rounding taxes"
+msgstr ""
+
+#. module: account_reports
 #: model:ir.model.fields,field_description:account_reports.field_account_report_line__display_custom_groupby_warning
 msgid "Display Custom Groupby Warning"
 msgstr "Zobrazit upozornění na vlastní způsob seskupení"
@@ -1250,6 +1336,14 @@ msgstr "Stáhnout i tak"
 #: model_terms:ir.ui.view,arch_db:account_reports.res_config_settings_view_form
 msgid "Download the Data Inalterability Check Report"
 msgstr "Stáhněte si zprávu o kontrole neměnnosti dat"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/journal_report/line/line.xml:0
+#: model_terms:ir.ui.view,arch_db:account_reports.journal_report_pdf_export_main_table_body
+#, python-format
+msgid "Due"
+msgstr "Do"
 
 #. module: account_reports
 #: model:account.report.column,name:account_reports.partner_ledger_report_date_maturity
@@ -1641,6 +1735,7 @@ msgstr "Funkce pro volání"
 #. odoo-python
 #: code:addons/account_reports/models/account_report.py:0
 #: code:addons/account_reports/models/account_trial_balance_report.py:0
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
 #: code:addons/account_reports/static/src/components/multicurrency_revaluation_report/line_name.xml:0
 #: model:account.report,name:account_reports.general_ledger_report
 #: model:ir.actions.client,name:account_reports.action_account_report_general_ledger
@@ -1687,6 +1782,13 @@ msgstr "Vlastní zpracování generických daňových výkazů (Účet -> Daň)"
 #: model:ir.model,name:account_reports.model_account_generic_tax_report_handler_tax_account
 msgid "Generic Tax Report Custom Handler (Tax -> Account)"
 msgstr "Vlastní zpracování generických daňových výkazů (Daň -> Účet)"
+
+#. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/account_journal_report.py:0
+#, python-format
+msgid "Global Tax Summary"
+msgstr "Celkové shrnutí daní"
 
 #. module: account_reports
 #. odoo-python
@@ -1842,6 +1944,13 @@ msgid "Impacted Tax Grids"
 msgstr "Ovlivněné daňové štítky"
 
 #. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/account_report/filters/filters.js:0
+#, python-format
+msgid "In %s"
+msgstr "V %s"
+
+#. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.view_account_report_search
 msgid "Inactive"
 msgstr "Neaktivní"
@@ -1877,6 +1986,18 @@ msgid "Including Analytic Simulations"
 msgstr "Včetně analytických simulací"
 
 #. module: account_reports
+#: model:account.report.line,name:account_reports.no_statement_unreconciled_payments
+#: model:account.report.line,name:account_reports.unreconciled_last_statement_payments
+msgid "Including Unreconciled Payments"
+msgstr ""
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.no_statement_unreconciled_receipt
+#: model:account.report.line,name:account_reports.unreconciled_last_statement_receipts
+msgid "Including Unreconciled Receipts"
+msgstr ""
+
+#. module: account_reports
 #: model:account.report.line,name:account_reports.account_financial_report_executivesummary_income0
 #: model:account.report.line,name:account_reports.account_financial_report_totalincome0
 msgid "Income"
@@ -1898,6 +2019,13 @@ msgstr "Účet poskytování příjmů"
 #, python-format
 msgid "Income Provision for %s"
 msgstr "Poskytování příjmů pro %s"
+
+#. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/bank_reconciliation_report.py:0
+#, python-format
+msgid "Inconsistent Statements"
+msgstr "Nekonzistentní prohlášení"
 
 #. module: account_reports
 #. odoo-python
@@ -2050,6 +2178,7 @@ msgstr "Účetní položka"
 #: code:addons/account_reports/models/account_deferred_reports.py:0
 #: code:addons/account_reports/models/account_report.py:0
 #: code:addons/account_reports/models/account_trial_balance_report.py:0
+#: code:addons/account_reports/models/bank_reconciliation_report.py:0
 #: code:addons/account_reports/static/src/components/aged_partner_balance/line_name/line_name.xml:0
 #: code:addons/account_reports/static/src/components/general_ledger/line_name.xml:0
 #: code:addons/account_reports/static/src/components/journal_report/line_name.xml:0
@@ -2115,6 +2244,7 @@ msgstr "PASIVA + VLASTNÍ KAPITÁL"
 #. odoo-python
 #: code:addons/account_reports/static/src/components/account_report/line/popover/debug_popover.xml:0
 #: code:addons/account_reports/wizard/multicurrency_revaluation.py:0
+#: model:account.report.column,name:account_reports.bank_reconciliation_report_label
 #: model:account.report.column,name:account_reports.journal_report_partner_name
 #, python-format
 msgid "Label"
@@ -2174,6 +2304,11 @@ msgstr "Naposledy upraveno uživatelem"
 #: model:ir.model.fields,field_description:account_reports.field_account_tax_unit__write_date
 msgid "Last Updated on"
 msgstr "Naposledy upraveno dne"
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.last_statement_balance
+msgid "Last statement balance"
+msgstr ""
 
 #. module: account_reports
 #. odoo-python
@@ -2267,6 +2402,11 @@ msgstr "Členové této jednotky"
 #, python-format
 msgid "Method '%s' must start with the '%s' prefix."
 msgstr "Metoda '%s' musí začínat předponou '%s'."
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.misc_operations
+msgid "Misc. operations"
+msgstr ""
 
 #. module: account_reports
 #. odoo-python
@@ -2436,6 +2576,14 @@ msgstr "Pohledávky mimo obchodní styk"
 
 #. module: account_reports
 #. odoo-javascript
+#: code:addons/account_reports/static/src/components/journal_report/line/line.xml:0
+#: model_terms:ir.ui.view,arch_db:account_reports.journal_report_pdf_export_main_table_body
+#, python-format
+msgid "Non-Deductible"
+msgstr "Neodpočitatelná položka"
+
+#. module: account_reports
+#. odoo-javascript
 #: code:addons/account_reports/static/src/components/account_report/filters/filter_horizontal_groups.xml:0
 #: code:addons/account_reports/static/src/components/account_report/filters/filters.js:0
 #: code:addons/account_reports/static/src/components/account_report/filters/filters.js:0
@@ -2495,6 +2643,7 @@ msgstr "Změnit data uzamčení mohou pouze správci fakturace!"
 #. odoo-python
 #: code:addons/account_reports/models/account_report.py:0
 #: code:addons/account_reports/static/src/components/account_report/filters/filter_extra_options.xml:0
+#: code:addons/account_reports/static/src/components/account_report/filters/filter_extra_options.xml:0
 #, python-format
 msgid "Only Show Unreconciled Entries"
 msgstr "Zobrazit pouze nezúčastněné položky"
@@ -2505,7 +2654,7 @@ msgstr "Zobrazit pouze nezúčastněné položky"
 #: code:addons/account_reports/static/src/components/partner_ledger/line_name.xml:0
 #, python-format
 msgid "Open"
-msgstr "Volný"
+msgstr "Otevřít"
 
 #. module: account_reports
 #: model:ir.model,name:account_reports.model_account_financial_year_op
@@ -2539,6 +2688,11 @@ msgstr "Možnosti:"
 #: model:account.report.line,name:account_reports.account_financial_report_other_income0
 msgid "Other Income"
 msgstr "Ostatní"
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.outstanding
+msgid "Outstanding Receipts/Payments"
+msgstr ""
 
 #. module: account_reports
 #. odoo-python
@@ -2733,6 +2887,13 @@ msgid "Post"
 msgstr "Zaúčtovat"
 
 #. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/account_report/filters/filter_extra_options.xml:0
+#, python-format
+msgid "Posted Entries Only"
+msgstr "Pouze zaúčtované položky"
+
+#. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.view_move_form_vat_return
 msgid ""
 "Posting this entry will also update and post the unposted closings of the "
@@ -2740,13 +2901,6 @@ msgid ""
 msgstr ""
 "Zveřejněním tohoto záznamu se také aktualizují a zveřejní nezveřejněné "
 "uzávěrky závislých společností."
-
-#. module: account_reports
-#. odoo-javascript
-#: code:addons/account_reports/static/src/components/account_report/filters/filter_extra_options.xml:0
-#, python-format
-msgid "Posted Entries Only"
-msgstr "Pouze zaúčtované položky"
 
 #. module: account_reports
 #: model:account.report.line,name:account_reports.account_financial_report_prepayements0
@@ -2828,6 +2982,11 @@ msgstr "Částka splatné daně"
 #: model:account.report.line,name:account_reports.account_financial_report_receivable0
 msgid "Receivables"
 msgstr "Pohledávky"
+
+#. module: account_reports
+#: model_terms:ir.ui.view,arch_db:account_reports.account_reports_journal_dashboard_kanban_view
+msgid "Reconciliation Report"
+msgstr "Zpráva o párování"
 
 #. module: account_reports
 #: model:ir.model.fields,field_description:account_reports.field_account_financial_year_op__account_tax_periodicity_reminder_day
@@ -2974,6 +3133,13 @@ msgstr "Krátkodobá hotovostní předpověď"
 #: model:ir.model.fields,field_description:account_reports.field_account_multicurrency_revaluation_wizard__show_warning_move_id
 msgid "Show Warning Move"
 msgstr "Zobrazit varovný pohyb"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "Some"
+msgstr ""
 
 #. module: account_reports
 #. odoo-javascript
@@ -3248,6 +3414,13 @@ msgstr ""
 
 #. module: account_reports
 #. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "The current balance in the"
+msgstr ""
+
+#. module: account_reports
+#. odoo-javascript
 #: code:addons/account_reports/static/src/components/deferred_reports/warnings.xml:0
 #, python-format
 msgid "The entry that will be generated will take them into account."
@@ -3419,10 +3592,19 @@ msgstr "Tento výjaz zobrazuje data pouze z aktivní společnosti."
 #. odoo-python
 #: code:addons/account_reports/models/account_report.py:0
 #, python-format
+msgid "This subformula references an unknown expression: %s"
+msgstr ""
+
+#. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/account_report.py:0
+#, python-format
 msgid ""
 "This tag is reported in a line of the report but is not linked to any "
 "account of the Chart of Accounts"
 msgstr ""
+"Tato položka je uvedena v řádku výkazu, ale není spojena s žádným účtem "
+"účtové osnovy."
 
 #. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.view_move_form_vat_return
@@ -3469,6 +3651,11 @@ msgstr "Celkový %s"
 #, python-format
 msgid "Trade Partners"
 msgstr "Obchodní partneři"
+
+#. module: account_reports
+#: model:account.report.line,name:account_reports.transaction_without_statement
+msgid "Transactions without statement"
+msgstr ""
 
 #. module: account_reports
 #: model:account.report,name:account_reports.trial_balance_report
@@ -3762,6 +3949,15 @@ msgstr "Nelze vytvářet záznamy do uzavřeného období."
 #: code:addons/account_reports/models/account_move.py:0
 #, python-format
 msgid ""
+"You cannot reset this closing entry to draft, as another closing entry has "
+"been posted at a later date."
+msgstr ""
+
+#. module: account_reports
+#. odoo-python
+#: code:addons/account_reports/models/account_move.py:0
+#, python-format
+msgid ""
 "You cannot reset this closing entry to draft, as it would delete carryover "
 "values impacting the tax report of a locked period. To do this, you first "
 "need to modify you tax return lock date."
@@ -3812,6 +4008,13 @@ msgid "days after period"
 msgstr "dny po období"
 
 #. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "doesn't match the balance of your"
+msgstr ""
+
+#. module: account_reports
 #: model:ir.model.fields.selection,name:account_reports.selection__res_company__account_tax_periodicity__2_months
 msgid "every 2 months"
 msgstr "každé 2 měsíce"
@@ -3820,6 +4023,13 @@ msgstr "každé 2 měsíce"
 #: model:ir.model.fields.selection,name:account_reports.selection__res_company__account_tax_periodicity__4_months
 msgid "every 4 months"
 msgstr "každé 4 měsíce"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "have a starting balance different from the previous ending balance."
+msgstr ""
 
 #. module: account_reports
 #. odoo-javascript
@@ -3836,6 +4046,20 @@ msgstr "v dalším období."
 #, python-format
 msgid "invoices"
 msgstr "faktury"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "journal items"
+msgstr "Účetní deník"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "last bank statement"
+msgstr ""
 
 #. module: account_reports
 #: model:ir.model.fields.selection,name:account_reports.selection__res_company__account_tax_periodicity__monthly
@@ -3874,6 +4098,13 @@ msgstr "kvartálně"
 #: model:ir.model.fields.selection,name:account_reports.selection__res_company__account_tax_periodicity__semester
 msgid "semi-annually"
 msgstr "pololetně"
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "statements"
+msgstr "výpisy"
 
 #. module: account_reports
 #: model_terms:ir.ui.view,arch_db:account_reports.view_tax_unit_form
@@ -3915,6 +4146,13 @@ msgstr "neodeslané vnitřní účetní doklady"
 #, python-format
 msgid "were carried over to this line from previous period."
 msgstr "byly na tuto položku přeneseny z předchozího období."
+
+#. module: account_reports
+#. odoo-javascript
+#: code:addons/account_reports/static/src/components/bank_reconciliation_report/warnings.xml:0
+#, python-format
+msgid "which don't originate from a bank statement nor payment."
+msgstr ""
 
 #. module: account_reports
 #. odoo-javascript

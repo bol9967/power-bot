@@ -6,7 +6,7 @@ from odoo import fields, models
 class HrWorkEntry(models.Model):
     _inherit = 'hr.work.entry'
 
-    planning_slot_id = fields.Many2one('planning.slot', groups='hr.group_hr_user')
+    planning_slot_id = fields.Many2one('planning.slot', groups='hr.group_hr_user', index='btree_not_null')
 
     def _get_planning_duration(self, date_start, date_stop):
         '''
@@ -27,7 +27,7 @@ class HrWorkEntry(models.Model):
             return self.planning_slot_id.allocated_hours
         else:
             new_slot = self.env['planning.slot'].new({
-                **self.planning_slot_id.read(['employee_id', 'company_id', 'allocated_percentage'])[0],
+                **self.planning_slot_id.read(['employee_id', 'company_id', 'allocated_percentage', 'resource_id'])[0],
                 **{
                     'start_datetime': date_start,
                     'end_datetime': date_stop,

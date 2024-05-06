@@ -20,7 +20,7 @@ class Task(models.Model):
             for order_line in sale_line:
                 to_log = {}
                 total_qty = sum(order_line.move_ids.filtered(lambda p: p.state not in ['cancel']).mapped('product_uom_qty'))
-                if float_compare(order_line.product_uom_qty, total_qty, order_line.product_uom.rounding) < 0:
+                if float_compare(order_line.product_uom_qty, total_qty, precision_rounding=order_line.product_uom.rounding) < 0:
                     to_log[order_line] = (order_line.product_uom_qty, total_qty)
 
                 if to_log:
@@ -74,14 +74,15 @@ class Task(models.Model):
         self.env['stock.move.line'].create(ml_to_create)
         for so_line in self.sale_order_id.order_line:
             # set the quantity delivered of the sol to the quantity ordered for the product linked to the task
-            if so_line.task_id == self and not so_line.product_id.service_policy == 'delivered_timesheet':
+            if so_line.task_id == self and so_line.product_id.service_policy not in ['delivered_timesheet', 'delivered_milestones']:
                 so_line.qty_delivered = so_line.product_uom_qty
 
         def is_fsm_material_picking(picking, task):
             """ this function returns if the picking is a picking ready to be validated. """
-            for move in picking.move_ids:
-                while move.move_dest_ids:
-                    move = move.move_dest_ids
+            moves = picking.move_ids
+            while moves.move_dest_ids:
+                moves = moves.move_dest_ids
+            for move in moves:
                 sol = move.sale_line_id
                 if sol.fsm_lot_id:
                     continue

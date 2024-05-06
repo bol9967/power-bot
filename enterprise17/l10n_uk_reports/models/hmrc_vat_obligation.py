@@ -59,7 +59,7 @@ class HmrcVatObligation(models.Model):
         :return: list of obligations of the status type for the requested period
         """
         if not match(r'^[0-9]{9}$', vat or ''):
-            raise UserError(_("VAT numbers of UK companies should have exactly 9 figures. Please check the settings of the current company."))
+            raise UserError(_("VAT numbers of UK companies should have exactly 9 figures or 11 with the GB or XI prefix. Please check the settings of the current company."))
 
         user = self.env.user
         bearer = user.l10n_uk_hmrc_vat_token
@@ -89,9 +89,27 @@ class HmrcVatObligation(models.Model):
             error_message = _('Invalid Status.')
         elif error_code == 'NOT_FOUND':
             error_message = _('No open obligations were found for the moment.')
+        elif error_code == 'CLIENT_OR_AGENT_NOT_AUTHORISED':
+            # In case one user needs to submit the report for two companies, they will need to re-login.
+            self.env['hmrc.service'].sudo()._clean_tokens()
+            return []
         else:
             error_message = response.get('message', error_code)
         raise UserError(error_message)
+
+    def _get_vat(self):
+        # Use company's VAT if company is British, otherwise try to look for a UK fiscal position.
+        foreign_vat = False
+        if not self.env.company.country_id.code == 'GB':
+            foreign_vat = self.env.company.fiscal_position_ids.filtered(lambda fp: fp.country_id.code == 'GB').foreign_vat
+
+        vat = foreign_vat or self.env.company.vat
+
+        # The VAT sent to HMRC should not include the GB or XI prefix.
+        if vat.startswith(('GB', 'XI')):
+            vat = vat[2:]
+
+        return vat
 
     def import_vat_obligations(self):
         today = datetime.date.today()
@@ -101,7 +119,7 @@ class HmrcVatObligation(models.Model):
 
         # look for open obligations in the -6 months +6 months range
         obligations = self.retrieve_vat_obligations(
-            self.env.company.vat,
+            self._get_vat(),
             (today + relativedelta(months=-6)).strftime('%Y-%m-%d'),
             (today + relativedelta(months=6,leapdays=-1)).strftime('%Y-%m-%d'))
 
@@ -163,7 +181,7 @@ class HmrcVatObligation(models.Model):
                         'mode': 'range'})
         report_values = report._get_lines(options)
         values = self._fetch_values_from_report(report_values)
-        vat = self.env.company.vat
+        vat = self._get_vat()
         res = self.env['hmrc.service']._login()
         if res: # If you can not login, return url for re-login
             return res
@@ -194,6 +212,12 @@ class HmrcVatObligation(models.Model):
                     msg += Markup('<b>%s</b>: %s</br>') % (sent_key, data[sent_key])
             self.sudo().message_post(body=msg)
             self.sudo().write({'status': "fulfilled"})
+
+            # Show a confirmation popup.
+            self.env['bus.bus']._sendone(self.env.user.partner_id, 'simple_notification', {
+                'type': 'success',
+                'message': _("The VAT report has been successfully submitted to HMRC."),
+            })
         elif r.status_code == 401:  # auth issue
             _logger.exception("HMRC auth issue : %s", r.content)
             raise UserError(_(

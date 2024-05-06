@@ -214,15 +214,6 @@ class TestReportEngines(TestAccountReportsCommon):
 
         return report
 
-    def _get_audit_params_from_report_line(self, options, report_line, report_line_dict, **kwargs):
-        return {
-            'report_line_id': report_line.id,
-            'calling_line_dict_id': report_line_dict['id'],
-            'expression_label': 'balance',
-            'column_group_key': next(iter(options['column_groups'])),
-            **kwargs,
-        }
-
     # -------------------------------------------------------------------------
     # TESTS
     # -------------------------------------------------------------------------
@@ -683,6 +674,67 @@ class TestReportEngines(TestAccountReportsCommon):
             [
                 ('test_line_1',          800.0),
                 ('test_line_2',          300.0),
+            ],
+            options,
+        )
+
+    def test_engine_external_editable_percentage(self):
+        # Create the report.
+        test_rounding_4 = self._prepare_test_report_line(
+            self._prepare_test_expression_external(
+                'most_recent', [
+                    self._prepare_test_external_values(10.1254, '2020-01-01'),
+                    self._prepare_test_external_values(5, '2020-01-02'),
+                ], figure_type='percentage', subformula='editable;rounding=4',
+            ),
+            code='TEST_PERCENTAGE'
+        )
+        test_rounding_2 = self._prepare_test_report_line(
+            self._prepare_test_expression_external(
+                'most_recent', [
+                    self._prepare_test_external_values(10.12, '2020-01-01'),
+                    self._prepare_test_external_values(5, '2020-01-02'),
+                ], figure_type='percentage', subformula='editable;rounding=2',
+            )
+        )
+        test_percentage_aggregate = self._prepare_test_report_line(
+            self._prepare_test_expression_aggregation('10000 * TEST_PERCENTAGE.balance'),
+        )
+        test_float = self._prepare_test_report_line(
+            self._prepare_test_expression_external(
+                'most_recent', [
+                    self._prepare_test_external_values(10.12, '2020-01-01'),
+                    self._prepare_test_external_values(5, '2020-01-02'),
+                ], figure_type='float', subformula='editable;rounding=2',
+            )
+        )
+
+        report = self._create_report([test_rounding_4, test_rounding_2, test_percentage_aggregate, test_float])
+        # Check the values at multiple dates.
+        options = self._generate_options(report, '2020-01-01', '2020-01-01')
+        self.assertLinesValues(
+            # pylint: disable=bad-whitespace
+            report._get_lines(options),
+            [0,                          1],
+            [
+                ('test_line_1', '10.1254%'),
+                ('test_line_2',   '10.12%'),
+                ('test_line_3',     101254),
+                ('test_line_4',    '10.12'),
+            ],
+            options,
+        )
+
+        options = self._generate_options(report, '2020-01-02', '2020-01-02')
+        self.assertLinesValues(
+            # pylint: disable=bad-whitespace
+            report._get_lines(options),
+            [0,                         1],
+            [
+                ('test_line_1', '5.0000%'),
+                ('test_line_2',   '5.00%'),
+                ('test_line_3',     50000),
+                ('test_line_4',    '5.00'),
             ],
             options,
         )
@@ -1437,6 +1489,51 @@ class TestReportEngines(TestAccountReportsCommon):
                         ],
                         options,
                     )
+
+    def test_engine_aggregation_cross_bound(self):
+        report_1 = self._create_report([
+            self._prepare_test_report_line(
+                self._prepare_test_expression_aggregation('line_2_1.balance', subformula='cross_report'),
+                name='Line 1-1',
+                code='line_1_1',
+            ),
+        ])
+
+        self._create_report([
+            self._prepare_test_report_line(
+                self._prepare_test_expression_aggregation('14.0', subformula='if_other_expr_above(line_2_1.dudu, EUR(0))'),
+                self._prepare_test_expression_account_codes('101', label='dudu'),
+                name='Line 2-1',
+                code='line_2_1',
+            ),
+        ])
+
+        options = self._generate_options(report_1, '2020-01-01', '2020-01-01')
+
+        self.assertLinesValues(
+            # pylint: disable=bad-whitespace
+            report_1._get_lines(options),
+            [   0,                          1],
+            [
+                ('Line 1-1',              0.0),
+            ],
+            options
+        )
+
+        self._create_test_account_moves([
+            self._prepare_test_account_move_line(10, account_code='101001'),
+            self._prepare_test_account_move_line(-10, account_code='100001'),
+        ])
+
+        self.assertLinesValues(
+            # pylint: disable=bad-whitespace
+            report_1._get_lines(options),
+            [   0,                          1],
+            [
+                ('Line 1-1',             14.0),
+            ],
+            options
+        )
 
     def test_change_expression_engine_to_tax_tags(self):
         """

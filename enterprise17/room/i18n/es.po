@@ -5,7 +5,7 @@
 # Translators:
 # Lucia Pacheco, 2023
 # Martin Trigaux, 2023
-# Wil Odoo, 2023
+# Wil Odoo, 2024
 # Larissa Manderfeld, 2024
 # 
 msgid ""
@@ -89,6 +89,20 @@ msgid "Action Needed"
 msgstr "Acción requerida"
 
 #. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_form/room_booking_form.xml:0
+#, python-format
+msgid "Add"
+msgstr "Añadir"
+
+#. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.xml:0
+#, python-format
+msgid "Add a Booking"
+msgstr "Agregar una reserva"
+
+#. module: room
 #: model:ir.model.fields,field_description:room.field_room_room__description
 msgid "Amenities"
 msgstr "Instalaciones"
@@ -99,6 +113,13 @@ msgstr "Instalaciones"
 #, python-format
 msgid "Are you sure you want to delete this booking?"
 msgstr "¿Está seguro de que desea eliminar esta reserva?"
+
+#. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.js:0
+#, python-format
+msgid "Are you sure you want to end the current booking ?"
+msgstr "¿Está seguro de que desea finalizar la reserva actual?"
 
 #. module: room
 #: model:ir.model.fields,field_description:room.field_room_booking__message_attachment_count
@@ -130,7 +151,7 @@ msgstr "Imagen de fondo"
 #: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.xml:0
 #, python-format
 msgid "Book now"
-msgstr "Reserve ahora"
+msgstr "Reservar ahora"
 
 #. module: room
 #. odoo-javascript
@@ -239,6 +260,13 @@ msgid "Delete"
 msgstr "Eliminar"
 
 #. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.xml:0
+#, python-format
+msgid "Discard"
+msgstr "Descartar"
+
+#. module: room
 #: model:ir.model.fields,field_description:room.field_room_booking__display_name
 #: model:ir.model.fields,field_description:room.field_room_office__display_name
 #: model:ir.model.fields,field_description:room.field_room_room__display_name
@@ -248,12 +276,12 @@ msgstr "Nombre mostrado"
 #. module: room
 #: model_terms:ir.ui.view,arch_db:room.room_booking_view_form
 msgid "E.g. Team Meeting"
-msgstr "Por ejemplo, Reunión de equipo"
+msgstr "p. ej. Reunión de equipo"
 
 #. module: room
 #: model_terms:ir.ui.view,arch_db:room.room_room_view_form
 msgid "E.g. projector, capacity 6 people"
-msgstr "Por ejemplo: proyector, con capacidad para 6 personas"
+msgstr "p. ej. proyector, con capacidad para 6 personas"
 
 #. module: room
 #: model:ir.module.category,description:room.module_category_room
@@ -261,6 +289,14 @@ msgid "Enable the user to manage meeting rooms available for booking"
 msgstr ""
 "Permitir que el usuario gestione las salas de reuniones disponibles para "
 "crear reservas"
+
+#. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.js:0
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.xml:0
+#, python-format
+msgid "End Booking"
+msgstr "Finalizar reserva"
 
 #. module: room
 #: model:ir.model.fields,field_description:room.field_room_booking__stop_datetime
@@ -444,6 +480,16 @@ msgid "Office Name"
 msgstr "Nombre de la oficina"
 
 #. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.xml:0
+#, python-format
+msgid ""
+"Oops! Looks like you have multiple tabs opened. Make sure to use only one."
+msgstr ""
+"¡Uy! Parece que tiene varias pestañas abiertas. Asegúrese de utilizar sólo "
+"una."
+
+#. module: room
 #: model_terms:ir.ui.view,arch_db:room.room_room_view_form
 msgid "Open"
 msgstr "Abierto"
@@ -485,12 +531,6 @@ msgid "Public Booking"
 msgstr "Reserva pública"
 
 #. module: room
-#: model:ir.model.fields,field_description:room.field_room_booking__rating_ids
-#: model:ir.model.fields,field_description:room.field_room_room__rating_ids
-msgid "Ratings"
-msgstr "Valoraciones"
-
-#. module: room
 #: model:ir.actions.act_window,name:room.room_room_action
 #: model:ir.model,name:room.model_room_room
 #: model:ir.model.fields,field_description:room.field_room_booking__room_id
@@ -521,7 +561,7 @@ msgstr "URL de la reserva de la sala"
 #: model:ir.model.fields,field_description:room.field_room_room__name
 #: model_terms:ir.ui.view,arch_db:room.room_room_view_form
 msgid "Room Name"
-msgstr "Nombre de la Sala"
+msgstr "Nombre de la sala"
 
 #. module: room
 #: model:ir.model,name:room.model_room_office
@@ -563,6 +603,13 @@ msgstr "Código corto"
 #: model:ir.model.fields,field_description:room.field_room_booking__start_datetime
 msgid "Start Datetime"
 msgstr "Fecha y hora de inicio"
+
+#. module: room
+#. odoo-javascript
+#: code:addons/room/static/src/room_booking/room_booking_view/room_booking_view.xml:0
+#, python-format
+msgid "Start now"
+msgstr "Comience ahora"
 
 #. module: room
 #: model:ir.model.constraint,message:room.constraint_room_room_uniq_access_token

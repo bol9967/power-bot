@@ -298,7 +298,7 @@ class AccountReconcileWizard(models.TransientModel):
             # Compute write-off amounts
             most_recent_line = max(amls, key=lambda aml: aml.date)
             if most_recent_line.currency_id == reco_currency:
-                rate = abs(most_recent_line.amount_currency / most_recent_line.balance) if most_recent_line.balance else 1.0
+                rate = abs(most_recent_line.amount_currency / most_recent_line.balance) if most_recent_line.balance else 0.0
             else:
                 rate = wizard.reco_currency_id._get_conversion_rate(amls.company_currency_id, reco_currency, amls.company_id, most_recent_line.date)
 
@@ -435,7 +435,7 @@ class AccountReconcileWizard(models.TransientModel):
         partner_id = partner.id if partner else None
         line_ids_commands = [
             Command.create({
-                'name': _('Write-Off'),
+                'name': self.label or _('Write-Off'),
                 'account_id': self.reco_account_id.id,
                 'partner_id': partner_id,
                 'currency_id': self.reco_currency_id.id,

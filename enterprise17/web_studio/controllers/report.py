@@ -106,18 +106,34 @@ def api_tree_or_string(func):
         return html.tostring(res) if is_string else tree
     return from_tree_or_string
 
-def _transform_table(table):
-    for el in table.xpath(".|.//thead|.//tbody|.//tfoot|.//th|.//tr|.//td"):
-        tag = el.tag
-        el.set("oe-origin-tag", tag)
-        el.tag = "div"
-        el.set("oe-origin-style", el.attrib.pop("style", ""))
+def _transform_tables(tree):
+    def _transform_node(node):
+        tag = node.tag
+        node.set("oe-origin-tag", tag)
+        node.tag = "div"
+        node.set("oe-origin-style", node.attrib.pop("style", ""))
+
+    for table in tree.iter("table"):
+        should_transform = False
+        table_nodes = [table]
+        index = 0
+        while index < len(table_nodes):
+            node = table_nodes[index]
+            index += 1
+            if node.tag == "td":
+                continue
+            for child in node.iterchildren(etree.Element):
+                if child.tag == "t":
+                    should_transform = True
+                table_nodes.append(child)
+        if should_transform:
+            for table_node in table_nodes:
+                if table_node.tag != "t":
+                    _transform_node(table_node)
 
 @api_tree_or_string
 def _html_to_client_compliant(tree):
-    for table in tree.xpath("//table[descendant-or-self::t[not(ancestor::td)]]"):
-        _transform_table(table)
-
+    _transform_tables(tree)
     return tree
 
 @api_tree_or_string
@@ -219,7 +235,10 @@ def _guess_qweb_variables(tree, report, qcontext):
         else:
             qcontext["self"] = IrQweb
             compiled = IrQweb._compile_format(expr)
-        return safe_eval(compiled, qcontext)
+        try:
+            return safe_eval(compiled, qcontext)
+        finally:
+            env.cr.rollback()
 
     def qweb_like_string_eval(expr, qcontext, is_format=False):
         try:
@@ -348,8 +367,12 @@ def _get_and_write_studio_view(view, values=None, should_create=True):
         vals = {"active": True, **values}
         studio_view.write(vals)
     elif should_create:
+        all_inheritance = view._get_inheriting_views()
         vals = {"name": key, "key": key, "inherit_id": view.id, "mode": "extension", "priority": 9999999, **values}
         studio_view = view.create(vals)
+        all_inheritance = all_inheritance.with_prefetch((all_inheritance + studio_view).ids)
+        studio_view = studio_view.with_prefetch(all_inheritance._prefetch_ids)
+        view._copy_field_terms_translations(all_inheritance, "arch_db", studio_view, "arch_db")
 
     return studio_view
 
@@ -575,9 +598,14 @@ class WebStudioReportController(main.WebStudioController):
 
         main_qweb = _html_to_client_compliant(load_arch(report_name))
 
-        render_context = report._get_rendering_context(report, [0], {"studio": True})
-        render_context['report_type'] = "pdf"
-        main_qweb = _guess_qweb_variables(main_qweb, report, render_context)
+        with report.env.registry.cursor() as nfg_cursor:
+            # We are about to evaluate expressions that may produce bad query errors
+            # This new cursor isolates those evaluations from the main transaction
+            # in order to avoid crashes related to them.
+            report_safe_cr = report.with_env(report.env(cr=nfg_cursor))
+            render_context = report_safe_cr._get_rendering_context(report_safe_cr, [0], {"studio": True})
+            render_context['report_type'] = "pdf"
+            main_qweb = _guess_qweb_variables(main_qweb, report_safe_cr, render_context)
 
         html_container = request.env["ir.ui.view"]._render_template("web.html_container", {"studio": True})
         html_container = html.fromstring(html_container)

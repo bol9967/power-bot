@@ -10,6 +10,7 @@
 # Martin Trigaux, 2023
 # Lasse L, 2023
 # Kristoffer Grundström <lovaren@gmail.com>, 2024
+# Claes-Johan Dahlin, 2024
 # Jakob Krabbe <jakob.krabbe@vertel.se>, 2024
 # 
 msgid ""
@@ -113,7 +114,7 @@ msgstr ""
 #: code:addons/web_enterprise/static/src/webclient/promote_studio_dialog/promote_studio_dialog.xml:0
 #, python-format
 msgid "Create automation rules"
-msgstr ""
+msgstr "Skapa automatiseringsregler"
 
 #. module: web_enterprise
 #. odoo-javascript
@@ -364,7 +365,7 @@ msgstr "Prenumerationskod:"
 #: code:addons/web_enterprise/static/src/webclient/home_menu/home_menu.xml:0
 #, python-format
 msgid "TIP"
-msgstr ""
+msgstr "TIP"
 
 #. module: web_enterprise
 #. odoo-javascript

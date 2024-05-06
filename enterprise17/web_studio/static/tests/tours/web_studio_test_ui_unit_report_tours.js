@@ -832,7 +832,8 @@ registry.category("web_tour.tours").add("web_studio.test_add_non_searchable_fiel
                 ".oe-powerbox-wrapper .oe-powerbox-commandDescription:contains(Insert a field)",
         },
         {
-            trigger: ".o-web-studio-field-dynamic-placeholder .o_model_field_selector_popover_search input",
+            trigger:
+                ".o-web-studio-field-dynamic-placeholder .o_model_field_selector_popover_search input",
             run: "text New",
         },
         {
@@ -1122,6 +1123,36 @@ registry.category("web_tour.tours").add("web_studio.test_error_at_loading", {
     ],
 });
 
+registry.category("web_tour.tours").add("web_studio.test_error_at_loading_debug", {
+    test: true,
+    sequence: 260,
+    steps: () => [
+        {
+            trigger: "body:not(:has(.o_error_dialog)) .o-web-studio-report-editor",
+        },
+        {
+            trigger: ".o-web-studio-report-container:not(:has(iframe))",
+        },
+        {
+            trigger: ".o-web-studio-report-container strong:contains(builtins.ValueError)",
+        },
+        {
+            trigger: "button[name='report_edit_sources']",
+        },
+        {
+            trigger: ".o_web_studio_xml_editor",
+        },
+        {
+            trigger: ".o-web-studio-report-container:not(:has(iframe))",
+        },
+        {
+            trigger:
+                ".o-web-studio-report-container strong:contains(odoo.addons.base.models.ir_qweb.QWebException)",
+            isCheck: true,
+        },
+    ],
+});
+
 registry.category("web_tour.tours").add("web_studio.test_xml_and_form_diff", {
     test: true,
     sequence: 260,
@@ -1360,7 +1391,29 @@ registry.category("web_tour.tours").add("web_studio.test_image_crop", {
             trigger: "body .oe-toolbar #image-crop",
         },
         {
-            trigger: "body .o-overlay-container .o_we_crop_widget",
+            trigger: "body .o-overlay-container .o_we_crop_widget .cropper-container",
+            isCheck: true,
+        },
+    ],
+});
+
+registry.category("web_tour.tours").add("web_studio.test_translations_are_copied", {
+    test: true,
+    steps: () => [
+        {
+            trigger: "body iframe #wrapwrap div:contains(term2)",
+            run() {
+                const newNode = document.createElement("div");
+                (newNode.textContent = "term3 from edition"),
+                    this.$anchor[0].insertAdjacentElement("beforebegin", newNode);
+                return nextTick();
+            },
+        },
+        {
+            trigger: ".o-web-studio-save-report.btn-primary",
+        },
+        {
+            trigger: ".o-web-studio-save-report:not(.btn-primary)",
             isCheck: true,
         },
     ],

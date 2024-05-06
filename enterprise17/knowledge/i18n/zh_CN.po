@@ -80,6 +80,18 @@ msgstr "#是最喜欢的"
 #. module: knowledge
 #. odoo-python
 #: code:addons/knowledge/models/knowledge_article.py:0
+#, python-format
+msgid ""
+"\"%(article_item_name)s\" is an Article Item from \"%(article_name)s\" and "
+"cannot be restored on its own. Contact the owner of \"%(article_name)s\" to "
+"have it restored instead."
+msgstr ""
+"\"%(article_item_name)s\" 是来自的 \"%(article_name)s\" 文章项目,不能自行恢复. 联系 "
+"\"%(article_name)s\" 的所有者来恢复它."
+
+#. module: knowledge
+#. odoo-python
+#: code:addons/knowledge/models/knowledge_article.py:0
 #: code:addons/knowledge/models/knowledge_article.py:0
 #: code:addons/knowledge/models/knowledge_article.py:0
 #, python-format
@@ -2409,6 +2421,7 @@ msgstr "文章项目属性"
 #. odoo-javascript
 #: code:addons/knowledge/static/src/components/knowledge_article_html_field/knowledge_article_html_field.js:0
 #: code:addons/knowledge/static/src/components/knowledge_article_html_field/knowledge_article_html_field.js:0
+#: code:addons/knowledge/static/src/components/knowledge_article_html_field/knowledge_article_html_field.js:0
 #: model:ir.actions.act_window,name:knowledge.knowledge_article_action_item_calendar
 #: model:ir.actions.act_window,name:knowledge.knowledge_article_item_action
 #: model:ir.actions.act_window,name:knowledge.knowledge_article_item_action_stages
@@ -2798,7 +2811,7 @@ msgstr "Car_Catalog.png"
 #: code:addons/knowledge/static/src/components/move_article_dialog/move_article_dialog.js:0
 #, python-format
 msgid "Categories"
-msgstr "电商品类"
+msgstr "类别"
 
 #. module: knowledge
 #: model:ir.model.fields,field_description:knowledge.field_knowledge_article_template_category__sequence
@@ -4956,6 +4969,13 @@ msgstr "Onboarding.pdf"
 #, python-format
 msgid "Ongoing"
 msgstr "正在进行"
+
+#. module: knowledge
+#. odoo-javascript
+#: code:addons/knowledge/static/src/components/behaviors/view_link_behavior/view_link_behavior.js:0
+#, python-format
+msgid "Only Internal Users can access this view."
+msgstr ""
 
 #. module: knowledge
 #. odoo-python

@@ -4,9 +4,9 @@
 # 
 # Translators:
 # Lucia Pacheco, 2023
-# Patricia Gutiérrez Capetillo <pagc@odoo.com>, 2023
 # Wil Odoo, 2024
 # Iran Villalobos López, 2024
+# Patricia Gutiérrez Capetillo <pagc@odoo.com>, 2024
 # Fernanda Alvarez, 2024
 # 
 msgid ""
@@ -547,7 +547,7 @@ msgstr "Nombre del empleado"
 #: model:ir.model.fields,help:mrp_workorder.field_quality_check__component_tracking
 #: model:ir.model.fields,help:mrp_workorder.field_quality_check__product_tracking
 msgid "Ensure the traceability of a storable product in your warehouse."
-msgstr "Asegurar el seguimiento del producto almacenable."
+msgstr "Asegure la trazabilidad de los productos almacenables en su almacén."
 
 #. module: mrp_workorder
 #. odoo-javascript
@@ -610,7 +610,7 @@ msgstr "Icono de Font Awesome, por ejemplo, fa-tasks"
 #. module: mrp_workorder
 #: model_terms:ir.ui.view,arch_db:mrp_workorder.quality_point_view_form_inherit_mrp
 msgid "Google Slide Link"
-msgstr "Enlace a la presentación de Google"
+msgstr "Enlace de presentación de Google"
 
 #. module: mrp_workorder
 #: model:ir.model.fields,field_description:mrp_workorder.field_quality_check__worksheet_url
@@ -1698,7 +1698,7 @@ msgstr "Deshacer planeación de órdenes"
 #. module: mrp_workorder
 #: model:ir.model.fields,field_description:mrp_workorder.field_quality_check__component_uom_id
 msgid "UoM"
-msgstr "Unidades de medida"
+msgstr "UdM"
 
 #. module: mrp_workorder
 #: model:ir.model.fields.selection,name:mrp_workorder.selection__propose_change__change_type__update_step
@@ -1947,6 +1947,17 @@ msgstr ""
 "Debe definir al menos una pérdida en la productividad en la categoría "
 "\"Productividad\". Cree una desde la aplicación Fabricación en el menú "
 "Configuración/Pérdidas en la productividad."
+
+#. module: mrp_workorder
+#. odoo-python
+#: code:addons/mrp_workorder/models/mrp_workorder.py:0
+#, python-format
+msgid ""
+"You need to link this user to an employee of this company to process the "
+"work order"
+msgstr ""
+"Para poder procesar esta orden de trabajo primero necesita vincular este "
+"usuario a un empleado de esta empresa."
 
 #. module: mrp_workorder
 #. odoo-python

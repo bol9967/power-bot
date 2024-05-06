@@ -5,16 +5,16 @@
 # Translators:
 # Martin Trigaux, 2023
 # Vo Thanh Thuy, 2023
-# Thi Huong Nguyen, 2023
 # Wil Odoo, 2024
+# Thi Huong Nguyen, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-24 20:55+0000\n"
+"POT-Creation-Date: 2024-02-22 15:46+0000\n"
 "PO-Revision-Date: 2023-10-26 23:10+0000\n"
-"Last-Translator: Wil Odoo, 2024\n"
+"Last-Translator: Thi Huong Nguyen, 2024\n"
 "Language-Team: Vietnamese (https://app.transifex.com/odoo/teams/41243/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1114,11 +1114,29 @@ msgid "Add a new plan"
 msgstr "Thêm gói cước mới"
 
 #. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid "Add a new rule"
+msgstr "Thêm quy tắc mới"
+
+#. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.product_pricelist_view
 #: model_terms:ir.ui.view,arch_db:sale_subscription.product_template_view_form_recurring
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_plan_view_form
 msgid "Add a price rule"
 msgstr "Thêm quy tắc giá cả"
+
+#. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid ""
+"Add a recurring plan for this product, or create a new one with the desired "
+"recurrence (e.g., Monthly)"
+msgstr ""
+"Thêm gói định kỳ cho sản phẩm này hoặc tạo gói mới với giai đoạn định kỳ "
+"mong muốn (VD: Hàng tháng)"
 
 #. module: sale_subscription
 #. odoo-python
@@ -1215,13 +1233,6 @@ msgstr "Phân công cho"
 #: model:ir.model.fields.selection,name:sale_subscription.selection__payment_transaction__subscription_action__assign_token
 msgid "Assign Token"
 msgstr "Assign Token"
-
-#. module: sale_subscription
-#. odoo-javascript
-#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
-#, python-format
-msgid "Assign a new partner to the contract"
-msgstr "Chỉ định một đối tác mới cho hợp đồng"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__message_attachment_count
@@ -1463,7 +1474,7 @@ msgstr "Đổi khách hàng"
 #: code:addons/sale_subscription/models/sale_order.py:0
 #, python-format
 msgid "Check reopened subscription"
-msgstr ""
+msgstr "Kiểm tra gói đăng ký được mở lại"
 
 #. module: sale_subscription
 #. odoo-javascript
@@ -1471,6 +1482,13 @@ msgstr ""
 #, python-format
 msgid "Choose a product name.<br/><i>(e.g. eLearning Access)</i>"
 msgstr "Chọn tên sản phẩm.<br/><i>(ví dụ: truy cập khóa học online)</i>"
+
+#. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid "Choose the invoice duration for your subscription"
+msgstr "Chọn thời hạn hóa đơn cho đăng ký của bạn"
 
 #. module: sale_subscription
 #: model:ir.model.fields.selection,name:sale_subscription.selection__sale_order_log__event_type__2_churn
@@ -1495,8 +1513,8 @@ msgstr "Churned"
 #. odoo-javascript
 #: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
 #, python-format
-msgid "Click here to add some products or services to your quotation."
-msgstr "Bấm vào đây để thêm một số sản phẩm hoặc dịch vào báo giá của bạn."
+msgid "Click here to add some products or services"
+msgstr "Nhấp vào đây để thêm một số sản phẩm hoặc dịch vụ"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_sale_order__user_closable
@@ -2000,7 +2018,7 @@ msgstr "Kết thúc hợp đồng"
 #: code:addons/sale_subscription/models/sale_order.py:0
 #, python-format
 msgid "Error during renewal of contract %s %s %s"
-msgstr ""
+msgstr "Lỗi khi gia hạn hợp đồng %s %s %s"
 
 #. module: sale_subscription
 #. odoo-python
@@ -2471,8 +2489,15 @@ msgstr "Hãy thêm giá với thời gian định kỳ"
 #. odoo-javascript
 #: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
 #, python-format
-msgid "Let's configure the product price"
-msgstr "Hãy cấu hình giá sản phẩm"
+msgid "Let's add price for selected recurrence"
+msgstr "Hãy thêm giá cho giai đoạn định kỳ đã chọn"
+
+#. module: sale_subscription
+#. odoo-javascript
+#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
+#, python-format
+msgid "Let's choose the customer for your subscription"
+msgstr "Hãy chọn khách hàng cho đăng ký của bạn"
 
 #. module: sale_subscription
 #. odoo-javascript
@@ -3042,14 +3067,14 @@ msgstr "Phương thức thanh toán:"
 #: code:addons/sale_subscription/models/sale_order.py:0
 #, python-format
 msgid "Payment not recorded"
-msgstr ""
+msgstr "Thanh toán chưa được ghi nhận"
 
 #. module: sale_subscription
 #. odoo-python
 #: code:addons/sale_subscription/models/sale_order.py:0
 #, python-format
 msgid "Payment recorded: %s"
-msgstr ""
+msgstr "Thanh toán đã được ghi nhận: %s"
 
 #. module: sale_subscription
 #: model:mail.template,subject:sale_subscription.email_payment_reminder
@@ -3388,11 +3413,15 @@ msgstr "Doanh thu định kỳ"
 #. module: sale_subscription
 #. odoo-python
 #: code:addons/sale_subscription/models/sale_order.py:0
+#: code:addons/sale_subscription/models/sale_subscription_plan.py:0
+#: model:ir.model.constraint,message:sale_subscription.constraint_sale_subscription_plan_check_for_valid_billing_period_value
 #, python-format
 msgid ""
 "Recurring period must be a positive number. Please ensure the input is a "
 "valid positive numeric value."
 msgstr ""
+"Giai đoạn định kỳ phải là số dương. Hãy đảm bảo dữ liệu đầu vào là giá trị "
+"số dương hợp lệ."
 
 #. module: sale_subscription
 #. odoo-python
@@ -3901,13 +3930,17 @@ msgid ""
 "                                                Note: if you already created a new subscription instead of renewing it, please cancel your newly\n"
 "                                                created subscription and renew %s instead"
 msgstr ""
+"Gói đăng ký %s đã bị hủy. Đơn hàng gốc %s đã được mở lại.\n"
+"                                                 Bạn nên đóng %s nếu khách hàng ngừng đăng ký, hoặc gia hạn nếu khách hàng tiếp tục sử dụng dịch vụ.\n"
+"                                                 Lưu ý: nếu bạn đã tạo một gói đăng ký mới thay vì gia hạn, vui lòng hủy gói đăng ký mới tạo này\n"
+"                                                 và gia hạn %s"
 
 #. module: sale_subscription
 #. odoo-python
 #: code:addons/sale_subscription/models/sale_order.py:0
 #, python-format
 msgid "Subscription %s has been reopened. The end date has been removed"
-msgstr ""
+msgstr "Gói đăng ký %s đã được mở lại. Ngày kết thúc đã bị xóa"
 
 #. module: sale_subscription
 #: model:ir.model.fields,field_description:sale_subscription.field_payment_transaction__subscription_action
@@ -4230,6 +4263,8 @@ msgid ""
 "The deferred settings are not properly set. Please complete them to generate"
 " subscription deferred revenues"
 msgstr ""
+"Cài đặt hoãn lại chưa được thiết lập đúng. Vui lòng hoàn thành để tạo doanh "
+"thu hoãn lại của gói đăng ký"
 
 #. module: sale_subscription
 #: model:ir.model.constraint,message:sale_subscription.constraint_sale_order_template_check_duration_value
@@ -4303,7 +4338,7 @@ msgid ""
 "The reason %s is required by the Subscription application and cannot be "
 "deleted."
 msgstr ""
-"Lý do %s là điều kiện bắt buộc cho ứng dụng Đăng ký và không thể xóa được."
+"Không thể xóa lý do %s vì đây là yếu tố bắt buộc cho ứng dụng Đăng ký."
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.sale_subscription_close_reason_view_form
@@ -4365,7 +4400,7 @@ msgstr "Đơn bán thêm %s đã được xác nhận."
 #: code:addons/sale_subscription/models/sale_subscription_pricing.py:0
 #, python-format
 msgid "There are multiple pricings for an unique product, plan and pricelist."
-msgstr ""
+msgstr "Có nhiều chiến lược giá cho một sản phẩm, gói và bảng giá duy nhất."
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.subscription_portal_template
@@ -4708,8 +4743,8 @@ msgstr "Thể tích"
 #: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
 #, python-format
 msgid ""
-"Want recurring billing via subscription management? Get started by clicking "
-"here"
+"Want a recurring billing through subscription management? Get started by "
+"clicking here"
 msgstr ""
 "Bạn muốn thanh toán định kỳ thông qua quản lý đăng ký? Hãy bắt đầu bằng cách"
 " nhấp vào đây"
@@ -5025,13 +5060,6 @@ msgid ""
 msgstr ""
 "Ở đây, bạn sẽ thấy các đăng ký cần gia hạn (ngày kết thúc sắp tới hoặc đã "
 "qua)"
-
-#. module: sale_subscription
-#. odoo-javascript
-#: code:addons/sale_subscription/static/src/js/tours/sale_subscription.js:0
-#, python-format
-msgid "Your contract is recurrent"
-msgstr "Hợp đồng của bạn được định kỳ"
 
 #. module: sale_subscription
 #: model_terms:ir.ui.view,arch_db:sale_subscription.payment_method_form

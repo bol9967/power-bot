@@ -140,7 +140,7 @@ msgstr "Agregar nuevo canal"
 #: code:addons/delivery_shiprocket/models/delivery_carrier.py:0
 #, python-format
 msgid "Authentication failed! Please check your credentials."
-msgstr "Autenticación fallo. Por favor revise sus credenciales."
+msgstr "La autenticación falló. Revise sus credenciales."
 
 #. module: delivery_shiprocket
 #: model:ir.model.fields.selection,name:delivery_shiprocket.selection__delivery_carrier__shiprocket_payment_method__cod
@@ -325,7 +325,7 @@ msgstr ""
 #. module: delivery_shiprocket
 #: model_terms:ir.ui.view,arch_db:delivery_shiprocket.view_delivery_carrier_form_inherit_delivery_shiprocket
 msgid "Go to"
-msgstr "ir a"
+msgstr "Ir a"
 
 #. module: delivery_shiprocket
 #. odoo-python
@@ -352,7 +352,7 @@ msgstr "ID"
 #: code:addons/delivery_shiprocket/models/delivery_carrier.py:0
 #, python-format
 msgid "Label generated of %s with Tracking Number: %s"
-msgstr "Etiqueta generada de %s con número de seguimiento: %s"
+msgstr "Etiqueta generada de %s con número de rastreo: %s"
 
 #. module: delivery_shiprocket
 #: model:ir.model.fields,field_description:delivery_shiprocket.field_shiprocket_channel__write_uid
@@ -372,7 +372,8 @@ msgstr "Última actualización el"
 #, python-format
 msgid "Length, Width and Height is necessary for Shiprocket Package."
 msgstr ""
-"Es necesario poner la altura, ancho y largo para el paquete de Shiprocket."
+"Es necesario poner la altura, el ancho y largo para el paquete de "
+"Shiprocket."
 
 #. module: delivery_shiprocket
 #. odoo-python
@@ -614,7 +615,7 @@ msgstr "Registrarse"
 #. module: delivery_shiprocket
 #: model:ir.model,name:delivery_shiprocket.model_stock_package_type
 msgid "Stock package type"
-msgstr "Tipo de paquete de existencias"
+msgstr "Tipo de paquete de stock"
 
 #. module: delivery_shiprocket
 #: model:ir.model.fields,help:delivery_shiprocket.field_stock_picking__shiprocket_orders
@@ -654,7 +655,7 @@ msgid ""
 "The method of payment. Can be either COD (Cash on delivery) Or Prepaid while"
 " creating Shiprocket order."
 msgstr ""
-"El método de pago. Puede ser pago contra entrega o prepagado al crear la "
+"El método de pago. Puede ser pago contrareembolso o prepagado al crear la "
 "orden de Shiprocket."
 
 #. module: delivery_shiprocket

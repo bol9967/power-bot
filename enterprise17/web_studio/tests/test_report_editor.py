@@ -1,6 +1,7 @@
 import json
 from psycopg2.extras import Json
 from lxml import etree
+from psycopg2 import DataError
 
 from odoo import Command
 from odoo.addons.base.models.ir_actions_report import IrActionsReport
@@ -573,6 +574,66 @@ class TestReportEditorUIUnit(HttpCase):
              </t>
         """)
 
+    def test_nested_table_rendering(self):
+        self.main_view_document.arch = """
+            <t t-name="web_studio.test_report_document">
+                <table class="invalid_table">
+                    <t t-foreach="doc.child_ids" t-as="child">
+                        <tr>
+                            <td>
+                                <t t-set="var" t-value="doc" />
+                                <table>
+                                    <tr><td>valid</td></tr>
+                                </table>
+                                <table>
+                                    <t t-foreach="doc.child_ids" t-as="subchild">
+                                        <tr><td>
+                                            <table><tr><td>I am valid</td></tr></table>
+                                        </td></tr>
+                                    </t>
+                                </table>
+                            </td>
+                        </tr>
+                    </t>
+                </table>
+            </t>
+        """
+        self.authenticate("admin", "admin")
+        response = self.url_open(
+            "/web_studio/get_report_qweb",
+            data=json.dumps({"params": {"report_id": self.report.id}}),
+            headers={"Content-Type": "application/json"}
+        )
+        qweb_html = response.json()["result"]
+        tree = html_to_xml_tree(qweb_html)
+        _remove_oe_context(tree)
+        div_node = tree.xpath("//t[@t-name='web_studio.test_report_document']")[0][0]
+        self.assertXMLEqual(etree.tostring(div_node), """
+        <div class="invalid_table" oe-origin-tag="table" oe-origin-style="">
+          <t t-foreach="doc.child_ids" t-as="child">
+            <div oe-origin-tag="tr" oe-origin-style="">
+              <div oe-origin-tag="td" oe-origin-style="">
+                <t t-set="var" t-value="doc"/>
+                <table>
+                  <tr>
+                    <td>valid</td>
+                  </tr>
+                </table>
+                <div oe-origin-tag="table" oe-origin-style="">
+                  <t t-foreach="doc.child_ids" t-as="subchild">
+                    <div oe-origin-tag="tr" oe-origin-style="">
+                      <div oe-origin-tag="td" oe-origin-style="">
+                        <table><tr><td>I am valid</td></tr></table>
+                      </div>
+                    </div>
+                  </t>
+                </div>
+              </div>
+            </div>
+          </t>
+        </div>
+        """)
+
     def test_field_placeholder(self):
         self.main_view_document.arch = """
             <t t-name="web_studio.test_report_document">
@@ -839,6 +900,10 @@ class TestReportEditorUIUnit(HttpCase):
 
         with mute_logger("odoo.http"):
             self.start_tour(self.tour_url, "web_studio.test_error_at_loading", login="admin")
+
+        with mute_logger("odoo.http"):
+            url = self.tour_url.replace("/web", "/web?debug=1")
+            self.start_tour(url, "web_studio.test_error_at_loading_debug", login="admin")
 
     def test_xml_and_form_diff(self):
         url = self.tour_url.replace("/web", "/web?debug=1")
@@ -1215,6 +1280,9 @@ class TestReportEditorUIUnit(HttpCase):
         self.start_tour(self.tour_url, "web_studio.test_image_crop", login="admin")
 
     def test_add_non_searchable_field(self):
+        with self.with_user("admin"):
+            partner = self.env["res.partner"].search([], limit=1)
+        partner.image_1024 = "iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAF0lEQVR4nGJxKFrEwMDAxAAGgAAAAP//D+IBWx9K7TUAAAAASUVORK5CYII="
         self.start_tour(self.tour_url, "web_studio.test_add_non_searchable_field", login="admin")
         arch, _ = get_combined_and_studio_arch(self.main_view_document)
         self.assertXMLEqual(arch, """
@@ -1229,4 +1297,85 @@ class TestReportEditorUIUnit(HttpCase):
                     <br/>
                 </p>
             </t>
+        """)
+
+    def test_translations_are_copied(self):
+        self.env["res.lang"]._activate_lang("fr_FR")
+        self.main_view_document.arch = """
+            <t t-name="web_studio.test_report_document">
+                <div>term1</div>
+            </t>
+        """
+        self.main_view_document.update_field_translations("arch_db", {"fr_FR": {"term1": "baguette"}})
+
+        inheriting = self.env["ir.ui.view"].create({
+            "type": "qweb",
+            "inherit_id": self.main_view_document.id,
+            "arch": """<data>
+                <xpath expr="//div[1]" position="after">
+                    <div>term2</div>
+                </xpath>
+            </data>"""
+        })
+        inheriting.update_field_translations("arch_db", {"fr_FR": {"term2": "croissant"}})
+
+        self.start_tour(self.tour_url, "web_studio.test_translations_are_copied", login="admin")
+
+        html, _ = self.report.with_context(lang="fr_FR")._render_qweb_html(self.report.id, [1])
+        main = etree.fromstring(html).find(".//main")
+        self.assertXMLEqual(etree.tostring(main), """
+        <main>
+            <div>
+                <p><br/></p>
+            </div>
+            <div>baguette</div>
+            <div>term3 from edition</div>
+            <div>croissant</div>
+        </main>
+        """)
+
+    def test_evaluate_bad_queries(self):
+        self.main_view_document.arch = """
+        <t t-name="web_studio.test_report_document">
+            <div>
+                <div t-attf-class="{{ docs.search([('create_date', '&lt;', 'false')]) }}">term1</div>
+                <div t-attf-class="{{ docs.search([('create_date', '&lt;', 'false')]) }}">term2</div>
+                <div t-attf-class="res_partner_{{ bool(docs.search([('create_date', '!=', False)], limit=1)) }}">term3</div>
+            </div>
+        </t>"""
+
+        ResPartner = self.env.registry.get("res.partner")
+        search = ResPartner.search
+        errors = []
+
+        def mock_search(record_set, *args, **kwargs):
+            try:
+                return search(record_set, *args, **kwargs)
+            except Exception as e:
+                errors.append(e)
+                raise
+
+        self.patch(ResPartner, "search", mock_search)
+
+        self.authenticate("admin", "admin")
+        with mute_logger("odoo.sql_db"):
+            response = self.url_open(
+                "/web_studio/get_report_qweb",
+                data=json.dumps({"params": {"report_id": self.report.id}}),
+                headers={"Content-Type": "application/json"}
+            )
+        self.assertEqual(len(errors), 2)
+        for e in errors:
+            self.assertTrue(isinstance(e, DataError))
+
+        qweb_html = response.json()["result"]
+        tree = html_to_xml_tree(qweb_html)
+        _remove_oe_context(tree)
+        div_node = tree.xpath("//t[@t-name='web_studio.test_report_document']")[0][0]
+        self.assertXMLEqual(etree.tostring(div_node), """
+        <div>
+            <div t-attf-class="{{ docs.search([('create_date', '&lt;', 'false')]) }}" oe-origin-class="" class="">term1</div>
+            <div t-attf-class="{{ docs.search([('create_date', '&lt;', 'false')]) }}" oe-origin-class="" class="">term2</div>
+            <div t-attf-class="res_partner_{{ bool(docs.search([('create_date', '!=', False)], limit=1)) }}" oe-origin-class="" class="res_partner_True">term3</div>
+        </div>
         """)

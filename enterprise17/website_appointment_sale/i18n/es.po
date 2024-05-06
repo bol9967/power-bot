@@ -60,7 +60,7 @@ msgstr "Reuniones"
 #: model_terms:ir.ui.view,arch_db:website_appointment_sale.website_sale_confirmation_appointment
 msgid "Oops, it looks like the following Meeting(s) were not booked smoothly:"
 msgstr ""
-"Ups, parece que la(s) siguiente(s) reunión(es) no se ha(n) reservado sin "
+"Uy, parece que la(s) siguiente(s) reunión(es) no se ha(n) reservado sin "
 "problemas:"
 
 #. module: website_appointment_sale
@@ -71,7 +71,7 @@ msgstr "Contáctenos"
 #. module: website_appointment_sale
 #: model:ir.model.fields,field_description:website_appointment_sale.field_calendar_booking__order_line_id
 msgid "Sale Order Line"
-msgstr "Línea pedido de venta"
+msgstr "Línea de orden de venta"
 
 #. module: website_appointment_sale
 #: model:ir.model,name:website_appointment_sale.model_sale_order

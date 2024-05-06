@@ -161,6 +161,7 @@
             <!-- Tax-free totals (all docs except withholds) -->
             <totalSinImpuestos t-if="not is_withhold" t-out="format_num_6(abs(move.amount_untaxed_signed))"/>
             <valorModificacion t-if="is_cnote" t-out="format_num_2(abs(move.amount_total_signed))"/>
+            <moneda t-if="is_cnote">DOLAR</moneda>
             <totalDescuento t-if="is_invoice or is_liquidation" t-out="format_num_2(discount_total)"/>
 
             <!-- Tax-included totals (all docs except withholds) -->
@@ -180,6 +181,7 @@
                 </impuesto>
             </impuestos>
             <importeTotal t-if="is_invoice or is_liquidation" t-out="format_num_2(abs(move.amount_total_signed))"/>
+            <moneda t-if="is_invoice or is_liquidation">DOLAR</moneda>
             <valorTotal t-if="is_dnote" t-out="format_num_2(abs(move.amount_total_signed))"/>
 
             <!-- Miscellaneous -->

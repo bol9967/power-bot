@@ -758,11 +758,19 @@ class HelpdeskTicket(models.Model):
             self.message_subscribe(partner_ids)
         return super(HelpdeskTicket, self).message_update(msg, update_vals=update_vals)
 
+    def _message_compute_subject(self):
+        """ Override the display name by the actual name field for communication."""
+        self.ensure_one()
+        return self.name
+
     def _message_post_after_hook(self, message, msg_vals):
-        if self.partner_email and self.partner_id and not self.partner_id.email:
+        if not self.partner_email:
+            return super()._message_post_after_hook(message, msg_vals)
+
+        if self.partner_id and not self.partner_id.email:
             self.partner_id.email = self.partner_email
 
-        if self.partner_email and not self.partner_id:
+        if not self.partner_id:
             # we consider that posting a message with a specified recipient (not a follower, a specific one)
             # on a document without customer means that it was created through the chatter using
             # suggested recipients. This heuristic allows to avoid ugly hacks in JS.
@@ -779,7 +787,7 @@ class HelpdeskTicket(models.Model):
                     ('partner_id', '=', False), email_domain,
                 ]).write({'partner_id': new_partner[0].id})
         # use the sanitized body of the email from the message thread to populate the ticket's description
-        if not self.description and message.subtype_id == self._creation_subtype() and self.partner_id == message.author_id:
+        if not self.description and message.subtype_id == self._creation_subtype() and tools.email_normalize(self.partner_email) == tools.email_normalize(message.email_from):
             self.description = message.body
         return super(HelpdeskTicket, self)._message_post_after_hook(message, msg_vals)
 
@@ -787,7 +795,9 @@ class HelpdeskTicket(models.Model):
         res = super(HelpdeskTicket, self)._track_template(changes)
         ticket = self[0]
         if 'stage_id' in changes and ticket.stage_id.template_id and ticket.partner_email and (
-            not self.env.user.partner_id or not ticket.partner_id or ticket.partner_id != self.env.user.partner_id or self.env.user._is_portal()):
+            not self.env.user.partner_id or not ticket.partner_id or ticket.partner_id != self.env.user.partner_id
+            or self.env.user._is_portal() or ticket._context.get('mail_notify_author')
+        ):
             res['stage_id'] = (ticket.stage_id.template_id, {
                 'auto_delete_keep_log': False,
                 'subtype_id': self.env['ir.model.data']._xmlid_to_res_id('mail.mt_note'),

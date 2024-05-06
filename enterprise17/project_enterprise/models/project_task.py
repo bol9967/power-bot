@@ -28,7 +28,7 @@ class Task(models.Model):
 
     planned_date_begin = fields.Datetime("Start date", tracking=True)
     # planned_date_start is added to be able to display tasks in calendar view because both start and end date are mandatory
-    planned_date_start = fields.Datetime(compute="_compute_planned_date_start", search="_search_planned_date_start")
+    planned_date_start = fields.Datetime(compute="_compute_planned_date_start", inverse='_inverse_planned_date_start', search="_search_planned_date_start")
     partner_mobile = fields.Char(related='partner_id.mobile', readonly=False)
     partner_zip = fields.Char(related='partner_id.zip', readonly=False)
     partner_street = fields.Char(related='partner_id.street', readonly=False)
@@ -296,6 +296,14 @@ class Task(models.Model):
         for task in self:
             task.planned_date_start = task.planned_date_begin or task.date_deadline
 
+    def _inverse_planned_date_start(self):
+        """ Inverse method only used for calendar view to update the date start if the date begin was defined """
+        for task in self:
+            if task.planned_date_begin:
+                task.planned_date_begin = task.planned_date_start
+            else: # to keep the right hour in the date_deadline
+                task.date_deadline = task.planned_date_start
+
     def _search_planned_date_start(self, operator, value):
         return [
             '|',
@@ -307,9 +315,11 @@ class Task(models.Model):
         compute_default_planned_dates = None
         date_start_update = 'planned_date_begin' in vals and vals['planned_date_begin'] is not False
         date_end_update = 'date_deadline' in vals and vals['date_deadline'] is not False
+        # if fsm_mode=True then the processing in industry_fsm module is done for these dates.
         if not self._context.get('fsm_mode', False) \
            and not self._context.get('smart_task_scheduling', False) \
-           and date_start_update and date_end_update:  # if fsm_mode=True then the processing in industry_fsm module is done for these dates.
+           and date_start_update and date_end_update \
+           and not any(task.planned_date_begin or task.date_deadline for task in self):
             compute_default_planned_dates = self.filtered(lambda task: not task.date_deadline)
 
         # if date_end was set to False, so we set planned_date_begin to False

@@ -2,7 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 from .dhl_request import DHLProvider
 from markupsafe import Markup
-from zeep.helpers import serialize_object
+from odoo.tools.zeep.helpers import serialize_object
 
 from odoo import api, models, fields, _
 from odoo.exceptions import UserError
@@ -229,6 +229,10 @@ class Providerdhl(models.Model):
             shipment_request['Billing'] = srm._set_billing(account_number, "S", self.dhl_duty_payment, self.dhl_dutiable)
             shipment_request['Consignee'] = srm._set_consignee(picking.partner_id)
             shipment_request['Shipper'] = srm._set_shipper(account_number, picking.company_id.partner_id, picking.picking_type_id.warehouse_id.partner_id)
+            shipment_request['Reference'] = {
+                'ReferenceID': picking.sale_id.name if picking.sale_id else picking.name,
+                'ReferenceType': 'CU'
+            }
             total_value, currency_name = self._dhl_calculate_value(picking)
             if self.dhl_dutiable:
                 incoterm = picking.sale_id.incoterm or self.env.company.incoterm_id

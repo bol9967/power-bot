@@ -24,4 +24,21 @@
         <field name="name">Taxable Amount</field>
         <field name="code">TAXABLE</field>
     </record>
+
+    <record id="hr_salary_rule_category_ded_net" model="hr.salary.rule.category">
+        <field name="name">Net Deductions</field>
+        <field name="code">DED_NET</field>
+        <field name="parent_id" ref="hr_payroll.DED"/>
+    </record>
+
+    <record id="hr_salary_rule_category_net_to_pay" model="hr.salary.rule.category">
+        <field name="name">Net To Pay</field>
+        <field name="code">NET_TO_PAY</field>
+    </record>
+
+    <record id="hr_salary_rule_category_bik" model="hr.salary.rule.category">
+        <field name="name">Benefit in Kind</field>
+        <field name="code">BIK</field>
+    </record>
+
 </odoo>
