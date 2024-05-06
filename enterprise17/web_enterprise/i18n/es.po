@@ -32,7 +32,7 @@ msgstr "%s días"
 #: code:addons/web_enterprise/static/src/webclient/settings_form_view/res_config_edition.xml:0
 #, python-format
 msgid "(Enterprise Edition)"
-msgstr "(Edición Enterprise)"
+msgstr "Versión Enterprise"
 
 #. module: web_enterprise
 #. odoo-javascript
@@ -67,7 +67,7 @@ msgstr "Automatizaciones"
 #: code:addons/web_enterprise/static/src/webclient/promote_studio_dialog/promote_studio_dialog.xml:0
 #, python-format
 msgid "Build new apps from scratch"
-msgstr "Cree nuevas aplicaciones desde cero"
+msgstr "Cree aplicaciones nuevas desde cero"
 
 #. module: web_enterprise
 #. odoo-javascript
@@ -258,7 +258,7 @@ msgstr "Soporte de Odoo"
 #: code:addons/web_enterprise/static/src/webclient/home_menu/expiration_panel.xml:0
 #, python-format
 msgid "Paste code here"
-msgstr "Pegar el código aquí"
+msgstr "Pega el código aquí"
 
 #. module: web_enterprise
 #. odoo-javascript
@@ -275,7 +275,7 @@ msgstr "Vista anterior"
 #: code:addons/web_enterprise/static/src/webclient/home_menu/expiration_panel.xml:0
 #, python-format
 msgid "Refresh subscription status"
-msgstr "Actualizar el estado de la suscripción"
+msgstr "Refresca el estado de la suscripción"
 
 #. module: web_enterprise
 #. odoo-javascript
@@ -304,7 +304,7 @@ msgstr "Renueve su suscripción"
 #: code:addons/web_enterprise/static/src/webclient/home_menu/expiration_panel.js:0
 #, python-format
 msgid "Retry"
-msgstr "Volver a intentar"
+msgstr "Reintentar"
 
 #. module: web_enterprise
 #. odoo-javascript
@@ -387,14 +387,14 @@ msgid ""
 "have been sent"
 msgstr ""
 "Se han enviado las instrucciones para desvincular su suscripción de las "
-"bases de datos anteriores"
+"bases de datos anteriores."
 
 #. module: web_enterprise
 #. odoo-javascript
 #: code:addons/web_enterprise/static/src/webclient/home_menu/expiration_panel.js:0
 #, python-format
 msgid "This database has expired. "
-msgstr "Esta base de datos ha vencido."
+msgstr "Esta base de datos ha expirado."
 
 #. module: web_enterprise
 #. odoo-javascript

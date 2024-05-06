@@ -74,24 +74,23 @@ export class SubscriptionManager {
      * Save the registration code then triggers a ping to submit it.
      */
     async submitCode(enterpriseCode) {
-        const [oldDate, ] = await Promise.all([
+        const [oldDate, , linkedSubscriptionUrl, linkedEmail] = await Promise.all([
             this.orm.call("ir.config_parameter", "get_param", ["database.expiration_date"]),
             this.orm.call("ir.config_parameter", "set_param", [
                 "database.enterprise_code",
                 enterpriseCode,
-            ])
-        ]);
-
-        await this.orm.call("publisher_warranty.contract", "update_notification", [[]]);
-
-        const [linkedSubscriptionUrl, linkedEmail, expirationDate] = await Promise.all([
+            ]),
+            // Aren't these a race condition ??? They depend on the upcoming ping...
             this.orm.call("ir.config_parameter", "get_param", [
                 "database.already_linked_subscription_url",
             ]),
             this.orm.call("ir.config_parameter", "get_param", ["database.already_linked_email"]),
-            this.orm.call("ir.config_parameter", "get_param", [
-                "database.expiration_date",
-            ])
+        ]);
+
+        await this.orm.call("publisher_warranty.contract", "update_notification", [[]]);
+
+        const expirationDate = await this.orm.call("ir.config_parameter", "get_param", [
+            "database.expiration_date",
         ]);
 
         if (linkedSubscriptionUrl) {

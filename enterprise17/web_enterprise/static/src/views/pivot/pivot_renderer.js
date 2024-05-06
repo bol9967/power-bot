@@ -11,12 +11,10 @@ patch(PivotRenderer.prototype, {
         this.root = useRef("root");
         if (this.env.isSmall) {
             useEffect(() => {
-                if (this.root.el) {
-                    const tooltipElems = this.root.el.querySelectorAll("*[data-tooltip]");
-                    for (const el of tooltipElems) {
-                        el.removeAttribute("data-tooltip");
-                        el.removeAttribute("data-tooltip-position");
-                    }
+                const tooltipElems = this.root.el.querySelectorAll("*[data-tooltip]");
+                for (const el of tooltipElems) {
+                    el.removeAttribute("data-tooltip");
+                    el.removeAttribute("data-tooltip-position");
                 }
             });
         }

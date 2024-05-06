@@ -95,8 +95,9 @@ QUnit.module(
                 assert.containsOnce(target, ".o_optional_columns_dropdown_toggle");
 
                 await click(target, ".o_optional_columns_dropdown_toggle");
-                assert.containsN(target, ".o_optional_columns_dropdown .dropdown-item", 2);
-                assert.containsOnce(target, ".o_optional_columns_dropdown .dropdown-item-studio");
+                const dropdown = target.querySelector(".o_optional_columns_dropdown");
+                assert.containsN(dropdown, ".dropdown-item", 2);
+                assert.containsOnce(dropdown, ".dropdown-item-studio");
 
                 await click(target, ".o_optional_columns_dropdown .dropdown-item-studio");
                 await nextTick();
@@ -155,8 +156,9 @@ QUnit.module(
                 assert.containsOnce(target, ".o_optional_columns_dropdown_toggle");
 
                 await click(target, ".o_optional_columns_dropdown_toggle");
-                assert.containsOnce(target, ".o_optional_columns_dropdown .dropdown-item");
-                assert.containsOnce(target, ".o_optional_columns_dropdown .dropdown-item-studio");
+                const dropdown = target.querySelector(".o_optional_columns_dropdown");
+                assert.containsOnce(dropdown, ".dropdown-item");
+                assert.containsOnce(dropdown, ".dropdown-item-studio");
 
                 await click(target, ".o_optional_columns_dropdown .dropdown-item-studio");
                 await nextTick();
@@ -189,8 +191,9 @@ QUnit.module(
 
                 assert.containsOnce(target, ".o_optional_columns_dropdown_toggle");
                 await click(target, ".o_optional_columns_dropdown_toggle");
-                assert.containsOnce(target, ".o_optional_columns_dropdown .dropdown-item");
-                assert.containsNone(target, ".o_optional_columns_dropdown .dropdown-item-studio");
+                const dropdown = target.querySelector(".o_optional_columns_dropdown");
+                assert.containsOnce(dropdown, ".dropdown-item");
+                assert.containsNone(dropdown, ".dropdown-item-studio");
             }
         );
 
@@ -295,8 +298,9 @@ QUnit.module(
             });
 
             await click(target, ".o_optional_columns_dropdown_toggle");
-            assert.containsN(target, ".o_optional_columns_dropdown .dropdown-item", 2);
-            assert.containsOnce(target, ".o_optional_columns_dropdown .dropdown-item-studio");
+            let dropdown = target.querySelector(".o_optional_columns_dropdown");
+            assert.containsN(dropdown, ".dropdown-item", 2);
+            assert.containsOnce(dropdown, ".dropdown-item-studio");
 
             await doAction(wc, {
                 id: 99,
@@ -317,8 +321,9 @@ QUnit.module(
             assert.containsNone(target, ".o_optional_columns_dropdown_toggle o-dropdown-menu");
             await click(target, ".o_optional_columns_dropdown_toggle");
 
-            assert.containsN(target, ".o_optional_columns_dropdown .dropdown-item", 2);
-            assert.containsOnce(target, ".o_optional_columns_dropdown .dropdown-item-studio");
+            dropdown = target.querySelector(".o_optional_columns_dropdown");
+            assert.containsN(dropdown, ".dropdown-item", 2);
+            assert.containsOnce(dropdown, ".dropdown-item-studio");
         });
     }
 );

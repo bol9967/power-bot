@@ -301,16 +301,16 @@ QUnit.module("web_enterprise", function ({ beforeEach }) {
                 // second try to submit
                 "get_param",
                 "set_param",
+                "get_param",
+                "get_param",
                 "update_notification",
-                "get_param",
-                "get_param",
                 "get_param",
                 // third try
                 "get_param",
                 "set_param",
+                "get_param",
+                "get_param",
                 "update_notification",
-                "get_param",
-                "get_param",
                 "get_param",
                 `{"message":"Thank you, your registration was successful! Your database is valid until November 15, 2019.","options":{"type":"success"}}`,
             ]);
@@ -394,7 +394,9 @@ QUnit.module("web_enterprise", function ({ beforeEach }) {
                 ),
                 formatWhiteSpaces(
                     `Your subscription is already linked to a database.
-Send an email to the subscription owner to confirm the change, enter a new code or buy a subscription.`
+                To unlink it you can either:
+                Login to your Odoo.com dashboard then unlink your previous database: www.super_company.com
+                Click here to send an email to the subscription owner (email: super_company_admin@gmail.com) with the instructions to follow`
                 )
             );
 
@@ -413,7 +415,9 @@ Send an email to the subscription owner to confirm the change, enter a new code 
                 ),
                 formatWhiteSpaces(
                     `Your subscription is already linked to a database.
-                Send an email to the subscription owner to confirm the change, enter a new code or buy a subscription.
+                To unlink it you can either:
+                Login to your Odoo.com dashboard then unlink your previous database: www.super_company.com
+                Click here to send an email to the subscription owner (email: super_company_admin@gmail.com) with the instructions to follow
                 Unable to send the instructions by email, please contact the Odoo Support
                 Error reason: By design`
                 )
@@ -422,9 +426,9 @@ Send an email to the subscription owner to confirm the change, enter a new code 
             assert.verifySteps([
                 "get_param",
                 "set_param",
+                "get_param",
+                "get_param",
                 "update_notification",
-                "get_param",
-                "get_param",
                 "get_param",
                 "get_param",
             ]);
